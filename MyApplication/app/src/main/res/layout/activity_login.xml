@@ -33,14 +33,21 @@
             <android.support.design.widget.TextInputLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_marginTop="50dp"
                 android:orientation="vertical">
 
+                <TableRow
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent" />
+
                 <AutoCompleteTextView
-                    android:id="@+id/email"
+                    android:id="@+id/Username"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:hint="@string/prompt_email"
-                    android:inputType="textEmailAddress"
+                    android:layout_marginTop="100dp"
+                    android:completionHint="Username"
+                    android:hint="@string/username"
+                    android:inputType="text|number"
                     android:maxLines="1"
                     android:singleLine="true" />
 
@@ -54,6 +61,7 @@
                     android:id="@+id/password"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:layout_marginTop="20dp"
                     android:hint="@string/prompt_password"
                     android:imeActionId="@+id/login"
                     android:imeActionLabel="@string/action_sign_in_short"
@@ -64,13 +72,24 @@
 
             </android.support.design.widget.TextInputLayout>
 
+            <TextView
+                android:id="@+id/linkRegistro"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="120dp"
+                android:layout_marginTop="50dp"
+                android:clickable="true"
+                android:text="Registrarse"
+                android:onClick="onClick"
+                android:textAppearance="@android:style/TextAppearance.Material.Medium" />
+
             <Button
                 android:id="@+id/email_sign_in_button"
                 style="?android:textAppearanceSmall"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="16dp"
-                android:text="@string/action_sign_in"
+                android:text="Log in"
                 android:textStyle="bold" />
 
         </LinearLayout>

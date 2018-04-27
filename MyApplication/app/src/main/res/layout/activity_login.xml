@@ -47,7 +47,7 @@
                     android:layout_marginTop="100dp"
                     android:completionHint="Username"
                     android:hint="@string/username"
-                    android:inputType="text|number"
+                    android:inputType="text"
                     android:maxLines="1"
                     android:singleLine="true" />
 

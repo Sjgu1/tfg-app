@@ -14,4 +14,6 @@
         completions."
     </string>
     <string name="username">"Username"</string>
+    <string name="registrar">Registrar</string>
+    <string name="title_activity_principal">PrincipalActivity</string>
 </resources>

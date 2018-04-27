@@ -79,9 +79,10 @@
                 android:layout_marginLeft="120dp"
                 android:layout_marginTop="50dp"
                 android:clickable="true"
-                android:text="Registrarse"
                 android:onClick="onClick"
-                android:textAppearance="@android:style/TextAppearance.Material.Medium" />
+                android:text="Registrarse"
+                android:textAppearance="@android:style/TextAppearance.Material.Small.Inverse"
+                android:textColor="@color/colorAccent" />
 
             <Button
                 android:id="@+id/email_sign_in_button"

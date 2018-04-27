@@ -156,10 +156,20 @@ public class LoginActivity extends AppCompatActivity {
             showProgress(true);
             mAuthTask = new UserLoginTask(username, password);
             mAuthTask.execute((Void) null);
+
+            /*
+            if(Session.getLoged()){
+                Log.i("conectado", Session.getLoged() + "");
+                Intent i = new Intent(getApplicationContext(), PrincipalActivity.class);
+                startActivity(i);
+            }*/
         }
     }
 
-
+    private void changeLogedStatus(){
+        Intent i = new Intent(getApplicationContext(), PrincipalActivity.class);
+        startActivity(i);
+    }
     private boolean isPasswordValid(String password) {
         return password.length() > 4;
     }
@@ -258,16 +268,19 @@ public class LoginActivity extends AppCompatActivity {
                 while ((inputLine = br.readLine()) != null) {
                     sb.append(inputLine);
                 }
+                String status = connection.getResponseCode() + "";
                 result = sb.toString();
-                try {
+                if(status.equals("200")) {
+                    try {
 
-                    JSONObject obj = new JSONObject(result);
-                    Session.setToken(obj.getString("token"));
+                        JSONObject obj = new JSONObject(result);
+                        Session.setToken(obj.getString("token"));
+                        return true;
 
-                } catch (Throwable t) {
-                    Log.e("My App", "Could not parse malformed JSON: \"" + result + "\"");
+                    } catch (Throwable t) {
+                        Log.e("My App", "Could not parse malformed JSON: \"" + result + "\"");
+                    }
                 }
-
                 Thread.sleep(2000);
             } catch (InterruptedException e) {
                 Log.i("exception", e.toString());
@@ -275,7 +288,7 @@ public class LoginActivity extends AppCompatActivity {
                 Log.i("exception", e.toString());
             }
 
-            return true;
+            return false;
         }
 
 
@@ -285,7 +298,9 @@ public class LoginActivity extends AppCompatActivity {
             showProgress(false);
 
             if (success) {
-                finish();
+                Session.setLoged(true);
+                changeLogedStatus();
+                //finish();
             } else {
                 mPasswordView.setError(getString(R.string.error_incorrect_password));
                 mPasswordView.requestFocus();

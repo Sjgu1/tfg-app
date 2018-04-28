@@ -43,10 +43,18 @@
             android:name=".HomeActivity"
             android:label="@string/title_activity_home"
             android:theme="@style/AppTheme.NoActionBar" />
-        <activity android:name=".AvatarsActivity"
-            android:theme="@style/AppTheme.Dialog"
+        <activity
+            android:name=".AvatarsActivity"
+            android:excludeFromRecents="true"
+            android:label="Avatares"
             android:parentActivityName=".HomeActivity"
-            android:excludeFromRecents="true"></activity>
+            android:theme="@style/AppTheme.Dialog" />
+        <activity
+            android:name=".ProjectActivity"
+            android:label="Proyecto"
+            android:parentActivityName=".HomeActivity"
+            android:theme="@style/AppTheme"
+            ></activity>
     </application>
 
 </manifest>

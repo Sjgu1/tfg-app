@@ -8,4 +8,16 @@
     tools:context="sergiojuliogu.myapplication.HomeActivity"
     tools:showIn="@layout/app_bar_home">
 
+    <GridView
+        android:id="@+id/baseGridView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:gravity="center_horizontal"
+        android:numColumns="1"
+        android:padding="0dp"
+        android:scrollingCache="false"
+        android:stretchMode="columnWidth"
+        tools:layout_editor_absoluteX="0dp"
+        tools:layout_editor_absoluteY="0dp" />
+
 </android.support.constraint.ConstraintLayout>

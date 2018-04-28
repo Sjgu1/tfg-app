@@ -55,6 +55,7 @@ public class LoginActivity extends AppCompatActivity {
      * Keep track of the login task to ensure we can cancel it if requested.
      */
     private UserLoginTask mAuthTask = null;
+    private JSONObject user = null;
 
     // UI references.
     private AutoCompleteTextView mUsernameView;
@@ -117,10 +118,10 @@ public class LoginActivity extends AppCompatActivity {
      * errors are presented and no actual login attempt is made.
      */
     private void attemptLogin() {
-        if(true){
+        /*if(true){
             changeLogedStatus();
             return;
-        }
+        }*/
         if (mAuthTask != null) {
             return;
         }
@@ -165,6 +166,10 @@ public class LoginActivity extends AppCompatActivity {
 
     private void changeLogedStatus(){
         Intent i = new Intent(getApplicationContext(), HomeActivity.class);
+
+        Bundle b = new Bundle();
+        b.putString("user", user.toString()); //Your id
+        i.putExtras(b); //Put your id to your next Intent
         startActivity(i);
     }
 
@@ -272,7 +277,9 @@ public class LoginActivity extends AppCompatActivity {
                     try {
 
                         JSONObject obj = new JSONObject(result);
+                        user = obj;
                         Session.setToken(obj.getString("token"));
+                        Session.setUsername(mUsername);
                         return true;
 
                     } catch (Throwable t) {

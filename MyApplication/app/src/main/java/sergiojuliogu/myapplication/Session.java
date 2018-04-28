@@ -7,6 +7,7 @@ package sergiojuliogu.myapplication;
 public class Session {
     private static String token = null;
     private static Boolean loged = false;
+    private static String username = null;
 
     protected Session(){}
 
@@ -24,5 +25,13 @@ public class Session {
 
     public static Boolean getLoged() {
         return loged;
+    }
+
+    public static String getUsername() {
+        return username;
+    }
+
+    public static void setUsername(String username) {
+        Session.username = username;
     }
 }

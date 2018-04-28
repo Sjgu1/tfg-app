@@ -117,9 +117,14 @@ public class LoginActivity extends AppCompatActivity {
      * errors are presented and no actual login attempt is made.
      */
     private void attemptLogin() {
+        if(true){
+            changeLogedStatus();
+            return;
+        }
         if (mAuthTask != null) {
             return;
         }
+
 
         // Reset errors.
         mUsernameView.setError(null);
@@ -132,8 +137,7 @@ public class LoginActivity extends AppCompatActivity {
         boolean cancel = false;
         View focusView = null;
 
-        // Check for a valid password, if the user entered one.
-        if (!TextUtils.isEmpty(password) && !isPasswordValid(password)) {
+        if(!isPasswordValid(password)){
             mPasswordView.setError(getString(R.string.error_invalid_password));
             focusView = mPasswordView;
             cancel = true;
@@ -156,20 +160,14 @@ public class LoginActivity extends AppCompatActivity {
             showProgress(true);
             mAuthTask = new UserLoginTask(username, password);
             mAuthTask.execute((Void) null);
-
-            /*
-            if(Session.getLoged()){
-                Log.i("conectado", Session.getLoged() + "");
-                Intent i = new Intent(getApplicationContext(), PrincipalActivity.class);
-                startActivity(i);
-            }*/
         }
     }
 
     private void changeLogedStatus(){
-        Intent i = new Intent(getApplicationContext(), PrincipalActivity.class);
+        Intent i = new Intent(getApplicationContext(), HomeActivity.class);
         startActivity(i);
     }
+
     private boolean isPasswordValid(String password) {
         return password.length() > 4;
     }

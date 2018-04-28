@@ -40,8 +40,13 @@
                 android:value=".LoginActivity" />
         </activity>
         <activity
-            android:name=".PrincipalActivity"
-            android:label="@string/title_activity_principal"></activity>
+            android:name=".HomeActivity"
+            android:label="@string/title_activity_home"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity android:name=".AvatarsActivity"
+            android:theme="@style/AppTheme.Dialog"
+            android:parentActivityName=".HomeActivity"
+            android:excludeFromRecents="true"></activity>
     </application>
 
 </manifest>

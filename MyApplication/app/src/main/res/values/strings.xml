@@ -16,4 +16,26 @@
     <string name="username">"Username"</string>
     <string name="registrar">Registrar</string>
     <string name="title_activity_principal">PrincipalActivity</string>
+
+    <string name="title_activity_main">Proyectos</string>
+
+    <string name="title_section1">Section 1</string>
+    <string name="title_section2">Section 2</string>
+    <string name="title_section3">Section 3</string>
+
+    <string name="navigation_drawer_open">Open navigation drawer</string>
+    <string name="navigation_drawer_close">Close navigation drawer</string>
+
+    <string name="action_example">Example action</string>
+
+    <string name="action_settings">Settings</string>
+
+    <string-array name="planets_array">
+        <item>Mercury</item>
+        <item>Venus</item>
+        <item>Earth</item>
+        <item>Mars</item>
+    </string-array>
+    <string name="title_activity_home">Proyectos</string>
 </resources>
+

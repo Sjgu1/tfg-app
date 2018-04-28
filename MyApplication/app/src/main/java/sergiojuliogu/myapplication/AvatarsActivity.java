@@ -42,7 +42,7 @@ public class AvatarsActivity extends AppCompatActivity {
         gridview.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             public void onItemClick(AdapterView<?> parent, View v,
                                     int position, long id) {
-                mUserInfo = new UserUpdateAvatarTask((int)id);
+                mUserInfo = new UserUpdateAvatarTask(position);
                 mUserInfo.execute((Void) null);
             }
         });
@@ -137,8 +137,8 @@ public class AvatarsActivity extends AppCompatActivity {
     public class UserUpdateAvatarTask extends AsyncTask<Void, Void, Boolean> {
 
         int position;
-        UserUpdateAvatarTask(int position) {
-            position = position;
+        UserUpdateAvatarTask(int pos) {
+            position = pos;
         }
 
         @Override
@@ -157,7 +157,7 @@ public class AvatarsActivity extends AppCompatActivity {
                 if(user.has("avatar") ){
                     body.put("avatar", user.get("avatar").toString());
                 }
-                position++;
+                position  = position + 1;
                 String avatar = "";
                 Log.i("pos", String.valueOf(position));
 

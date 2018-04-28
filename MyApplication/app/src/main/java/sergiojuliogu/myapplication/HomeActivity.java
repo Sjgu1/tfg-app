@@ -304,7 +304,7 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
                 user = userObject;
                 if(user.has("avatar") ){
                     if(!user.get("avatar").equals("")){
-                        int resourceId = c.getResources().getIdentifier("avatar_040", "drawable",c.getPackageName());
+                        int resourceId = c.getResources().getIdentifier(user.get("avatar").toString(), "drawable",c.getPackageName());
                         userAvatar.setImageResource(resourceId);
                     }
                 }

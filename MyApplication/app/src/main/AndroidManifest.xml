@@ -58,11 +58,16 @@
             android:name=".ProfileActivity"
             android:label="Editar Perfil"
             android:parentActivityName=".HomeActivity"
-            android:theme="@style/AppTheme"/>
-        <activity android:name=".NewProjectActivity"
+            android:theme="@style/AppTheme" />
+        <activity
+            android:name=".NewProjectActivity"
             android:label="Nuevo Proyecto"
             android:parentActivityName=".HomeActivity"
             android:theme="@style/AppTheme" />
+        <activity android:name=".PruebaActivity"
+            android:label="Editar Perfil"
+            android:parentActivityName=".HomeActivity"
+            android:theme="@style/AppTheme" ></activity>
     </application>
 
 </manifest>

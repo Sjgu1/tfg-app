@@ -71,7 +71,7 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent(c, NewProjectActivity.class);
-                startActivity(intent);
+                startActivityForResult(intent, activityBrequestCode);
             }
         });
 

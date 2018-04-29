@@ -1,6 +1,8 @@
 package sergiojuliogu.myapplication;
 
 import android.app.ActionBar;
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.support.v7.app.AppCompatActivity;
@@ -30,6 +32,7 @@ public class ProfileActivity extends AppCompatActivity {
 
     private JSONObject user;
     private UserUpdateTask mUserUpdateTask = null;
+    private UserDeleteTask mUserDeleteTask = null;
 
     // UI references.
     private EditText mUsernameView;
@@ -69,7 +72,7 @@ public class ProfileActivity extends AppCompatActivity {
         mDeleteButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                attemptDelete();
+                attemptDelete(view);
             }
         });
 
@@ -192,10 +195,26 @@ public class ProfileActivity extends AppCompatActivity {
         }
     }
 
-    private void attemptDelete() {
+    private void attemptDelete(View v) {
+        DialogInterface.OnClickListener dialogClickListener = new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                switch (which){
+                    case DialogInterface.BUTTON_POSITIVE:
+                        mUserDeleteTask = new UserDeleteTask();
+                        mUserDeleteTask.execute((Void) null);
+                        break;
 
-        mUserUpdateTask = new UserUpdateTask(username , email , name, surname);
-        mUserUpdateTask.execute((Void) null);
+                    case DialogInterface.BUTTON_NEGATIVE:
+                        //No button clicked
+                        break;
+                }
+            }
+        };
+
+        AlertDialog.Builder builder = new AlertDialog.Builder(v.getContext());
+        builder.setMessage("¿Estás seguro que quieres borrar tú perfil?").setPositiveButton("Yes", dialogClickListener)
+                .setNegativeButton("No", dialogClickListener).show();
 
     }
 
@@ -336,6 +355,70 @@ public class ProfileActivity extends AppCompatActivity {
             }
 
         }
+    }
+
+    public class UserDeleteTask extends AsyncTask<Void, Void, Boolean> {
+
+        UserDeleteTask() { }
+
+        @Override
+        protected Boolean doInBackground(Void... params) {
+
+            //Some url endpoint that you may have
+            String urlPedida = "https://sergiojuliogu-tfg-2018.herokuapp.com/users/"+Session.getUsername();
+            //String to place our result in
+            String result;
+
+            try{
+
+                URL url = new URL(urlPedida);
+                HttpURLConnection connection = (HttpURLConnection) url.openConnection();
+
+                connection.setRequestMethod("DELETE");
+                connection.setRequestProperty("Content-Type", "application/json");
+                connection.setRequestProperty("Accept", "*/*");
+                connection.setRequestProperty("Authorization", Session.getToken());
+
+                connection.connect();
+
+                connection.connect();
+                BufferedReader br;
+                if (200 <= connection.getResponseCode() && connection.getResponseCode() <= 299) {
+                    Thread.sleep(2000);
+                    return true;
+                } else {
+                    Thread.sleep(2000);
+                    return false;
+                }
+            } catch (InterruptedException e) {
+                Log.i("exception", e.toString());
+            } catch (Exception e){
+                Log.i("exception", e.toString());
+            }
+
+            return false;
+        }
+
+
+        @Override
+        protected void onPostExecute(final Boolean success) {
+            mUserDeleteTask = null;
+            if (success) {
+                Session.logOut();
+                setResult(RESULT_OK);
+                finish();
+            } else {
+                Toast.makeText(ProfileActivity.this, "No se ha podido eliminar el usuario." ,
+                        Toast.LENGTH_SHORT).show();
+            }
+        }
+
+        @Override
+        protected void onCancelled() {
+            mUserDeleteTask = null;
+        }
+
+
     }
 }
 

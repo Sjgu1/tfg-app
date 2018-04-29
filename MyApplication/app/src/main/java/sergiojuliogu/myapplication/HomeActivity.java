@@ -84,6 +84,13 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
 
         hView =  navigationView.getHeaderView(0);
         userAvatar = (ImageView) hView.findViewById(R.id.imageViewLogo);
+        userAvatar.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                showAvatarBox();
+            }
+
+        });
 
         nombreUsuario = (TextView) hView.findViewById(R.id.textViewName);
         nombreUsuario.setText(Session.getUsername());
@@ -158,6 +165,8 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
 
         //noinspection SimplifiableIfStatement
         if (id == R.id.action_settings) {
+            Session.logOut();
+            finish();
             return true;
         }
 
@@ -171,7 +180,16 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
         int id = item.getItemId();
 
         if (id == R.id.nav_camera) {
-            showAvatarBox();
+
+            String user = userObject.toString();
+
+            Intent intent = new Intent(c, ProfileActivity.class);
+            Bundle b = new Bundle();
+            b.putString("user", user);
+            intent.putExtras(b);
+            intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+            startActivityForResult(intent, activityBrequestCode);
+            // finish();
             // Handle the camera action
         } else if (id == R.id.nav_gallery) {
 

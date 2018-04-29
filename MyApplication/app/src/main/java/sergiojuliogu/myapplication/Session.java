@@ -34,4 +34,10 @@ public class Session {
     public static void setUsername(String username) {
         Session.username = username;
     }
+
+    public static  void logOut(){
+        setLoged(false);
+        setToken(null);
+        setUsername(null);
+    }
 }

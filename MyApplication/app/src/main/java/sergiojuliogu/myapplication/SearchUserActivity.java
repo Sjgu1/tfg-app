@@ -1,5 +1,6 @@
 package sergiojuliogu.myapplication;
 
+import android.content.Context;
 import android.os.AsyncTask;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -38,26 +39,27 @@ public class SearchUserActivity extends AppCompatActivity implements SearchView.
     private GetRolesTask mGetRolesTask = null;
     private GetUsersTask mGetUsersTask = null;
 
+    private Context c;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_search_user);
-
-        mGetRolesTask = new GetRolesTask();
-        mGetRolesTask.execute((Void) null);
+        c = this.getApplicationContext();
 
         mGetUsersTask = new GetUsersTask();
         mGetUsersTask.execute((Void) null);
 
+        mGetRolesTask = new GetRolesTask();
+        mGetRolesTask.execute((Void) null);
 
-        // Pass results to ListViewAdapter Class
-        adapter = new SearchUserAdapter(this, users);
+
+
+
 
         list = (GridView) findViewById(R.id.grid_search_users);
 
-        // Binds the Adapter to the ListView
-        list.setAdapter(adapter);
+
 
         // Locate the EditText in listview_main.xml
         editsearch = (SearchView) findViewById(R.id.simpleSearchView);
@@ -203,7 +205,11 @@ public class SearchUserActivity extends AppCompatActivity implements SearchView.
                 if(status.equals("200")) {
                     try {
 
+                        Log.i("Lo que obtengo", result.toString());
+
                         users = new JSONArray(result);
+                        Log.i("UsuLo que saco", users.toString());
+
                         return true;
 
                     } catch (Throwable t) {
@@ -227,6 +233,10 @@ public class SearchUserActivity extends AppCompatActivity implements SearchView.
 
             if (success) {
                 Log.i("Proyectos", success.toString());
+                // Pass results to ListViewAdapter Class
+                adapter = new SearchUserAdapter(c, users);
+                // Binds the Adapter to the ListView
+                list.setAdapter(adapter);
             } else {
                 Toast.makeText(SearchUserActivity.this, "Error al obtener los usuario." ,
                         Toast.LENGTH_SHORT).show();

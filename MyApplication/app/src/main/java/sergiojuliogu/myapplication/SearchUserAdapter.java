@@ -10,8 +10,6 @@ import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import android.R;
-
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -30,6 +28,8 @@ public class SearchUserAdapter extends BaseAdapter {
     private JSONArray usersFiltrar;
 
     public SearchUserAdapter(Context context, JSONArray usuarios) {
+        Log.i("Usuario en s1231212h", usuarios.toString());
+
         mContext = context;
         users = usuarios;
         inflater = LayoutInflater.from(mContext);
@@ -71,13 +71,11 @@ public class SearchUserAdapter extends BaseAdapter {
         // 1
         try{
             final JSONObject userProject = users.getJSONObject(position);
-            final JSONObject userObject = userProject.getJSONObject("user");
-            final JSONObject roleObject = userProject.getJSONObject("role");
 
             // 2
             if (convertView == null) {
                 final LayoutInflater layoutInflater = LayoutInflater.from(mContext);
-                convertView = layoutInflater.inflate(R.layout.linearlayout_users, null);
+                convertView = layoutInflater.inflate(R.layout.linearlayour_search_users, null);
             }
 
             // 3
@@ -86,13 +84,14 @@ public class SearchUserAdapter extends BaseAdapter {
 
             // 4
 
-            String name = userObject.get("username").toString();
+            String name = userProject.get("username").toString();
             nameTextView.setText(name);
 
+            Log.i("Usuario en search", userProject.toString());
 
-            if(userObject.has("avatar") ){
-                if(!userObject.get("avatar").equals("")){
-                    int resourceId = this.mContext.getResources().getIdentifier(userObject.get("avatar").toString(), "drawable",mContext.getPackageName());
+            if(userProject.has("avatar") ){
+                if(!userProject.get("avatar").equals("")){
+                    int resourceId = this.mContext.getResources().getIdentifier(userProject.get("avatar").toString(), "drawable",mContext.getPackageName());
                     avatarImageView.setImageResource(resourceId);
                 }
             }
@@ -110,7 +109,6 @@ public class SearchUserAdapter extends BaseAdapter {
         charText = charText.toLowerCase(Locale.getDefault());
 
         try {
-            JSONObject objetoSubir = new JSONObject();
             for(int i = 0; i < users.length(); i++) {
                 users.remove(i);
             }

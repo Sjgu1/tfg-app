@@ -111,7 +111,7 @@ public class ProjectActivity extends AppCompatActivity {
         projectEstimateEndView = (TextView) findViewById(R.id.label_end_date);
         projectEndDateView = (TextView) findViewById(R.id.label_end);
         projectRoleView = (TextView) findViewById(R.id.label_project_role);
-        addUserView = (ImageButton) findViewById(R.id.addUserProjectButton);
+        addUserView = (ImageButton) findViewById(R.id.add_user_button);
         addUserView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

@@ -75,7 +75,13 @@ public class UsersAdapter extends BaseAdapter {
                 if(!userObject.get("avatar").equals("")){
                     int resourceId = this.mContext.getResources().getIdentifier(userObject.get("avatar").toString(), "drawable",mContext.getPackageName());
                     avatarImageView.setImageResource(resourceId);
+                }else{
+                    int resourceId = this.mContext.getResources().getIdentifier("avatar_051", "drawable",mContext.getPackageName());
+                    avatarImageView.setImageResource(resourceId);
                 }
+            }else{
+                int resourceId = this.mContext.getResources().getIdentifier("avatar_051", "drawable",mContext.getPackageName());
+                avatarImageView.setImageResource(resourceId);
             }
         }catch (JSONException e){
             Log.e("JavaException", e.toString());

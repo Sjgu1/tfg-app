@@ -247,7 +247,6 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
             //Some url endpoint that you may have
             String urlPedida = "https://sergiojuliogu-tfg-2018.herokuapp.com/users/" + Session.getUsername();
             //String to place our result in
-            Log.i("URL", urlPedida);
             String result;
             //Instantiate new instance of our class
             //Perform the doInBackground method, passing in our url
@@ -277,7 +276,6 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
                 }
                 String status = connection.getResponseCode() + "";
                 result = sb.toString();
-                Log.i("Resultado", status);
                 if(status.equals("200")) {
                     try {
 
@@ -305,7 +303,6 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
             mUserTask = null;
 
             if (success) {
-                Log.i("Proyectos", success.toString());
                 pintarDatos(user);
             } else {
                 Toast.makeText(HomeActivity.this, "Error al obtener los datos del usuario." ,
@@ -336,7 +333,6 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
                 }else{
 
                     projects = (JSONArray)user.get("projects");
-                    Log.i("Proyecto", projects.toString());
 
                     ProjectsAdapter projectsAdapter = new ProjectsAdapter(c, projects);
                     gridView.setAdapter(projectsAdapter);

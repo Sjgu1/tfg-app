@@ -1,16 +1,58 @@
 package sergiojuliogu.myapplication;
 
+import android.content.Context;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
 import android.support.v7.app.AppCompatActivity;
+import android.text.InputType;
+import android.util.Log;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.Button;
+import android.widget.EditText;
+import android.widget.GridView;
+import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
+import java.net.HttpURLConnection;
+import java.net.URL;
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.Locale;
+
 public class ProjectActivity extends AppCompatActivity {
 
-    private TextView mTextMessage;
+    private ProjectInfoTask mProjectTask = null;
+
+    private JSONObject projectObject;
+    private JSONArray usersObject;
+
+    private JSONArray recalculadoUsersObject;
+
+    private TextView projectNameView;
+    private TextView projectDescriptionView;
+    private TextView projectRepositoryView;
+    private TextView projectStartDateView;
+    private TextView projectEstimateEndView;
+    private TextView projectEndDateView;
+    private TextView projectRoleView;
+    private Context c;
+
+
+    private GridView gridView;
+    private boolean admin = false;
+
 
     private BottomNavigationView.OnNavigationItemSelectedListener mOnNavigationItemSelectedListener
             = new BottomNavigationView.OnNavigationItemSelectedListener() {
@@ -18,15 +60,18 @@ public class ProjectActivity extends AppCompatActivity {
         @Override
         public boolean onNavigationItemSelected(@NonNull MenuItem item) {
             switch (item.getItemId()) {
-                case R.id.navigation_home:
-                    mTextMessage.setText("Volver");
-                    finish();
+                case R.id.navigation_charts:
                     return true;
-                case R.id.navigation_dashboard:
-                    mTextMessage.setText(R.string.title_dashboard);
+                case R.id.navigation_edit:
+                    if(admin){
+                        Toast.makeText(ProjectActivity.this, "Eres admin." ,
+                                Toast.LENGTH_SHORT).show();
+                    }else{
+                        Toast.makeText(ProjectActivity.this, "Solo disponible para administradores." ,
+                                Toast.LENGTH_SHORT).show();
+                    }
                     return true;
-                case R.id.navigation_notifications:
-                    mTextMessage.setText(R.string.title_notifications);
+                case R.id.navigation_sprints:
                     return true;
             }
             return false;
@@ -39,15 +84,230 @@ public class ProjectActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_project);
 
-        mTextMessage = (TextView) findViewById(R.id.message);
+        c = this.getApplicationContext();
+
         BottomNavigationView navigation = (BottomNavigationView) findViewById(R.id.navigation);
         navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
         Bundle b = getIntent().getExtras();
         String value = ""; // or other values
         if(b != null)
             value = b.getString("key");
-        Toast.makeText(ProjectActivity.this, "He recibido la key " + value ,
-                Toast.LENGTH_SHORT).show();
+        findViewsById();
+
+
+        mProjectTask = new ProjectInfoTask(value);
+        mProjectTask.execute((Void) null);
+
+    }
+
+    private void findViewsById() {
+        projectNameView = (TextView) findViewById(R.id.label_project_name);
+        projectDescriptionView = (TextView) findViewById(R.id.label_project_description);
+        projectRepositoryView = (TextView) findViewById(R.id.label_project_repository);
+        projectStartDateView = (TextView) findViewById(R.id.label_start_date);
+        projectEstimateEndView = (TextView) findViewById(R.id.label_end_date);
+        projectEndDateView = (TextView) findViewById(R.id.label_end);
+        projectRoleView = (TextView) findViewById(R.id.label_project_role);
+        gridView = (GridView) findViewById(R.id.users_grid);
+
+    }
+
+    /**
+     * Represents an asynchronous task used to get users information.
+     */
+    public class ProjectInfoTask extends AsyncTask<Void, Void, Boolean> {
+        private String project;
+        private String projectObtenido;
+
+        ProjectInfoTask(String idProject) {
+            project = idProject;
+        }
+
+
+        @Override
+        protected Boolean doInBackground(Void... params) {
+
+            //Some url endpoint that you may have
+            String urlPedida = "https://sergiojuliogu-tfg-2018.herokuapp.com/users/" + Session.getUsername()+"/projects/"+project;
+            //String to place our result in
+            String result;
+            //Instantiate new instance of our class
+            //Perform the doInBackground method, passing in our url
+
+            try{
+
+
+                URL url = new URL(urlPedida);
+                HttpURLConnection connection = (HttpURLConnection) url.openConnection();
+                connection.setRequestProperty("Authorization", Session.getToken());
+                connection.connect();
+
+
+                BufferedReader br;
+                if (200 <= connection.getResponseCode() && connection.getResponseCode() <= 299) {
+                    br = new BufferedReader(new InputStreamReader(connection.getInputStream()));
+                } else {
+                    br = new BufferedReader(new InputStreamReader(connection.getErrorStream()));
+                }
+                // Response: 400
+                // Log.e("Response", connection.getResponseMessage() + "");
+                StringBuffer sb = new StringBuffer();
+
+                String inputLine = "";
+                while ((inputLine = br.readLine()) != null) {
+                    sb.append(inputLine);
+                }
+                String status = connection.getResponseCode() + "";
+                result = sb.toString();
+                Log.i("Resultado", status);
+                if(status.equals("200")) {
+                    try {
+
+                        JSONObject obj = new JSONObject(result);
+                        projectObject = obj;
+                        return true;
+
+                    } catch (Throwable t) {
+                        Log.e("My App", "Could not parse malformed JSON: \"" + result + "\"");
+                        return false;
+                    }
+                }
+                Thread.sleep(2000);
+            } catch (InterruptedException e) {
+                Log.i("exception", e.toString());
+            } catch (Exception e){
+                Log.i("exception", e.toString());
+            }
+
+            return false;
+        }
+
+
+        @Override
+        protected void onPostExecute(final Boolean success) {
+            mProjectTask = null;
+
+            if (success) {
+                Log.i("Proyectos", success.toString());
+                pintarDatos();
+            } else {
+                Toast.makeText(ProjectActivity.this, "Error al obtener los datos del usuario." ,
+                        Toast.LENGTH_SHORT).show();
+            }
+        }
+
+        @Override
+        protected void onCancelled() {
+            mProjectTask = null;
+        }
+
+        private void pintarDatos(){
+            DateFormat dateFormat = new SimpleDateFormat("MM/dd/yyyy", Locale.US);
+            DateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
+
+            try{
+                if(projectObject.has("name") ){
+                    projectNameView.setText(projectObject.get("name").toString());
+                }else{
+                    projectNameView.setText("Nombre no obtenido");
+                }
+
+                if(projectObject.has("description") ){
+                    projectDescriptionView.setText(projectObject.get("description").toString());
+                }else{
+                    projectDescriptionView.setText("");
+                }
+
+                if(projectObject.has("repository") ){
+                    projectRepositoryView.setText(projectObject.get("repository").toString());
+                }else{
+                    projectRepositoryView.setText("Repositorio no obtenido.");
+                }
+
+                if(projectObject.has("start_date") ){
+                    //Date date = dateFormat.parse(projectObject.get("start_date").toString().substring(0,10));
+                    String dateStr = parseDate(projectObject.get("start_date").toString().substring(0,10));
+                    projectStartDateView.setText(dateStr);
+                }else{
+                    projectStartDateView.setText("No establecida");
+                }
+
+                if(projectObject.has("estimated_end") ){
+                    String dateStr = parseDate(projectObject.get("estimated_end").toString().substring(0,10));
+
+                    projectEstimateEndView.setText(dateStr);
+                }else{
+                    projectEstimateEndView.setText("No establecida");
+                }
+
+                if(projectObject.has("end_date") ){
+                    String dateStr = parseDate(projectObject.get("end_date").toString().substring(0,10));
+                    projectEndDateView.setText(dateStr);
+                }else{
+                    projectEndDateView.setText("No finalizado");
+                }
+
+                if(projectObject.get("users").toString().equals("[]") ){
+                    Toast.makeText(ProjectActivity.this, "No existen usuarios." ,
+                            Toast.LENGTH_SHORT).show();
+                }else{
+
+                    usersObject = (JSONArray)projectObject.get("users");
+                    JSONObject  userArrayObject= new JSONObject();
+                    JSONObject  userObject= new JSONObject();
+                    JSONObject  roleObject= new JSONObject();
+
+                    String conectado = Session.getUsername();
+                    for ( int i = 0; i< usersObject.length(); i++){
+                        userArrayObject = (JSONObject) usersObject.get(i);
+                        Log.i("El user a comprobar", userArrayObject.toString());
+                        userObject =  userArrayObject.getJSONObject("user");
+                        roleObject = userArrayObject.getJSONObject("role");
+                        if(userObject.get("username").toString().equals(conectado)){
+                            projectRoleView.setText(roleObject.get("name").toString());
+                            if(roleObject.get("name").toString().equals("Admin")){
+                                admin = true;
+                            }
+                        }
+                    }
+
+                    UsersAdapter usersAdapter = new UsersAdapter(c, usersObject);
+                    gridView.setAdapter(usersAdapter);
+
+                }
+
+            }catch (JSONException e){
+                Log.e("JSON", e.toString());
+            }catch (Exception e){
+                Log.e("Error", e.toString());
+
+            }
+
+        }
+        public String parseDate(String time) {
+
+
+
+            String inputPattern = "yyyy-dd-MM";
+
+            String outputPattern = "MM/dd/yyyy";
+
+            SimpleDateFormat inputFormat = new SimpleDateFormat(inputPattern);
+            SimpleDateFormat outputFormat = new SimpleDateFormat(outputPattern);
+
+            Date date = null;
+            String str = null;
+
+            try {
+                date = inputFormat.parse(time);
+                str = outputFormat.format(date);
+
+                Log.i("mini", "Converted Date Today:" + str);
+            } catch (ParseException e) {
+                e.printStackTrace();
+            }
+            return str;
+        }
     }
 
 }

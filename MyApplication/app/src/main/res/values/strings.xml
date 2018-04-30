@@ -13,6 +13,18 @@
     <string name="prompt_repository">Respositorio github.</string>
     <string name="prompt_update">Actualizar</string>
     <string name="action_sign_in">Sign in or register</string>
+    <string name="prompt_sprints">Sprints</string>
+    <string name="prompt_charts">Estadísticas</string>
+    <string name="prompt_edit">Editar</string>
+
+    <string name="prompt_users">Usuarios</string>
+    <string name="prompt_not_ended">No finalizado</string>
+
+    <string name="label_repository">Repositorio:</string>
+    <string name="prompt_end_date">Fecha finalización:</string>
+    <string name="prompt_role">Rol:</string>
+
+
     <string name="action_sign_in_short">Sign in</string>
     <string name="error_invalid_email">La dirección de email es incorrecta</string>
     <string name="error_invalid_password">La contraseña es demasiado corta</string>
@@ -45,5 +57,7 @@
     <string name="title_home">Home</string>
     <string name="title_dashboard">Dashboard</string>
     <string name="title_notifications">Notifications</string>
+
+    <string name="lorem_75">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nam sit amet nisi eu tortor egestas blandit. Vivamus condimentum placerat ante, eget maximus urna ornare id. Maecenas vel nibh vel lorem tristique aliquam. Sed auctor, risus at tempor scelerisque, sapien nisl blandit libero, sit amet venenatis lectus mi ac felis. Sed mattis dignissim mauris eget blandit. Cras mollis mauris mauris, non iaculis sem volutpat a. Integer non orci erat. Nam bibendum erat tortor, et cursus eros dictum a.</string>
 </resources>
 

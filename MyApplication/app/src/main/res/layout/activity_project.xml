@@ -43,7 +43,7 @@
 
                 <LinearLayout
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
+                    android:layout_height="505dp"
                     android:gravity="center"
                     android:orientation="vertical">
 
@@ -80,22 +80,12 @@
                         android:layout_height="wrap_content"
                         android:layout_marginBottom="20dp">
 
-                        <ScrollView
+                        <TextView
+                            android:id="@+id/label_project_description"
                             android:layout_width="match_parent"
-                            android:layout_height="70dp">
-
-                            <LinearLayout
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:orientation="vertical">
-
-                                <TextView
-                                    android:id="@+id/label_project_description"
-                                    android:layout_width="match_parent"
-                                    android:layout_height="wrap_content"
-                                    android:textAppearance="@android:style/TextAppearance.Material.Body2" />
-                            </LinearLayout>
-                        </ScrollView>
+                            android:layout_height="wrap_content"
+                            android:text="Texto"
+                            android:textAppearance="@android:style/TextAppearance.Material.Body2" />
 
                     </TableRow>
 
@@ -207,30 +197,41 @@
 
                     <TableRow
                         android:layout_width="match_parent"
-                        android:layout_height="wrap_content">
+                        android:layout_height="wrap_content"
+                        android:weightSum="1">
 
                         <TextView
                             android:id="@+id/usuarios"
                             android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
+                            android:layout_height="match_parent"
+                            android:layout_weight="0.8"
+                            android:gravity="center_vertical"
                             android:text="@string/prompt_users"
                             android:textAppearance="@android:style/TextAppearance.Material.Medium" />
+
+                        <ImageButton
+                            android:id="@+id/imageButton3"
+                            android:layout_width="76dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="0.4"
+                            android:background="@android:color/transparent"
+                            app:srcCompat="@drawable/ic_person_add_white_18dp" />
 
                     </TableRow>
 
                     <TableRow
                         android:layout_width="match_parent"
-                        android:layout_height="match_parent">
+                        android:layout_height="wrap_content">
 
                         <LinearLayout
                             android:layout_width="match_parent"
-                            android:layout_height="108dp"
+                            android:layout_height="wrap_content"
                             android:orientation="vertical">
 
                             <GridView
                                 android:id="@+id/users_grid"
                                 android:layout_width="match_parent"
-                                android:layout_height="match_parent"
+                                android:layout_height="wrap_content"
                                 android:columnWidth="100dp"
                                 android:gravity="center"
                                 android:horizontalSpacing="10dp"

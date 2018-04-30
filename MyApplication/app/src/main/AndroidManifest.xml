@@ -64,10 +64,16 @@
             android:label="Nuevo Proyecto"
             android:parentActivityName=".HomeActivity"
             android:theme="@style/AppTheme" />
-        <activity android:name=".PruebaActivity"
+        <activity
+            android:name=".PruebaActivity"
             android:label="Editar Perfil"
             android:parentActivityName=".HomeActivity"
-            android:theme="@style/AppTheme" ></activity>
+            android:theme="@style/AppTheme" />
+        <activity android:name=".SearchUserActivity"
+            android:label="Agregar Usuario"
+            android:parentActivityName=".ProjectActivity"
+            android:theme="@style/AppTheme.Dialog"
+            ></activity>
     </application>
 
 </manifest>

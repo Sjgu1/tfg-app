@@ -1,6 +1,7 @@
 package sergiojuliogu.myapplication;
 
 import android.content.Context;
+import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -47,7 +48,10 @@ public class ProjectActivity extends AppCompatActivity {
     private TextView projectEstimateEndView;
     private TextView projectEndDateView;
     private TextView projectRoleView;
+    private ImageButton addUserView;
     private Context c;
+    private int activityBrequestCode = 0;
+
 
 
     private GridView gridView;
@@ -64,8 +68,7 @@ public class ProjectActivity extends AppCompatActivity {
                     return true;
                 case R.id.navigation_edit:
                     if(admin){
-                        Toast.makeText(ProjectActivity.this, "Eres admin." ,
-                                Toast.LENGTH_SHORT).show();
+
                     }else{
                         Toast.makeText(ProjectActivity.this, "Solo disponible para administradores." ,
                                 Toast.LENGTH_SHORT).show();
@@ -108,6 +111,14 @@ public class ProjectActivity extends AppCompatActivity {
         projectEstimateEndView = (TextView) findViewById(R.id.label_end_date);
         projectEndDateView = (TextView) findViewById(R.id.label_end);
         projectRoleView = (TextView) findViewById(R.id.label_project_role);
+        addUserView = (ImageButton) findViewById(R.id.addUserProjectButton);
+        addUserView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(c, SearchUserActivity.class);
+                startActivityForResult(intent, activityBrequestCode);
+            }
+        });
         gridView = (GridView) findViewById(R.id.users_grid);
 
     }

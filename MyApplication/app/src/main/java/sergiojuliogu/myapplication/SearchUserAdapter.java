@@ -25,7 +25,6 @@ public class SearchUserAdapter extends BaseAdapter {
     private JSONArray usersFiltrar;
 
     public SearchUserAdapter(Context context, JSONArray usuarios) {
-        Log.i("Usuario en s1231212h", usuarios.toString());
 
         mContext = context;
         users = usuarios;
@@ -83,8 +82,6 @@ public class SearchUserAdapter extends BaseAdapter {
 
             String name = userProject.get("username").toString();
             nameTextView.setText(name);
-
-            Log.i("Usuario en search", userProject.toString());
 
             if(userProject.has("avatar") ){
                 if(!userProject.get("avatar").equals("")){

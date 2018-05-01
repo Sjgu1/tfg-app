@@ -41,6 +41,8 @@ public class ProfileActivity extends AppCompatActivity {
     private EditText mSurnameView;
     private ImageView mAvatarView;
     private View mUpdateFormView;
+    private View mProgressView;
+
     private int activityBrequestCode = 0;
 
 

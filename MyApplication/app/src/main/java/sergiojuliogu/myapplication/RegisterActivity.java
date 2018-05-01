@@ -251,7 +251,6 @@ public class RegisterActivity extends AppCompatActivity {
                         return false;
                     }
                 }
-                Log.i("Mensaje de respuesta", result + "");
 
                 Thread.sleep(2000);
             } catch (InterruptedException e) {

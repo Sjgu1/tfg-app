@@ -49,6 +49,8 @@ public class NewProjectActivity extends AppCompatActivity {
     private EditText repoInput;
 
     private Button newProjButton;
+    private View mProgressView;
+
 
     private DatePickerDialog fromDatePickerDialog;
     private DatePickerDialog toDatePickerDialog;
@@ -141,7 +143,6 @@ public class NewProjectActivity extends AppCompatActivity {
         }catch (Exception e){
             Log.e("Error de fechas", e.toString());
         }
-
 
         if (cancel) {
             // There was an error; don't attempt register and focus the first
@@ -252,16 +253,13 @@ public class NewProjectActivity extends AppCompatActivity {
                 body.put("description", mDescription);
                 body.put("repository", mRepository);
 
-                if(!startDate.equals("Inicio")){
+                if(!mStartDate.equals("")){
                     body.put("start_date", mStartDate);
 
                 }
-                if(!startDate.equals("Fin")){
+                if(!mEndDate.equals("")){
                     body.put("estimated_end", mEndDate);
                 }
-
-                Log.i("fecha inicio", mStartDate);
-                Log.i("fecha fin", mEndDate);
 
 
                 URL url = new URL(urlPedida);

@@ -1,7 +1,11 @@
 package sergiojuliogu.myapplication;
 
+import android.animation.Animator;
+import android.animation.AnimatorListenerAdapter;
+import android.annotation.TargetApi;
 import android.content.Context;
 import android.os.AsyncTask;
+import android.os.Build;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -28,6 +32,9 @@ public class AvatarsActivity extends AppCompatActivity {
     private Context c;
 
     private UserUpdateAvatarTask mUserInfo = null;
+    private View mProgressView;
+    private View mAvatarsFormView;
+
 
 
     @Override
@@ -39,9 +46,14 @@ public class AvatarsActivity extends AppCompatActivity {
         GridView gridview = (GridView) findViewById(R.id.gridview);
         gridview.setAdapter(new AvatarsActivity.ImageAdapter(this));
 
+        mProgressView = findViewById(R.id.avatars_progress);
+        mAvatarsFormView = findViewById(R.id.avatars_form);
+
         gridview.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             public void onItemClick(AdapterView<?> parent, View v,
                                     int position, long id) {
+                showProgress(true);
+
                 mUserInfo = new UserUpdateAvatarTask(position);
                 mUserInfo.execute((Void) null);
             }
@@ -59,6 +71,42 @@ public class AvatarsActivity extends AppCompatActivity {
 
         } catch (Throwable t) {
             Log.e("My App", "Could not parse malformed JSON: \"" + value + "\"");
+        }
+    }
+
+    /**
+     * Shows the progress UI and hides the login form.
+     */
+    @TargetApi(Build.VERSION_CODES.HONEYCOMB_MR2)
+    private void showProgress(final boolean show) {
+        // On Honeycomb MR2 we have the ViewPropertyAnimator APIs, which allow
+        // for very easy animations. If available, use these APIs to fade-in
+        // the progress spinner.
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB_MR2) {
+            int shortAnimTime = getResources().getInteger(android.R.integer.config_shortAnimTime);
+
+            mAvatarsFormView.setVisibility(show ? View.GONE : View.VISIBLE);
+            mAvatarsFormView.animate().setDuration(shortAnimTime).alpha(
+                    show ? 0 : 1).setListener(new AnimatorListenerAdapter() {
+                @Override
+                public void onAnimationEnd(Animator animation) {
+                    mAvatarsFormView.setVisibility(show ? View.GONE : View.VISIBLE);
+                }
+            });
+
+            mProgressView.setVisibility(show ? View.VISIBLE : View.GONE);
+            mProgressView.animate().setDuration(shortAnimTime).alpha(
+                    show ? 1 : 0).setListener(new AnimatorListenerAdapter() {
+                @Override
+                public void onAnimationEnd(Animator animation) {
+                    mProgressView.setVisibility(show ? View.VISIBLE : View.GONE);
+                }
+            });
+        } else {
+            // The ViewPropertyAnimator APIs are not available, so simply show
+            // and hide the relevant UI components.
+            mProgressView.setVisibility(show ? View.VISIBLE : View.GONE);
+            mAvatarsFormView.setVisibility(show ? View.GONE : View.VISIBLE);
         }
     }
 
@@ -217,6 +265,7 @@ public class AvatarsActivity extends AppCompatActivity {
         @Override
         protected void onPostExecute(final Boolean success) {
             mUserInfo = null;
+            showProgress(false);
 
             if (success) {
                 setResult(RESULT_OK);
@@ -230,6 +279,7 @@ public class AvatarsActivity extends AppCompatActivity {
 
         @Override
         protected void onCancelled() {
+            showProgress(false);
             mUserInfo = null;
         }
     }

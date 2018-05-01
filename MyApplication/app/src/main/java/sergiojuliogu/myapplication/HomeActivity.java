@@ -228,6 +228,7 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
             Intent intent = getIntent();
             finish();
             startActivity(intent);
+
         }
     }
 
@@ -284,7 +285,7 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
                         return true;
 
                     } catch (Throwable t) {
-                        Log.e("My App", "Could not parse malformed JSON: \"" + result + "\"");
+                        Log.e("My App", "Could not parse malformed JSON good: \"" + result + "\"");
                     }
                 }
                 Thread.sleep(2000);

@@ -8,6 +8,7 @@ public class Session {
     private static String token = null;
     private static Boolean loged = false;
     private static String username = null;
+    private static String projectSelected = null;
 
     protected Session(){}
 
@@ -33,6 +34,14 @@ public class Session {
 
     public static void setUsername(String username) {
         Session.username = username;
+    }
+
+    public static String getProjectSelected() {
+        return projectSelected;
+    }
+
+    public static void setProjectSelected(String projectSelected) {
+        Session.projectSelected = projectSelected;
     }
 
     public static  void logOut(){

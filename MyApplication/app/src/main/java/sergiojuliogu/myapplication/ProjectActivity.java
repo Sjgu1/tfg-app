@@ -49,7 +49,9 @@ public class ProjectActivity extends AppCompatActivity {
     private TextView projectEndDateView;
     private TextView projectRoleView;
     private ImageButton addUserView;
+    private Intent esteIntent;
     private Context c;
+    private String projectID;
     private int activityBrequestCode = 0;
 
 
@@ -88,19 +90,31 @@ public class ProjectActivity extends AppCompatActivity {
         setContentView(R.layout.activity_project);
 
         c = this.getApplicationContext();
+        esteIntent = this.getIntent();
 
         BottomNavigationView navigation = (BottomNavigationView) findViewById(R.id.navigation);
         navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
         Bundle b = getIntent().getExtras();
         String value = ""; // or other values
-        if(b != null)
+        if(b != null){
             value = b.getString("key");
+            projectID = value;
+            Session.setProjectSelected(value);
+        }
+
         findViewsById();
 
-        Log.i("La id project", value);
 
-        mProjectTask = new ProjectInfoTask(value);
-        mProjectTask.execute((Void) null);
+
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+        // The activity is about to become visible.
+        projectID = Session.getProjectSelected();
+            mProjectTask = new ProjectInfoTask(projectID);
+            mProjectTask.execute((Void) null);
 
     }
 
@@ -136,15 +150,18 @@ public class ProjectActivity extends AppCompatActivity {
 
         if (requestCode == activityBrequestCode && resultCode == RESULT_OK){
             activityBrequestCode =0;
-            Intent intent = getIntent();
-            finish();
-            startActivity(intent);
+            projectID = projectID;
+
+            Intent refresh = new Intent(c, ProjectActivity.class);
+            finish(); //finish Activity.
+
+            startActivity(refresh);//Start the same Activity
+
         }
     }
 
-
     /**
-     * Represents an asynchronous task used to get users information.
+     * Represents an asynchronous task used to get project info information.
      */
     public class ProjectInfoTask extends AsyncTask<Void, Void, Boolean> {
         private String project;
@@ -181,7 +198,6 @@ public class ProjectActivity extends AppCompatActivity {
                     br = new BufferedReader(new InputStreamReader(connection.getErrorStream()));
                 }
                 // Response: 400
-                // Log.e("Response", connection.getResponseMessage() + "");
                 StringBuffer sb = new StringBuffer();
 
                 String inputLine = "";
@@ -217,6 +233,7 @@ public class ProjectActivity extends AppCompatActivity {
         protected void onPostExecute(final Boolean success) {
             mProjectTask = null;
 
+            Log.i("Resultado de asin", success+"");
             if (success) {
                 pintarDatos();
             } else {
@@ -316,7 +333,7 @@ public class ProjectActivity extends AppCompatActivity {
 
 
 
-            String inputPattern = "yyyy-dd-MM";
+            String inputPattern = "yyyy-MM-dd";
 
             String outputPattern = "MM/dd/yyyy";
 

@@ -5,7 +5,16 @@
     android:layout_height="match_parent"
     tools:context="sergiojuliogu.myapplication.AvatarsActivity">
 
+    <ProgressBar
+        android:id="@+id/avatars_progress"
+        style="?android:attr/progressBarStyleLarge"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="8dp"
+        android:visibility="gone" />
+
     <LinearLayout
+        android:id="@+id/avatars_form"
         android:layout_width="360dp"
         android:layout_height="300dp"
         android:orientation="horizontal"

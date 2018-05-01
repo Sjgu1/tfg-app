@@ -42,6 +42,8 @@ public class SearchUserActivity extends AppCompatActivity implements SearchView.
     private SearchView editsearch;
     private Spinner dropDown;
 
+    private View mProgressView;
+
 
     private JSONArray users = new JSONArray();
     private JSONArray roles = new JSONArray();
@@ -164,7 +166,6 @@ public class SearchUserActivity extends AppCompatActivity implements SearchView.
                 }
                 String status = connection.getResponseCode() + "";
                 result = sb.toString();
-                Log.i("Resultado", status);
                 if(status.equals("200")) {
                     try {
 
@@ -192,7 +193,6 @@ public class SearchUserActivity extends AppCompatActivity implements SearchView.
             mGetRolesTask = null;
 
             if (success) {
-                Log.i("Proyectos", success.toString());
                 try{
                     List<String> spinnerArray =  new ArrayList<String>();
                     JSONObject roleLeido;
@@ -200,7 +200,6 @@ public class SearchUserActivity extends AppCompatActivity implements SearchView.
                         roleLeido = rolesObtenidos.getJSONObject(i);
                         if(roleLeido.has("name")){
                             spinnerArray.add(roleLeido.get("name").toString());
-                            Log.i("Item a agregar",roleLeido.getString("name") );
                         }
                     }
 
@@ -264,15 +263,10 @@ public class SearchUserActivity extends AppCompatActivity implements SearchView.
                 }
                 String status = connection.getResponseCode() + "";
                 result = sb.toString();
-                Log.i("Resultado", status);
                 if(status.equals("200")) {
                     try {
 
-                        Log.i("Lo que obtengo", result.toString());
-
                         users = new JSONArray(result);
-                        Log.i("UsuLo que saco", users.toString());
-
                         return true;
 
                     } catch (Throwable t) {
@@ -296,11 +290,9 @@ public class SearchUserActivity extends AppCompatActivity implements SearchView.
 
             if (success) {
                 try{
-                    Log.i("Proyectos", success.toString());
                     // Pass results to ListViewAdapter Class
                     JSONObject usuarioParticipa = new JSONObject();
                     JSONObject randomuser = new JSONObject();
-                    Log.i("Users participantes", usersParticipantes.toString());
                     for (int i = 0; i < usersParticipantes.length(); i ++){
                         usuarioParticipa = (JSONObject) usersParticipantes.getJSONObject(i);
                         usuarioParticipa = (JSONObject) usuarioParticipa.getJSONObject("user");
@@ -346,9 +338,9 @@ public class SearchUserActivity extends AppCompatActivity implements SearchView.
         private String name = null;
         private String description = null;
         private String repository = null;
-        private String start_date = null;
-        private String end_date = null;
-        private String estimated_end = null;
+        private String start_date = "vacio";
+        private String end_date = "vacio";
+        private String estimated_end = "vacio";
         private String username = null;
         private String role = null;
 
@@ -373,7 +365,8 @@ public class SearchUserActivity extends AppCompatActivity implements SearchView.
                     this.estimated_end = project.get("estimated_end").toString();
                 }
                 if(project.has("end_date")){
-                    this.end_date = project.get("end_date").toString();
+                    if(!project.getString("end_date").equals(""))
+                        this.end_date = project.get("end_date").toString();
                 }
 
                 this.username = username;
@@ -407,14 +400,17 @@ public class SearchUserActivity extends AppCompatActivity implements SearchView.
                 if(repository != null){
                     body.put("repository", repository);
                 }
-                if(start_date != null){
-                    body.put("start_date", parseDate(start_date.substring(0,10)));
+                Log.i("end", "Ahi viene el endate");
+
+                Log.i("end", end_date);
+                if(!start_date.equals("vacio")){
+                    body.put("start_date", start_date);
                 }
-                if(estimated_end != null){
-                    body.put("estimated_end", parseDate(estimated_end.substring(0,10)));
+                if(!estimated_end.equals("vacio")){
+                    body.put("estimated_end", estimated_end);
                 }
-                if(end_date != null){
-                    body.put("end_date", parseDate(end_date.substring(0,10)));
+                if(!end_date.equals("vacio")){
+                    body.put("end_date", end_date);
                 }
 
                 nuevoUsuario.put("user", username);
@@ -440,7 +436,6 @@ public class SearchUserActivity extends AppCompatActivity implements SearchView.
                 BufferedReader br;
                 if (200 <= connection.getResponseCode() && connection.getResponseCode() <= 299) {
                     br = new BufferedReader(new InputStreamReader(connection.getInputStream()));
-                    Session.setUsername(username);
                 } else {
                     br = new BufferedReader(new InputStreamReader(connection.getErrorStream()));
                 }
@@ -453,9 +448,6 @@ public class SearchUserActivity extends AppCompatActivity implements SearchView.
                 }
                 result = sb.toString();
                 String status = connection.getResponseCode() + "";
-
-                Log.i("Respuesta del add:", result);
-                Log.i("resultado:", status);
 
                 if(status.equals("400")){
                     if(result.equals("El usuario a agregar ya participa en el proyecto")){

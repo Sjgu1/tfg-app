@@ -68,7 +68,6 @@ public class UsersAdapter extends BaseAdapter {
 
             String role = roleObject.get("name").toString();
             roleTextView.setText(role);
-            Log.i("Esto", name);
 
 
             if(userObject.has("avatar") ){

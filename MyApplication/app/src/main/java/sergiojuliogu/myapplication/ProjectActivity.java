@@ -97,6 +97,7 @@ public class ProjectActivity extends AppCompatActivity {
             value = b.getString("key");
         findViewsById();
 
+        Log.i("La id project", value);
 
         mProjectTask = new ProjectInfoTask(value);
         mProjectTask.execute((Void) null);
@@ -116,12 +117,31 @@ public class ProjectActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(c, SearchUserActivity.class);
+                Bundle b = new Bundle();
+                b.putString("usersParticipantes", usersObject.toString()); //Your id
+                b.putString("proyecto", projectObject.toString());
+                intent.putExtras(b); //Put your id to your next Intent
+                intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                 startActivityForResult(intent, activityBrequestCode);
+
             }
         });
         gridView = (GridView) findViewById(R.id.users_grid);
 
     }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        if (requestCode == activityBrequestCode && resultCode == RESULT_OK){
+            activityBrequestCode =0;
+            Intent intent = getIntent();
+            finish();
+            startActivity(intent);
+        }
+    }
+
 
     /**
      * Represents an asynchronous task used to get users information.
@@ -170,7 +190,6 @@ public class ProjectActivity extends AppCompatActivity {
                 }
                 String status = connection.getResponseCode() + "";
                 result = sb.toString();
-                Log.i("Resultado", status);
                 if(status.equals("200")) {
                     try {
 
@@ -199,7 +218,6 @@ public class ProjectActivity extends AppCompatActivity {
             mProjectTask = null;
 
             if (success) {
-                Log.i("Proyectos", success.toString());
                 pintarDatos();
             } else {
                 Toast.makeText(ProjectActivity.this, "Error al obtener los datos del usuario." ,
@@ -271,7 +289,6 @@ public class ProjectActivity extends AppCompatActivity {
                     String conectado = Session.getUsername();
                     for ( int i = 0; i< usersObject.length(); i++){
                         userArrayObject = (JSONObject) usersObject.get(i);
-                        Log.i("El user a comprobar", userArrayObject.toString());
                         userObject =  userArrayObject.getJSONObject("user");
                         roleObject = userArrayObject.getJSONObject("role");
                         if(userObject.get("username").toString().equals(conectado)){
@@ -313,7 +330,6 @@ public class ProjectActivity extends AppCompatActivity {
                 date = inputFormat.parse(time);
                 str = outputFormat.format(date);
 
-                Log.i("mini", "Converted Date Today:" + str);
             } catch (ParseException e) {
                 e.printStackTrace();
             }

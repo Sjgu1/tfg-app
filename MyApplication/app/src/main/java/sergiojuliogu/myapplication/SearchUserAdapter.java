@@ -1,7 +1,6 @@
 package sergiojuliogu.myapplication;
 
 import android.content.Context;
-import android.content.Context;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -14,8 +13,6 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Locale;
 
 public class SearchUserAdapter extends BaseAdapter {
@@ -75,7 +72,7 @@ public class SearchUserAdapter extends BaseAdapter {
             // 2
             if (convertView == null) {
                 final LayoutInflater layoutInflater = LayoutInflater.from(mContext);
-                convertView = layoutInflater.inflate(R.layout.linearlayour_search_users, null);
+                convertView = layoutInflater.inflate(R.layout.linearlayout_search_users, null);
             }
 
             // 3

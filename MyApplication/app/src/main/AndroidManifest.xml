@@ -69,11 +69,16 @@
             android:label="Editar Perfil"
             android:parentActivityName=".HomeActivity"
             android:theme="@style/AppTheme" />
-        <activity android:name=".SearchUserActivity"
+        <activity
+            android:name=".SearchUserActivity"
             android:label="Agregar Usuario"
             android:parentActivityName=".ProjectActivity"
-            android:theme="@style/AppTheme.Dialog"
-            ></activity>
+            android:theme="@style/AppTheme.Dialog" />
+        <activity android:name=".UpdateProjectActivity" />
+        <activity android:name=".SprintsActivity" />
+        <activity
+            android:name=".SprintActivity"
+            android:label="@string/title_activity_sprint"></activity>
     </application>
 
 </manifest>

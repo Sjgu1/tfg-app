@@ -6,19 +6,24 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:layout_weight="10"
-    tools:context="sergiojuliogu.myapplication.ProjectActivity">
+    tools:context="sergiojuliogu.myapplication.ProjectActivity"
+    tools:layout_editor_absoluteY="81dp">
 
     <LinearLayout
         android:id="@+id/wei"
-        android:layout_width="match_parent"
+        android:layout_width="0dp"
         android:layout_height="0dp"
-        android:layout_marginBottom="8dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginStart="8dp"
         android:layout_marginTop="8dp"
         android:orientation="vertical"
         android:weightSum="10"
         app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_weight="10"
+        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.65"
         app:layout_constraintVertical_weight="10">
 
         <ScrollView
@@ -60,6 +65,7 @@
                             android:gravity="center"
                             android:textAppearance="@android:style/TextAppearance.Material.Title"
                             android:textSize="24sp" />
+
                     </TableRow>
 
                     <TableRow

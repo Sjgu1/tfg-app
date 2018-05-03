@@ -215,7 +215,7 @@ public class NewProjectActivity extends AppCompatActivity {
     }
 
     /**
-     * Represents an asynchronous register task used to authenticate
+     * Represents an asynchronous register task used to create new project
      * the user.
      */
     public class NewProjectTask extends AsyncTask<Void, Void, Boolean> {
@@ -240,7 +240,7 @@ public class NewProjectActivity extends AppCompatActivity {
         protected Boolean doInBackground(Void... params) {
 
             //Some url endpoint that you may have
-            String urlPedida = "https://sergiojuliogu-tfg-2018.herokuapp.com/users/"+Session.getUsername()+"/projects";
+            String urlPedida =  Session.URL+"/users/"+Session.getUsername()+"/projects";
             //String to place our result in
             String result;
             //Instantiate new instance of our class
@@ -303,7 +303,6 @@ public class NewProjectActivity extends AppCompatActivity {
                         return false;
                     }
                 }
-                Log.i("Mensaje de respuesta", result + "");
 
                 Thread.sleep(2000);
             } catch (InterruptedException e) {

@@ -28,7 +28,7 @@
         android:layout_height="68dp"
         android:layout_gravity="bottom|end"
         android:layout_margin="@dimen/fab_margin"
-        app:backgroundTint="@color/AliceBlue"
+        android:tint="@color/White"
         app:srcCompat="@drawable/icono_plus" />
 
 </android.support.design.widget.CoordinatorLayout>

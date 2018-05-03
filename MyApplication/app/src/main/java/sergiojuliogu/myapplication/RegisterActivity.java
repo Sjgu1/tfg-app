@@ -198,7 +198,7 @@ public class RegisterActivity extends AppCompatActivity {
         protected Boolean doInBackground(Void... params) {
 
             //Some url endpoint that you may have
-            String urlPedida = "https://sergiojuliogu-tfg-2018.herokuapp.com/auth/signup";
+            String urlPedida = Session.URL+"/auth/signup";
             //String to place our result in
             String result;
             //Instantiate new instance of our class

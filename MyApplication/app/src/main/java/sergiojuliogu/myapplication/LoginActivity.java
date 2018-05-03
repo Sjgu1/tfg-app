@@ -232,11 +232,12 @@ public class LoginActivity extends AppCompatActivity {
         protected Boolean doInBackground(Void... params) {
 
             //Some url endpoint that you may have
-            String urlPedida = "https://sergiojuliogu-tfg-2018.herokuapp.com/auth/login";
+            String urlPedida = Session.URL+"/auth/login";
             //String to place our result in
             String result;
             //Instantiate new instance of our class
             //Perform the doInBackground method, passing in our url
+            Log.i("La url", urlPedida);
 
             JSONObject body = new JSONObject();
             try{
@@ -273,6 +274,7 @@ public class LoginActivity extends AppCompatActivity {
                 }
                 String status = connection.getResponseCode() + "";
                 result = sb.toString();
+                Log.i("res", result);
                 if(status.equals("200")) {
                     try {
 

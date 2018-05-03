@@ -9,13 +9,13 @@
 
     <TextView
         android:id="@+id/textview_project_name"
-        android:layout_width="match_parent"
-        android:layout_height="40dp"
-        android:layout_marginBottom="10dp"
+        android:layout_width="350dp"
+        android:layout_height="88dp"
+        android:layout_marginBottom="15dp"
+        android:layout_marginLeft="20dp"
+        android:layout_marginRight="20dp"
         android:background="@drawable/border_project"
         android:gravity="center"
-        android:paddingLeft="8dp"
-        android:paddingRight="8dp"
         android:textAppearance="@android:style/TextAppearance.Material.Title"
         android:textSize="22sp"
         tools:text="Are You My Mother" />

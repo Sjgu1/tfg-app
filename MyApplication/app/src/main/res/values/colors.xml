@@ -31,7 +31,7 @@
     <color name="DarkOrange">#FF8C00</color>
     <color name="Coral">#FF7F50</color>
     <color name="HotPink">#FF69B4</color>
-    <color name="Tomato">#FF6347</color>
+    <color name="Tomato">#90caf9</color>
     <color name="OrangeRed">#FF4500</color>
     <color name="DeepPink">#FF1493</color>
     <color name="Fuchsia">#FF00FF</color>
@@ -146,4 +146,5 @@
     <color name="DarkBlue">#00008B</color>
     <color name="Navy">#000080</color>
     <color name="Black">#000000</color>
+    <color name="Prueba">#df9beb</color>
 </resources>

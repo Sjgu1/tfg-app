@@ -9,6 +9,9 @@ public class Session {
     private static Boolean loged = false;
     private static String username = null;
     private static String projectSelected = null;
+    //public static String URL = "https://sergiojuliogu-tfg-2018.herokuapp.com";
+    public static String URL = "http://10.0.2.2:5000";
+
 
     protected Session(){}
 

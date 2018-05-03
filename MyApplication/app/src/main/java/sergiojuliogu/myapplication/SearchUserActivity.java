@@ -137,7 +137,7 @@ public class SearchUserActivity extends AppCompatActivity implements SearchView.
         @Override
         protected Boolean doInBackground(Void... params) {
             //Some url endpoint that you may have
-            String urlPedida = "https://sergiojuliogu-tfg-2018.herokuapp.com/users/" + Session.getUsername()+"/roles";
+            String urlPedida = Session.URL+"/users/" + Session.getUsername()+"/roles";
             //String to place our result in
             String result;
             //Instantiate new instance of our class
@@ -234,7 +234,7 @@ public class SearchUserActivity extends AppCompatActivity implements SearchView.
         protected Boolean doInBackground(Void... params) {
 
             //Some url endpoint that you may have
-            String urlPedida = "https://sergiojuliogu-tfg-2018.herokuapp.com/users";
+            String urlPedida = Session.URL+"/users";
             //String to place our result in
             String result;
             //Instantiate new instance of our class
@@ -382,7 +382,7 @@ public class SearchUserActivity extends AppCompatActivity implements SearchView.
 
 
             //Some url endpoint that you may have
-            String urlPedida = "https://sergiojuliogu-tfg-2018.herokuapp.com/users/"+Session.getUsername()+"/projects/"+this.idProject;
+            String urlPedida = Session.URL+"/users/"+Session.getUsername()+"/projects/"+this.idProject;
             //String to place our result in
             String result;
             //Instantiate new instance of our class

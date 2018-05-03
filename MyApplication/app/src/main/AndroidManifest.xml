@@ -74,7 +74,10 @@
             android:label="Agregar Usuario"
             android:parentActivityName=".ProjectActivity"
             android:theme="@style/AppTheme.Dialog" />
-        <activity android:name=".UpdateProjectActivity" />
+        <activity android:name=".UpdateProjectActivity"
+            android:label="Actualizar Proyecto"
+            android:parentActivityName=".ProjectActivity"
+            />
         <activity android:name=".SprintsActivity" />
         <activity
             android:name=".SprintActivity"

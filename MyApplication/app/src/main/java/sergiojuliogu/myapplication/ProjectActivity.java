@@ -71,6 +71,12 @@ public class ProjectActivity extends AppCompatActivity {
                 case R.id.navigation_edit:
                     if(admin){
 
+                        Intent intent = new Intent(c, UpdateProjectActivity.class);
+                        Bundle b = new Bundle();
+                        b.putString("projectID", projectID.toString());
+                        intent.putExtras(b); //Put your id to your next Intent
+                        intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                        startActivityForResult(intent, activityBrequestCode);
                     }else{
                         Toast.makeText(ProjectActivity.this, "Solo disponible para administradores." ,
                                 Toast.LENGTH_SHORT).show();
@@ -176,7 +182,7 @@ public class ProjectActivity extends AppCompatActivity {
         protected Boolean doInBackground(Void... params) {
 
             //Some url endpoint that you may have
-            String urlPedida = "https://sergiojuliogu-tfg-2018.herokuapp.com/users/" + Session.getUsername()+"/projects/"+project;
+            String urlPedida = Session.URL+"/users/" + Session.getUsername()+"/projects/"+project;
             //String to place our result in
             String result;
             //Instantiate new instance of our class
@@ -233,7 +239,6 @@ public class ProjectActivity extends AppCompatActivity {
         protected void onPostExecute(final Boolean success) {
             mProjectTask = null;
 
-            Log.i("Resultado de asin", success+"");
             if (success) {
                 pintarDatos();
             } else {

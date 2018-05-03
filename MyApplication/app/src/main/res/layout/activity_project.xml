@@ -274,7 +274,7 @@
                 android:layout_weight="10"
                 android:background="#262626"
                 app:itemBackground="@android:color/transparent"
-                app:itemIconTint="@color/DarkGray"
+                app:itemIconTint="?attr/colorAccent"
                 app:itemTextColor="@color/DarkGray"
                 app:menu="@menu/navigation"
                 tools:layout_editor_absoluteY="366dp" />

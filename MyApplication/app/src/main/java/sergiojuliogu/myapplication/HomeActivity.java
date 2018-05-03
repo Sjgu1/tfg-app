@@ -246,7 +246,7 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
         protected Boolean doInBackground(Void... params) {
 
             //Some url endpoint that you may have
-            String urlPedida = "https://sergiojuliogu-tfg-2018.herokuapp.com/users/" + Session.getUsername();
+            String urlPedida = Session.URL+"/users/" + Session.getUsername();
             //String to place our result in
             String result;
             //Instantiate new instance of our class

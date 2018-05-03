@@ -2,12 +2,12 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
     android:gravity="center">
 
     <ImageView
-        android:id="@+id/imageViewAvatar"
+        android:id="@+id/update_user_project_avatar"
         android:layout_width="48dp"
         android:layout_height="48dp"
         android:layout_marginTop="5dp"
@@ -15,7 +15,7 @@
         app:srcCompat="@drawable/avatar_051" />
 
     <TextView
-        android:id="@+id/textViewName"
+        android:id="@+id/update_user_project_name"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:gravity="center"
@@ -25,18 +25,18 @@
         android:textAppearance="@android:style/TextAppearance.Material.Small" />
 
     <Spinner
-        android:id="@+id/spinner"
-        android:layout_width="184dp"
-        android:layout_height="wrap_content"
-        android:layout_weight="1" />
-
-    <ImageButton
-        android:id="@+id/imageButton3"
+        android:id="@+id/update_user_project_spinner"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_weight="1"
-        android:background="@android:color/transparent"
-        android:tint="@color/FireBrick"
-        app:srcCompat="@android:drawable/ic_menu_delete" />
+        android:gravity="end"
+        android:textAlignment="viewEnd" />
+
+    <ImageButton
+        android:id="@+id/update_user_project_delete_button"
+        android:layout_width="wrap_content"
+        android:layout_height="30dp"
+        android:backgroundTint="@android:color/transparent"
+        android:src="@android:drawable/ic_menu_delete" />
 
 </LinearLayout>

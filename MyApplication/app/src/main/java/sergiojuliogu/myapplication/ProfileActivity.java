@@ -215,7 +215,7 @@ public class ProfileActivity extends AppCompatActivity {
         };
 
         AlertDialog.Builder builder = new AlertDialog.Builder(v.getContext());
-        builder.setMessage("¿Estás seguro que quieres borrar tú perfil?").setPositiveButton("Yes", dialogClickListener)
+        builder.setMessage("¿Estás seguro que quieres borrar tu perfil?").setPositiveButton("Yes", dialogClickListener)
                 .setNegativeButton("No", dialogClickListener).show();
 
     }
@@ -419,7 +419,6 @@ public class ProfileActivity extends AppCompatActivity {
         protected void onCancelled() {
             mUserDeleteTask = null;
         }
-
 
     }
 }

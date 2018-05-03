@@ -1,7 +1,9 @@
 package sergiojuliogu.myapplication;
 
+import android.app.AlertDialog;
 import android.app.DatePickerDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.os.AsyncTask;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -62,6 +64,7 @@ public class UpdateProjectActivity extends AppCompatActivity {
     private EditText descrInput;
     private Switch mSwitch;
     private EditText repoInput;
+    private TextView eliminarButton;
     private Button updateProjButton;
     private ListView userListView;
     private View mProgressView;
@@ -70,6 +73,7 @@ public class UpdateProjectActivity extends AppCompatActivity {
     private GetRolesTask mGetRolesTask = null;
     private ProjectInfoTask mGeProjectTask = null;
     private UpdateUserProjectTask mUpdateUserTask = null;
+    private ProjectDeleteTask mProjectDeleteTask = null;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -126,6 +130,36 @@ public class UpdateProjectActivity extends AppCompatActivity {
                 attemptUpdateInfoProject();
             }
         });
+
+        eliminarButton = (TextView) findViewById(R.id.delete_project);
+        eliminarButton.setOnClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick(View v) {
+                attemptDeleteProject(v);
+            }
+        });
+
+    }
+    private void  attemptDeleteProject(View v){
+        DialogInterface.OnClickListener dialogClickListener = new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                switch (which){
+                    case DialogInterface.BUTTON_POSITIVE:
+                        mProjectDeleteTask = new ProjectDeleteTask(Session.getProjectSelected());
+                        mProjectDeleteTask.execute((Void) null);
+                        break;
+
+                    case DialogInterface.BUTTON_NEGATIVE:
+                        //No button clicked
+                        break;
+                }
+            }
+        };
+
+        AlertDialog.Builder builder = new AlertDialog.Builder(v.getContext());
+        builder.setMessage("¿Estás seguro que quieres eliminar el proyecto?").setPositiveButton("Yes", dialogClickListener)
+                .setNegativeButton("No", dialogClickListener).show();
 
     }
 
@@ -241,6 +275,77 @@ public class UpdateProjectActivity extends AppCompatActivity {
             }
 
         },newCalendar.get(Calendar.YEAR), newCalendar.get(Calendar.MONTH), newCalendar.get(Calendar.DAY_OF_MONTH));
+    }
+
+    /**
+     * Represents an asynchronous task used to delete a project .
+     */
+    public class ProjectDeleteTask extends AsyncTask<Void, Void, Boolean> {
+        private String project;
+        private String projectObtenido;
+
+        ProjectDeleteTask(String idProject) {
+            project = idProject;
+        }
+
+        @Override
+        protected Boolean doInBackground(Void... params) {
+
+            //Some url endpoint that you may have
+            String urlPedida = Session.URL+"/users/"+Session.getUsername()+"/projects/"+ project;
+            //String to place our result in
+            String result;
+
+            try{
+
+                URL url = new URL(urlPedida);
+                HttpURLConnection connection = (HttpURLConnection) url.openConnection();
+
+                connection.setRequestMethod("DELETE");
+                connection.setRequestProperty("Content-Type", "application/json");
+                connection.setRequestProperty("Accept", "*/*");
+                connection.setRequestProperty("Authorization", Session.getToken());
+
+                connection.connect();
+
+                connection.connect();
+                BufferedReader br;
+                if (200 <= connection.getResponseCode() && connection.getResponseCode() <= 299) {
+                    Thread.sleep(2000);
+                    return true;
+                } else {
+                    Thread.sleep(2000);
+                    return false;
+                }
+            } catch (InterruptedException e) {
+                Log.i("exception", e.toString());
+            } catch (Exception e){
+                Log.i("exception", e.toString());
+            }
+
+            return false;
+        }
+
+
+        @Override
+        protected void onPostExecute(final Boolean success) {
+            mProjectDeleteTask = null;
+            if (success) {
+                Session.setProjectSelected("");
+                setResult(300);
+                finish();
+            } else {
+                Toast.makeText(UpdateProjectActivity.this, "No se ha podido eliminar el proyecto." ,
+                        Toast.LENGTH_SHORT).show();
+            }
+        }
+
+        @Override
+        protected void onCancelled() {
+            mProjectDeleteTask = null;
+        }
+
+
     }
 
     /**

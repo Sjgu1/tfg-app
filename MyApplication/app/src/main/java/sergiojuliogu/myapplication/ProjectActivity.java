@@ -154,6 +154,12 @@ public class ProjectActivity extends AppCompatActivity {
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
 
+        if (resultCode == 300){
+            activityBrequestCode =0;
+            setResult(RESULT_OK);
+            finish(); //finish Activity.
+        }
+
         if (requestCode == activityBrequestCode && resultCode == RESULT_OK){
             activityBrequestCode =0;
             projectID = projectID;

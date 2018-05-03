@@ -66,11 +66,13 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
+        c = this.getApplicationContext();
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.button_new);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent(c, NewProjectActivity.class);
+                intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                 startActivityForResult(intent, activityBrequestCode);
             }
         });
@@ -113,7 +115,7 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
                     b.putString("key", project.get("_id").toString()); //Your id
                     intent.putExtras(b); //Put your id to your next Intent
                     intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                    startActivity(intent);
+                    startActivityForResult(intent, activityBrequestCode);
                    // finish();
 
                 }catch (JSONException e){
@@ -222,8 +224,16 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
+        Log.i("requesctCode", requestCode + "");
+        Log.i("resultCode", resultCode + "");
 
         if (requestCode == activityBrequestCode && resultCode == RESULT_OK){
+            activityBrequestCode =0;
+            Intent intent = getIntent();
+            finish();
+            startActivity(intent);
+
+        }if (requestCode == activityBrequestCode && resultCode == 300){
             activityBrequestCode =0;
             Intent intent = getIntent();
             finish();

@@ -128,8 +128,6 @@ public class UsersUpdateAdapter extends BaseAdapter {
                     String text = roleSpinnerView.getSelectedItem().toString();
                     try{
                         if(userObject.getString("username").equals(Session.getUsername())){
-                            Toast.makeText(mContext, "No puedes cambiar tu rol." ,
-                                    Toast.LENGTH_LONG).show();
                             return;
                         }
                         boolean encontrador = false;

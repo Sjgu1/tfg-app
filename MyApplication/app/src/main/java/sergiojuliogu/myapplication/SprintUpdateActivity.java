@@ -4,6 +4,7 @@ import android.app.AlertDialog;
 import android.app.DatePickerDialog;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.os.AsyncTask;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -11,7 +12,6 @@ import android.text.InputType;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
-import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
@@ -24,6 +24,7 @@ import android.widget.Toast;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
+import org.w3c.dom.Text;
 
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
@@ -34,196 +35,135 @@ import java.net.URL;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
-import java.util.List;
 import java.util.Locale;
 
-public class UpdateProjectActivity extends AppCompatActivity {
+public class SprintUpdateActivity extends AppCompatActivity {
+
+    private SprintInfoTask mGetSprintTask = null;
+    private UpdateSprintProjectTask mUpdateSprintTask = null;
+    private SprintDeleteTask mSprintDeleteTask = null;
+    private NewStatusTask mNewStatusTask = null;
 
     private Context c;
-    private JSONObject projectObject;
-    private JSONArray usersObject;
-    private JSONArray rolesObject;
-    private String projectID;
+    private JSONObject sprintObject;
+    private JSONArray statusObject;
+    private String sprintID;
 
     private DatePickerDialog fromDatePickerDialog;
     private DatePickerDialog toDatePickerDialog;
     private SimpleDateFormat dateFormatter;
 
-
     private ImageButton startDate;
     private ImageButton endDate;
+
+    //UI References
     private EditText startDateInput;
     private EditText endDateInput;
-    private TextView endateText;
+    private Switch mSwitch;
     private EditText nomInput;
     private EditText descrInput;
-    private Switch mSwitch;
-    private EditText repoInput;
     private TextView eliminarButton;
-    private Button updateProjButton;
-    private ListView userListView;
-    private View mProgressView;
+    private TextView endateText;
+    private Button updateSprintButton;
+    private ListView statusListView;
+    private TextView addStatus;
+    private String m_Text = "";
 
 
-    private GetRolesTask mGetRolesTask = null;
-    private ProjectInfoTask mGetProjectTask = null;
-    private UpdateUserProjectTask mUpdateUserTask = null;
-    private ProjectDeleteTask mProjectDeleteTask = null;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_update_project);
+        setContentView(R.layout.activity_sprint_update);
 
         dateFormatter = new SimpleDateFormat("MM/dd/yyyy", Locale.US);
-
         c = this.getApplicationContext();
         Bundle b = getIntent().getExtras();
         String value = ""; // or other values
         if(b != null){
-            value = b.getString("projectID");
-            projectID = value;
-            Session.setProjectSelected(value);
+            value = b.getString("sprintID");
+            sprintID = value;
+            Session.setSprintSelected(sprintID);
         }
-        mGetRolesTask = new GetRolesTask();
-        mGetRolesTask.execute((Void) null);
-
 
         findViewsById();
         setDateTimeField();
 
-        mGetProjectTask = new ProjectInfoTask(projectID);
-        mGetProjectTask.execute((Void) null);
-
-
+        mGetSprintTask = new SprintInfoTask(sprintID);
+        mGetSprintTask.execute((Void) null);
     }
-
     private void findViewsById() {
-        startDateInput = (EditText) findViewById(R.id.etxt_fromdate_update);
+        startDateInput = (EditText) findViewById(R.id.etxt_fromdate_sprint_update);
         startDateInput.setInputType(InputType.TYPE_NULL);
         startDateInput.requestFocus();
 
-        endDateInput = (EditText) findViewById(R.id.etxt_todate_update);
+        endDateInput = (EditText) findViewById(R.id.etxt_todate_sprint_update);
         endDateInput.setInputType(InputType.TYPE_NULL);
 
-        startDate = (ImageButton) findViewById(R.id.imageButtonUpdate);
-        endDate = (ImageButton) findViewById(R.id.imageButton2Update);
+        startDate = (ImageButton) findViewById(R.id.imageButton_sprint_update);
+        endDate = (ImageButton) findViewById(R.id.imageButton2_sprint_update);
 
-        nomInput = (EditText) findViewById(R.id.input_nombre_update);
-        descrInput = (EditText) findViewById(R.id.input_description_update);
-        repoInput = (EditText) findViewById(R.id.input_respository_update);
-        endateText = (TextView) findViewById(R.id.text_end_update);
+        nomInput = (EditText) findViewById(R.id.input_nombre_sprint_update);
+        descrInput = (EditText) findViewById(R.id.input_description_sprint_update);
+        endateText = (TextView) findViewById(R.id.text_end_update_finalizado);
 
-        mSwitch = (Switch) findViewById(R.id.switch_update);
+        mSwitch = (Switch) findViewById(R.id.switch_update_sprint);
         mSwitch.setChecked(false);
-        userListView = (ListView) findViewById(R.id.list_view_update);
+        statusListView = (ListView) findViewById(R.id.sprint_status_list_update);
 
-        updateProjButton = (Button) findViewById(R.id.button_update_project);
-        updateProjButton.setOnClickListener(new View.OnClickListener() {
+        updateSprintButton = (Button) findViewById(R.id.update_sprint_button);
+        updateSprintButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                attemptUpdateInfoProject();
+                attemptUpdateInfoSprint();
             }
         });
 
-        eliminarButton = (TextView) findViewById(R.id.delete_project);
+        eliminarButton = (TextView) findViewById(R.id.delete_sprint);
         eliminarButton.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View v) {
-                attemptDeleteProject(v);
+                attemptDeleteSprint(v);
             }
         });
 
-    }
-    private void  attemptDeleteProject(View v){
-        DialogInterface.OnClickListener dialogClickListener = new DialogInterface.OnClickListener() {
+        addStatus = (TextView) findViewById(R.id.new_status_button);
+        addStatus.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(DialogInterface dialog, int which) {
-                switch (which){
-                    case DialogInterface.BUTTON_POSITIVE:
-                        mProjectDeleteTask = new ProjectDeleteTask(Session.getProjectSelected());
-                        mProjectDeleteTask.execute((Void) null);
-                        break;
+            public void onClick(View v) {
+                AlertDialog.Builder builder = new AlertDialog.Builder(SprintUpdateActivity.this);
+                builder.setTitle("Nombre del nuevo estado");
 
-                    case DialogInterface.BUTTON_NEGATIVE:
-                        //No button clicked
-                        break;
-                }
-            }
-        };
+                final EditText input = new EditText(c);
+                input.setInputType(InputType.TYPE_CLASS_TEXT);
+                builder.setView(input);
 
-        AlertDialog.Builder builder = new AlertDialog.Builder(v.getContext());
-        builder.setMessage("¿Estás seguro que quieres eliminar el proyecto?").setPositiveButton("Yes", dialogClickListener)
-                .setNegativeButton("No", dialogClickListener).show();
+                builder.setPositiveButton("Agregar", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        m_Text = input.getText().toString();
+                        if (!TextUtils.isEmpty(m_Text)){
+                            mNewStatusTask = new NewStatusTask(m_Text);
+                            mNewStatusTask.execute((Void) null);
+                        }else{
+                            Toast.makeText(SprintUpdateActivity.this, "Se necesita un nombre." ,
+                                    Toast.LENGTH_SHORT).show();
+                        }
 
-    }
-
-    private void attemptUpdateInfoProject(){
-
-        if (mUpdateUserTask != null) {
-            return;
-        }
-
-        // Reset errors.
-        nomInput.setError(null);
-        descrInput.setError(null);
-        repoInput.setError(null);
-
-        startDateInput.setError(null);
-        endDateInput.setError(null);
-
-
-        // Store values at the time of the register attempt.
-        String nameProject = nomInput.getText().toString();
-        String descriptionProject = descrInput.getText().toString();
-        String repositoryProject = repoInput.getText().toString();
-        String startProject = startDateInput.getText().toString();
-        String endProject = endDateInput.getText().toString();
-        boolean finalizado = mSwitch.isChecked();
-
-        boolean cancel = false;
-        View focusView = null;
-
-        // Check for a valid name, if the user entered one.
-        if (TextUtils.isEmpty(nameProject)) {
-            nomInput.setError(getString(R.string.error_field_required));
-            focusView = nomInput;
-            cancel = true;
-        }
-
-        try{
-            // Check for a valid email address.
-            if (!startProject.equals("Inicio")) {
-                if (!endProject.equals("Fin")) {
-                    DateFormat format = new SimpleDateFormat("MM/dd/yyyy", Locale.US);
-                    Date dateStart = format.parse(startProject);
-                    Date dateEnd = format.parse(endProject);
-
-                    if(dateEnd.before(dateStart)){
-                        endDateInput.setError(getString(R.string.error_invalid_date));
-                        focusView = endDateInput;
-                        cancel = true;
                     }
-                }
+                });
+                builder.setNegativeButton("Cancelar", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        dialog.cancel();
+                    }
+                });
+
+                builder.show();
             }
-        }catch (Exception e){
-            Log.e("Error de fechas", e.toString());
-        }
-
-        if (cancel) {
-            // There was an error; don't attempt register and focus the first
-            // form field with an error.
-            focusView.requestFocus();
-        } else {
-
-            //showProgress(true);
-            mUpdateUserTask = new UpdateUserProjectTask(nameProject , repositoryProject, descriptionProject , startProject, endProject, finalizado);
-            mUpdateUserTask.execute((Void) null);
-        }
-
+        });
     }
     private void setDateTimeField() {
         startDate.setOnClickListener(new View.OnClickListener() {
@@ -275,22 +215,109 @@ public class UpdateProjectActivity extends AppCompatActivity {
         },newCalendar.get(Calendar.YEAR), newCalendar.get(Calendar.MONTH), newCalendar.get(Calendar.DAY_OF_MONTH));
     }
 
+    private void updateActivity(){
+        setResult(RESULT_OK);
+        finish();
+    }
+    private void  attemptDeleteSprint(View v){
+        DialogInterface.OnClickListener dialogClickListener = new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                switch (which){
+                    case DialogInterface.BUTTON_POSITIVE:
+                        mSprintDeleteTask = new SprintDeleteTask(Session.getSprintSelected());
+                        mSprintDeleteTask.execute((Void) null);
+                        break;
+
+                    case DialogInterface.BUTTON_NEGATIVE:
+                        //No button clicked
+                        break;
+                }
+            }
+        };
+
+        AlertDialog.Builder builder = new AlertDialog.Builder(v.getContext());
+        builder.setMessage("¿Estás seguro que quieres eliminar el sprint?").setPositiveButton("Sí", dialogClickListener)
+                .setNegativeButton("No", dialogClickListener).show();
+    }
+    private void attemptUpdateInfoSprint(){
+
+        if (mUpdateSprintTask != null) {
+            return;
+        }
+
+        // Reset errors.
+        nomInput.setError(null);
+        descrInput.setError(null);
+
+        startDateInput.setError(null);
+        endDateInput.setError(null);
+
+
+        // Store values at the time of the register attempt.
+        String nameSprint = nomInput.getText().toString();
+        String descriptionSprint = descrInput.getText().toString();
+        String startSprint = startDateInput.getText().toString();
+        String endSprint = endDateInput.getText().toString();
+        boolean finalizado = mSwitch.isChecked();
+
+        boolean cancel = false;
+        View focusView = null;
+
+        // Check for a valid name, if the user entered one.
+        if (TextUtils.isEmpty(nameSprint)) {
+            nomInput.setError(getString(R.string.error_field_required));
+            focusView = nomInput;
+            cancel = true;
+        }
+
+        try{
+            // Check for a valid email address.
+            if (!startSprint.equals("Inicio")) {
+                if (!endSprint.equals("Fin")) {
+                    DateFormat format = new SimpleDateFormat("MM/dd/yyyy", Locale.US);
+                    Date dateStart = format.parse(startSprint);
+                    Date dateEnd = format.parse(endSprint);
+
+                    if(dateEnd.before(dateStart)){
+                        endDateInput.setError(getString(R.string.error_invalid_date));
+                        focusView = endDateInput;
+                        cancel = true;
+                    }
+                }
+            }
+        }catch (Exception e){
+            Log.e("Error de fechas", e.toString());
+        }
+
+        if (cancel) {
+            // There was an error; don't attempt register and focus the first
+            // form field with an error.
+            focusView.requestFocus();
+        } else {
+
+            //showProgress(true);
+            mUpdateSprintTask = new UpdateSprintProjectTask(nameSprint , descriptionSprint , startSprint, endSprint, finalizado);
+            mUpdateSprintTask.execute((Void) null);
+        }
+    }
+
     /**
-     * Represents an asynchronous task used to delete a project .
+     * Represents an asynchronous task used to delete an sprint .
      */
-    public class ProjectDeleteTask extends AsyncTask<Void, Void, Boolean> {
-        private String project;
+    public class SprintDeleteTask extends AsyncTask<Void, Void, Boolean> {
+        private String sprint;
         private String projectObtenido;
 
-        ProjectDeleteTask(String idProject) {
-            project = idProject;
+        SprintDeleteTask(String idSprint) {
+            sprint = idSprint;
         }
 
         @Override
         protected Boolean doInBackground(Void... params) {
 
             //Some url endpoint that you may have
-            String urlPedida = Session.URL+"/users/"+Session.getUsername()+"/projects/"+ project;
+            String urlPedida = Session.URL+"/users/"+Session.getUsername()+"/projects/"+ Session.getProjectSelected() +"/sprints/" + sprint;
             //String to place our result in
             String result;
 
@@ -327,34 +354,34 @@ public class UpdateProjectActivity extends AppCompatActivity {
 
         @Override
         protected void onPostExecute(final Boolean success) {
-            mProjectDeleteTask = null;
+            mSprintDeleteTask = null;
             if (success) {
-                Session.setProjectSelected("");
+                Session.setSprintSelected("");
                 setResult(300);
                 finish();
             } else {
-                Toast.makeText(UpdateProjectActivity.this, "No se ha podido eliminar el proyecto." ,
+                Toast.makeText(SprintUpdateActivity.this, "No se ha podido eliminar el sprint." ,
                         Toast.LENGTH_SHORT).show();
             }
         }
 
         @Override
         protected void onCancelled() {
-            mProjectDeleteTask = null;
+            mSprintDeleteTask = null;
         }
 
 
     }
 
     /**
-     * Represents an asynchronous task used to get project info.
+     * Represents an asynchronous task used to get sprint info.
      */
-    public class ProjectInfoTask extends AsyncTask<Void, Void, Boolean> {
-        private String project;
-        private String projectObtenido;
+    public class SprintInfoTask extends AsyncTask<Void, Void, Boolean> {
+        private String sprint;
+        private String sprintObtenido;
 
-        ProjectInfoTask(String idProject) {
-            project = idProject;
+        SprintInfoTask(String idSprint) {
+            sprint = idSprint;
         }
 
 
@@ -362,7 +389,7 @@ public class UpdateProjectActivity extends AppCompatActivity {
         protected Boolean doInBackground(Void... params) {
 
             //Some url endpoint that you may have
-            String urlPedida = Session.URL+"/users/" + Session.getUsername()+"/projects/"+project;
+            String urlPedida = Session.URL+"/users/" + Session.getUsername()+"/projects/"+Session.getProjectSelected()+"/sprints/"+sprint;
             //String to place our result in
             String result;
             //Instantiate new instance of our class
@@ -370,12 +397,10 @@ public class UpdateProjectActivity extends AppCompatActivity {
 
             try{
 
-
                 URL url = new URL(urlPedida);
                 HttpURLConnection connection = (HttpURLConnection) url.openConnection();
                 connection.setRequestProperty("Authorization", Session.getToken());
                 connection.connect();
-
 
                 BufferedReader br;
                 if (200 <= connection.getResponseCode() && connection.getResponseCode() <= 299) {
@@ -394,11 +419,9 @@ public class UpdateProjectActivity extends AppCompatActivity {
                 result = sb.toString();
                 if(status.equals("200")) {
                     try {
-
                         JSONObject obj = new JSONObject(result);
-                        projectObject = obj;
+                        sprintObject = obj;
                         return true;
-
                     } catch (Throwable t) {
                         Log.e("My App", "Could not parse malformed JSON: \"" + result + "\"");
                         return false;
@@ -417,19 +440,19 @@ public class UpdateProjectActivity extends AppCompatActivity {
 
         @Override
         protected void onPostExecute(final Boolean success) {
-            mGetProjectTask = null;
+            mGetSprintTask = null;
 
             if (success) {
                 pintarDatos();
             } else {
-                Toast.makeText(c, "Error al obtener los datos del usuario." ,
+                Toast.makeText(c, "Error al obtener los datos del sprint." ,
                         Toast.LENGTH_SHORT).show();
             }
         }
 
         @Override
         protected void onCancelled() {
-            mGetProjectTask = null;
+            mGetSprintTask = null;
         }
 
         private void pintarDatos(){
@@ -437,56 +460,50 @@ public class UpdateProjectActivity extends AppCompatActivity {
             DateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
 
             try{
-                if(projectObject.has("name") ){
-                    nomInput.setText(projectObject.get("name").toString());
+                if(sprintObject.has("name") ){
+                    nomInput.setText(sprintObject.get("name").toString());
                 }else{
                     nomInput.setText("");
                 }
 
-                if(projectObject.has("description") ){
-                    descrInput.setText(projectObject.get("description").toString());
+                if(sprintObject.has("description") ){
+                    descrInput.setText(sprintObject.get("description").toString());
                 }else{
                     descrInput.setText("");
                 }
 
-                if(projectObject.has("repository") ){
-                    repoInput.setText(projectObject.get("repository").toString());
-                }else{
-                    repoInput.setText("");
-                }
-
-                if(projectObject.has("start_date") ){
+                if(sprintObject.has("start_date") ){
                     //Date date = dateFormat.parse(projectObject.get("start_date").toString().substring(0,10));
-                    String dateStr = parseDate(projectObject.get("start_date").toString().substring(0,10));
+                    String dateStr = parseDate(sprintObject.get("start_date").toString().substring(0,10));
                     startDateInput.setText(dateStr);
                 }else{
                     startDateInput.setText("Inicio");
                 }
 
-                if(projectObject.has("estimated_end") ){
-                    String dateStr = parseDate(projectObject.get("estimated_end").toString().substring(0,10));
+                if(sprintObject.has("estimated_end") ){
+                    String dateStr = parseDate(sprintObject.get("estimated_end").toString().substring(0,10));
 
                     endDateInput.setText(dateStr);
                 }else{
                     endDateInput.setText("Fin");
                 }
 
-                if(projectObject.has("end_date") ){
-                    String dateStr = parseDate(projectObject.get("end_date").toString().substring(0,10));
+                if(sprintObject.has("end_date") ){
+                    String dateStr = parseDate(sprintObject.get("end_date").toString().substring(0,10));
                     endateText.setText(dateStr);
                 }else{
                     endateText.setText("No finalizado");
                 }
 
-                if(projectObject.get("users").toString().equals("[]") ){
-                    Toast.makeText(c, "No existen usuarios." ,
+                if(sprintObject.get("status").toString().equals("[]") ){
+                    Toast.makeText(c, "No existen estados." ,
                             Toast.LENGTH_SHORT).show();
                 }else{
 
-                    usersObject = (JSONArray)projectObject.get("users");
+                    statusObject = (JSONArray) sprintObject.get("status");
 
-                    UsersUpdateAdapter usersAdapter = new UsersUpdateAdapter(c, usersObject, rolesObject);
-                    userListView.setAdapter(usersAdapter);
+                    StatusAdapter statusAdapter = new StatusAdapter(c, statusObject);
+                    statusListView.setAdapter(statusAdapter);
                 }
 
             }catch (JSONException e){
@@ -499,10 +516,7 @@ public class UpdateProjectActivity extends AppCompatActivity {
         }
         public String parseDate(String time) {
 
-
-
             String inputPattern = "yyyy-MM-dd";
-
             String outputPattern = "MM/dd/yyyy";
 
             SimpleDateFormat inputFormat = new SimpleDateFormat(inputPattern);
@@ -522,118 +536,33 @@ public class UpdateProjectActivity extends AppCompatActivity {
         }
     }
 
-
     /**
-     * Represents an asynchronous task used to get roles.
+     * Represents an asynchronous task used to update an sprint.
      */
-    public class GetRolesTask extends AsyncTask<Void, Void, Boolean> {
-        JSONArray rolesObtenidos;
-
-        GetRolesTask() { }
-
-
-        @Override
-        protected Boolean doInBackground(Void... params) {
-            //Some url endpoint that you may have
-            String urlPedida = Session.URL+"/users/" + Session.getUsername()+"/roles";
-            //String to place our result in
-            String result;
-            //Instantiate new instance of our class
-            //Perform the doInBackground method, passing in our url
-
-            try{
-
-                URL url = new URL(urlPedida);
-                HttpURLConnection connection = (HttpURLConnection) url.openConnection();
-                connection.setRequestProperty("Authorization", Session.getToken());
-                connection.connect();
-
-                BufferedReader br;
-                if (200 <= connection.getResponseCode() && connection.getResponseCode() <= 299) {
-                    br = new BufferedReader(new InputStreamReader(connection.getInputStream()));
-                } else {
-                    br = new BufferedReader(new InputStreamReader(connection.getErrorStream()));
-                }
-                // Response: 400
-                // Log.e("Response", connection.getResponseMessage() + "");
-                StringBuffer sb = new StringBuffer();
-
-                String inputLine = "";
-                while ((inputLine = br.readLine()) != null) {
-                    sb.append(inputLine);
-                }
-                String status = connection.getResponseCode() + "";
-                result = sb.toString();
-                if(status.equals("200")) {
-                    try {
-
-                        rolesObject = new JSONArray(result);
-                        rolesObtenidos = new JSONArray(result);
-                        return true;
-
-                    } catch (Throwable t) {
-                        Log.e("My App", "Could not parse malformed JSON: \"" + result + "\"");
-                        return false;
-                    }
-                }
-                Thread.sleep(2000);
-            } catch (InterruptedException e) {
-                Log.i("exception", e.toString());
-            } catch (Exception e){
-                Log.i("exception", e.toString());
-            }
-
-            return false;
-        }
-
-
-        @Override
-        protected void onPostExecute(final Boolean success) {
-            mGetRolesTask = null;
-
-            if (success) {
-                //Toast.makeText(c, "He conseguido los roles." ,
-                 //       Toast.LENGTH_SHORT).show();
-            }else{
-               // Toast.makeText(c, "No he conseguido los roles." ,
-                //        Toast.LENGTH_SHORT).show();
-            }
-        }
-        @Override
-        protected void onCancelled() {
-                mGetRolesTask = null;
-        }
-    }
-
-    /**
-     * Represents an asynchronous task used to update a project.
-     */
-    public class UpdateUserProjectTask extends AsyncTask<Void, Void, Boolean> {
-        private String idProject = null;
+    public class UpdateSprintProjectTask extends AsyncTask<Void, Void, Boolean> {
+        private String idSprint = null;
         private String error = "";
         private String name = null;
         private String description = null;
-        private String repository = null;
         private String start_date = "vacio";
         private String end_date = "vacio";
         private String estimated_end = "vacio";
         private String username = null;
 
-        UpdateUserProjectTask( String name, String repository, String description, String startDate, String estimatedEnd, boolean finalizado) {
+        UpdateSprintProjectTask( String name, String description, String startDate, String estimatedEnd, boolean finalizado) {
 
-                this.idProject = Session.getProjectSelected();
-                this.name = name;
-                this.repository = repository;
-                this.description = description;
-                this.start_date = startDate;
-                this.estimated_end = estimatedEnd;
-                if(finalizado){
-                    DateFormat dateFormat = new SimpleDateFormat("MM/dd/yyyy");
-                    Date date = new Date();
-                    this.end_date = dateFormat.format(date);
-                }else{
-                    this.end_date = "vacio";
-                }
+            this.idSprint = Session.getProjectSelected();
+            this.name = name;
+            this.description = description;
+            this.start_date = startDate;
+            this.estimated_end = estimatedEnd;
+            if(finalizado){
+                DateFormat dateFormat = new SimpleDateFormat("MM/dd/yyyy");
+                Date date = new Date();
+                this.end_date = dateFormat.format(date);
+            }else{
+                this.end_date = "vacio";
+            }
         }
 
 
@@ -642,7 +571,7 @@ public class UpdateProjectActivity extends AppCompatActivity {
 
 
             //Some url endpoint that you may have
-            String urlPedida = Session.URL+"/users/"+Session.getUsername()+"/projects/"+Session.getProjectSelected();
+            String urlPedida = Session.URL+"/users/"+Session.getUsername()+"/projects/"+Session.getProjectSelected()+"/sprints/"+Session.getSprintSelected();
             //String to place our result in
             String result;
             //Instantiate new instance of our class
@@ -656,10 +585,6 @@ public class UpdateProjectActivity extends AppCompatActivity {
                 if(description != null){
                     body.put("description", description);
                 }
-                if(repository != null){
-                    body.put("repository", repository);
-                }
-
                 if(!start_date.equals("vacio")){
                     body.put("start_date", start_date);
                 }
@@ -703,16 +628,6 @@ public class UpdateProjectActivity extends AppCompatActivity {
                 String status = connection.getResponseCode() + "";
 
                 if(status.equals("400")){
-                    if(result.equals("El repositorio tiene que ser una url valida")){
-                        error = "repositorio";
-                        return false;
-                    }else{
-                        error = "otros";
-                        return false;
-                    }
-                }
-                if(status.equals("404")){
-                    error = "otros";
                     return false;
                 }
                 Thread.sleep(2000);
@@ -728,7 +643,7 @@ public class UpdateProjectActivity extends AppCompatActivity {
 
         @Override
         protected void onPostExecute(final Boolean success) {
-            mUpdateUserTask = null;
+            mUpdateSprintTask = null;
             if (success) {
                 setResult(RESULT_OK);
                 finish();
@@ -739,14 +654,11 @@ public class UpdateProjectActivity extends AppCompatActivity {
 
         @Override
         protected void onCancelled() {
-            mUpdateUserTask = null;
+            mUpdateSprintTask = null;
         }
         public String parseDate(String time) {
 
-
-
             String inputPattern = "yyyy-dd-MM";
-
             String outputPattern = "MM/dd/yyyy";
 
             SimpleDateFormat inputFormat = new SimpleDateFormat(inputPattern);
@@ -766,17 +678,96 @@ public class UpdateProjectActivity extends AppCompatActivity {
         }
 
         private void mostrarErroresRespuesta(){
-
-            if(error.equals("repositorio")){
-                repoInput.setError("URL no válida. Ejemplo: www.ejemplo.com/...");
-                repoInput.requestFocus();
-
-            }else{
-                Toast.makeText(c, "Ha ocurrido agún problema." ,
-                        Toast.LENGTH_SHORT).show();
-            }
-
+            Toast.makeText(c, "Ha ocurrido agún problema." , Toast.LENGTH_SHORT).show();
         }
     }
 
+    /**
+     * Represents an asynchronous task used to add a new status to an sprint.
+     */
+    public class NewStatusTask extends AsyncTask<Void, Void, Boolean> {
+
+        private String name = null;
+        NewStatusTask( String name) {
+            this.name = name;
+        }
+
+        @Override
+        protected Boolean doInBackground(Void... params) {
+
+            //Some url endpoint that you may have
+            String urlPedida = Session.URL+"/users/"+Session.getUsername()+"/projects/"+Session.getProjectSelected()+"/sprints/"+Session.getSprintSelected()+"/status";
+            //String to place our result in
+            String result;
+            //Instantiate new instance of our class
+            //Perform the doInBackground method, passing in our url
+
+            JSONObject body = new JSONObject();
+            try{
+                if(name != null){
+                    body.put("name", name);
+                }
+
+                URL url = new URL(urlPedida);
+                HttpURLConnection connection = (HttpURLConnection) url.openConnection();
+
+                connection.setRequestMethod("POST");
+                connection.setRequestProperty("Content-Type", "application/json");
+                connection.setRequestProperty("Accept", "*/*");
+                connection.setRequestProperty("Authorization", Session.getToken());
+
+                connection.setDoOutput(true);
+                BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(connection.getOutputStream()));
+                writer.write(body.toString());
+                writer.close();
+
+                connection.connect();
+
+                connection.connect();
+                BufferedReader br;
+                if (200 <= connection.getResponseCode() && connection.getResponseCode() <= 299) {
+                    br = new BufferedReader(new InputStreamReader(connection.getInputStream()));
+                } else {
+                    br = new BufferedReader(new InputStreamReader(connection.getErrorStream()));
+                }
+
+                StringBuffer sb = new StringBuffer();
+
+                String inputLine = "";
+                while ((inputLine = br.readLine()) != null) {
+                    sb.append(inputLine);
+                }
+                result = sb.toString();
+                String status = connection.getResponseCode() + "";
+
+                if(status.equals("400")){
+                    return false;
+                }
+                Thread.sleep(2000);
+                return true;
+            } catch (InterruptedException e) {
+                Log.i("exception", e.toString());
+            } catch (Exception e){
+                Log.i("exception", e.toString());
+            }
+
+            return false;
+        }
+
+        @Override
+        protected void onPostExecute(final Boolean success) {
+            mNewStatusTask = null;
+            if (success) {
+                updateActivity();
+            } else {
+                Toast.makeText(SprintUpdateActivity.this, "No se ha podido crear el estado." ,
+                        Toast.LENGTH_SHORT).show();            }
+        }
+
+        @Override
+        protected void onCancelled() {
+            mNewStatusTask = null;
+        }
+
+    }
 }

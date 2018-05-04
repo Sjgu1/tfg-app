@@ -7,6 +7,7 @@
     tools:context=".SprintsActivity">
 
     <ListView
+        android:id="@+id/sprints_grid"
         android:layout_width="395dp"
         android:layout_height="587dp"
         android:layout_marginBottom="8dp"
@@ -15,6 +16,21 @@
         android:layout_marginTop="8dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.0" />
+
+    <android.support.design.widget.FloatingActionButton
+        android:id="@+id/button_new_sprint"
+        android:layout_width="76dp"
+        android:layout_height="68dp"
+        android:layout_gravity="bottom|end"
+        android:layout_margin="@dimen/fab_margin"
+        android:layout_marginBottom="8dp"
+        android:layout_marginEnd="8dp"
+        android:tint="@color/White"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:srcCompat="@drawable/icono_plus" />
 </android.support.constraint.ConstraintLayout>

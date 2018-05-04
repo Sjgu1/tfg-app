@@ -49,12 +49,10 @@ public class ProjectActivity extends AppCompatActivity {
     private TextView projectEndDateView;
     private TextView projectRoleView;
     private ImageButton addUserView;
-    private Intent esteIntent;
+
     private Context c;
     private String projectID;
     private int activityBrequestCode = 0;
-
-
 
     private GridView gridView;
     private boolean admin = false;
@@ -70,7 +68,6 @@ public class ProjectActivity extends AppCompatActivity {
                     return true;
                 case R.id.navigation_edit:
                     if(admin){
-
                         Intent intent = new Intent(c, UpdateProjectActivity.class);
                         Bundle b = new Bundle();
                         b.putString("projectID", projectID.toString());
@@ -83,6 +80,12 @@ public class ProjectActivity extends AppCompatActivity {
                     }
                     return true;
                 case R.id.navigation_sprints:
+                    Intent intent = new Intent(c, SprintsActivity.class);
+                    Bundle b = new Bundle();
+                    b.putString("projectID", projectID.toString());
+                    intent.putExtras(b); //Put your id to your next Intent
+                    intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                    startActivityForResult(intent, activityBrequestCode);
                     return true;
             }
             return false;
@@ -96,10 +99,10 @@ public class ProjectActivity extends AppCompatActivity {
         setContentView(R.layout.activity_project);
 
         c = this.getApplicationContext();
-        esteIntent = this.getIntent();
 
         BottomNavigationView navigation = (BottomNavigationView) findViewById(R.id.navigation);
         navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
+
         Bundle b = getIntent().getExtras();
         String value = ""; // or other values
         if(b != null){
@@ -110,8 +113,6 @@ public class ProjectActivity extends AppCompatActivity {
 
         findViewsById();
 
-
-
     }
 
     @Override
@@ -119,9 +120,8 @@ public class ProjectActivity extends AppCompatActivity {
         super.onStart();
         // The activity is about to become visible.
         projectID = Session.getProjectSelected();
-            mProjectTask = new ProjectInfoTask(projectID);
-            mProjectTask.execute((Void) null);
-
+        mProjectTask = new ProjectInfoTask(projectID);
+        mProjectTask.execute((Void) null);
     }
 
     private void findViewsById() {

@@ -9,6 +9,8 @@
     <uses-permission android:name="android.permission.GET_ACCOUNTS" />
     <uses-permission android:name="android.permission.READ_PROFILE" />
     <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW" />
+
 
     <application
         android:allowBackup="true"
@@ -74,14 +76,26 @@
             android:label="Agregar Usuario"
             android:parentActivityName=".ProjectActivity"
             android:theme="@style/AppTheme.Dialog" />
-        <activity android:name=".UpdateProjectActivity"
+        <activity
+            android:name=".UpdateProjectActivity"
             android:label="Actualizar Proyecto"
-            android:parentActivityName=".ProjectActivity"
-            />
-        <activity android:name=".SprintsActivity" />
+            android:parentActivityName=".ProjectActivity" />
+        <activity
+            android:name=".SprintsActivity"
+            android:label="Sprints"
+            android:parentActivityName=".ProjectActivity" />
         <activity
             android:name=".SprintActivity"
-            android:label="@string/title_activity_sprint"></activity>
+            android:label="Sprint"
+            android:parentActivityName=".SprintsActivity" />
+        <activity
+            android:name=".NewSprintActivity"
+            android:label="Nuevo Sprint"
+            android:parentActivityName=".SprintsActivity" />
+        <activity
+            android:name=".SprintUpdateActivity"
+            android:label="Actualizar Sprint"
+            android:parentActivityName=".SprintActivity"></activity>
     </application>
 
 </manifest>

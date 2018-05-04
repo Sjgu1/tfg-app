@@ -121,8 +121,6 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
                 }catch (JSONException e){
                     Log.e("JsonException", e.toString());
                 }
-
-
             }
         });
 
@@ -224,9 +222,6 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        Log.i("requesctCode", requestCode + "");
-        Log.i("resultCode", resultCode + "");
-
         if (requestCode == activityBrequestCode && resultCode == RESULT_OK){
             activityBrequestCode =0;
             Intent intent = getIntent();

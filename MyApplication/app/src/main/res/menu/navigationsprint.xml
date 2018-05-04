@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item
+        android:id="@+id/navigation_charts_sprint"
+        android:icon="@drawable/icono_chart_white"
+        android:title="@string/prompt_charts" />
+
+    <item
+        android:id="@+id/navigation_edit_sprint"
+        android:icon="@drawable/icono_edit_white"
+        android:title="@string/prompt_edit" />
+
+    <item
+        android:id="@+id/navigation_sprints_sprint"
+        android:icon="@drawable/icono_sprint_black"
+        android:title="Tableros"
+        />
+
+</menu>

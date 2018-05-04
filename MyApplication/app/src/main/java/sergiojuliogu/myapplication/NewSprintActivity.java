@@ -1,14 +1,12 @@
 package sergiojuliogu.myapplication;
 
 import android.app.DatePickerDialog;
-
 import android.os.AsyncTask;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.InputType;
 import android.text.TextUtils;
 import android.util.Log;
-import android.view.Menu;
 import android.view.View;
 import android.widget.Button;
 import android.widget.DatePicker;
@@ -30,9 +28,10 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.Locale;
 
-public class NewProjectActivity extends AppCompatActivity {
+public class NewSprintActivity extends AppCompatActivity {
 
-    private NewProjectTask mNewProjectTask;
+
+    private NewSprintTask mNewSprintTask;
 
     private ImageButton startDate;
     private ImageButton endDate;
@@ -43,9 +42,8 @@ public class NewProjectActivity extends AppCompatActivity {
 
     private EditText nomInput;
     private EditText descrInput;
-    private EditText repoInput;
 
-    private Button newProjButton;
+    private Button newSprintButton;
     private View mProgressView;
 
 
@@ -54,10 +52,11 @@ public class NewProjectActivity extends AppCompatActivity {
 
     private SimpleDateFormat dateFormatter;
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_new_project);
+        setContentView(R.layout.activity_new_sprint);
 
         dateFormatter = new SimpleDateFormat("MM/dd/yyyy", Locale.US);
 
@@ -67,92 +66,28 @@ public class NewProjectActivity extends AppCompatActivity {
     }
 
     private void findViewsById() {
-        startDateInput = (EditText) findViewById(R.id.etxt_fromdate);
+        startDateInput = (EditText) findViewById(R.id.etxt_fromdate_sprint);
         startDateInput.setInputType(InputType.TYPE_NULL);
         startDateInput.requestFocus();
 
-        endDateInput = (EditText) findViewById(R.id.etxt_todate);
+        endDateInput = (EditText) findViewById(R.id.etxt_todate_sprint);
         endDateInput.setInputType(InputType.TYPE_NULL);
 
         startDate = (ImageButton) findViewById(R.id.imageButton_sprint_update);
         endDate = (ImageButton) findViewById(R.id.imageButton2_sprint_update);
 
-        nomInput = (EditText) findViewById(R.id.input_nombre);
-        descrInput = (EditText) findViewById(R.id.input_description);
-        repoInput = (EditText) findViewById(R.id.input_respository);
+        nomInput = (EditText) findViewById(R.id.input_nombre_sprint);
+        descrInput = (EditText) findViewById(R.id.input_description_sprint);
 
-        newProjButton = (Button) findViewById(R.id.new_project_button);
-        newProjButton.setOnClickListener(new View.OnClickListener() {
+        newSprintButton = (Button) findViewById(R.id.update_sprint_button);
+        newSprintButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                attemptNewProject();
+                attemptNewSprint();
             }
         });
 
     }
-
-    private void attemptNewProject(){
-        if (mNewProjectTask != null) {
-            return;
-        }
-
-        // Reset errors.
-        nomInput.setError(null);
-        descrInput.setError(null);
-        repoInput.setError(null);
-
-        startDateInput.setError(null);
-        endDateInput.setError(null);
-
-
-        // Store values at the time of the register attempt.
-        String nameProject = nomInput.getText().toString();
-        String descriptionProject = descrInput.getText().toString();
-        String repositoryProject = repoInput.getText().toString();
-        String startProject = startDateInput.getText().toString();
-        String endProject = endDateInput.getText().toString();
-
-        boolean cancel = false;
-        View focusView = null;
-
-        // Check for a valid password, if the user entered one.
-        if (TextUtils.isEmpty(nameProject)) {
-            nomInput.setError(getString(R.string.error_field_required));
-            focusView = nomInput;
-            cancel = true;
-        }
-
-        try{
-            // Check for a valid email address.
-            if (!startProject.equals("Inicio")) {
-                if (!endProject.equals("Fin")) {
-                    DateFormat format = new SimpleDateFormat("MM/dd/yyyy", Locale.US);
-                    Date dateStart = format.parse(startProject);
-                    Date dateEnd = format.parse(endProject);
-
-                    if(dateEnd.before(dateStart)){
-                        endDateInput.setError(getString(R.string.error_invalid_date));
-                        focusView = endDateInput;
-                        cancel = true;
-                    }
-                }
-            }
-        }catch (Exception e){
-            Log.e("Error de fechas", e.toString());
-        }
-
-        if (cancel) {
-            // There was an error; don't attempt register and focus the first
-            // form field with an error.
-            focusView.requestFocus();
-        } else {
-
-            //showProgress(true);
-            mNewProjectTask = new NewProjectTask(nameProject , descriptionProject , repositoryProject, startProject, endProject);
-            mNewProjectTask.execute((Void) null);
-        }
-    }
-
 
     private void setDateTimeField() {
         startDate.setOnClickListener(new View.OnClickListener() {
@@ -204,29 +139,79 @@ public class NewProjectActivity extends AppCompatActivity {
         },newCalendar.get(Calendar.YEAR), newCalendar.get(Calendar.MONTH), newCalendar.get(Calendar.DAY_OF_MONTH));
     }
 
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.main, menu);
-        return true;
-    }
+    private void attemptNewSprint(){
+        if (mNewSprintTask != null) {
+            return;
+        }
 
+        // Reset errors.
+        nomInput.setError(null);
+        descrInput.setError(null);
+
+        startDateInput.setError(null);
+        endDateInput.setError(null);
+
+
+        // Store values at the time of the register attempt.
+        String nameSprint = nomInput.getText().toString();
+        String descriptionSprint = descrInput.getText().toString();
+        String startSprint = startDateInput.getText().toString();
+        String endSprint = endDateInput.getText().toString();
+
+        boolean cancel = false;
+        View focusView = null;
+
+        // Check for a valid password, if the user entered one.
+        if (TextUtils.isEmpty(nameSprint)) {
+            nomInput.setError(getString(R.string.error_field_required));
+            focusView = nomInput;
+            cancel = true;
+        }
+
+        try{
+            // Check for a valid email address.
+            if (!startSprint.equals("Inicio")) {
+                if (!endSprint.equals("Fin")) {
+                    DateFormat format = new SimpleDateFormat("MM/dd/yyyy", Locale.US);
+                    Date dateStart = format.parse(startSprint);
+                    Date dateEnd = format.parse(endSprint);
+
+                    if(dateEnd.before(dateStart)){
+                        endDateInput.setError(getString(R.string.error_invalid_date));
+                        focusView = endDateInput;
+                        cancel = true;
+                    }
+                }
+            }
+        }catch (Exception e){
+            Log.e("Error de fechas", e.toString());
+        }
+
+        if (cancel) {
+            // There was an error; don't attempt register and focus the first
+            // form field with an error.
+            focusView.requestFocus();
+        } else {
+
+            //showProgress(true);
+            mNewSprintTask = new NewSprintTask(nameSprint , descriptionSprint , startSprint, endSprint);
+            mNewSprintTask.execute((Void) null);
+        }
+    }
     /**
-     * Represents an asynchronous register task used to create new project
+     * Represents an asynchronous register task used to create new sprint.
      */
-    public class NewProjectTask extends AsyncTask<Void, Void, Boolean> {
+    public class NewSprintTask extends AsyncTask<Void, Void, Boolean> {
 
         private final String mName;
         private final String mDescription;
-        private final String mRepository;
         private final String mStartDate;
         private final String mEndDate;
         private  String error;
 
-        NewProjectTask(String nombre,String descripcion, String repositorio, String fechaInicio, String fechaFin ) {
+        NewSprintTask(String nombre,String descripcion, String fechaInicio, String fechaFin ) {
             mName = nombre;
             mDescription = descripcion;
-            mRepository = repositorio;
             mStartDate = fechaInicio;
             mEndDate = fechaFin;
             error = "false";
@@ -236,7 +221,7 @@ public class NewProjectActivity extends AppCompatActivity {
         protected Boolean doInBackground(Void... params) {
 
             //Some url endpoint that you may have
-            String urlPedida =  Session.URL+"/users/"+Session.getUsername()+"/projects";
+            String urlPedida =  Session.URL+"/users/"+Session.getUsername()+"/projects/"+Session.getProjectSelected()+"/sprints";
             //String to place our result in
             String result;
             //Instantiate new instance of our class
@@ -247,7 +232,6 @@ public class NewProjectActivity extends AppCompatActivity {
 
                 body.put("name", mName);
                 body.put("description", mDescription);
-                body.put("repository", mRepository);
 
                 if(!mStartDate.equals("")){
                     body.put("start_date", mStartDate);
@@ -291,13 +275,7 @@ public class NewProjectActivity extends AppCompatActivity {
                 String status = connection.getResponseCode() + "";
 
                 if(status.equals("400")){
-                    if(result.equals("El repositorio tiene que ser una url valida")){
-                        error = "repositorio";
-                        return false;
-                    }else{
-                        error = "otros";
-                        return false;
-                    }
+                    return false;
                 }
 
                 Thread.sleep(2000);
@@ -312,14 +290,13 @@ public class NewProjectActivity extends AppCompatActivity {
 
         @Override
         protected void onPostExecute(final Boolean success) {
-            mNewProjectTask = null;
+            mNewSprintTask = null;
             //showProgress(false);
 
             if (success) {
                 setResult(RESULT_OK);
-                Toast.makeText(NewProjectActivity.this, "Se ha creado el proyecto." ,
+                Toast.makeText(NewSprintActivity.this, "Se ha creado el sprint." ,
                         Toast.LENGTH_SHORT).show();
-
                 finish();
             } else {
                 mostrarErroresRespuesta();
@@ -328,22 +305,15 @@ public class NewProjectActivity extends AppCompatActivity {
 
         @Override
         protected void onCancelled() {
-            mNewProjectTask = null;
+            mNewSprintTask = null;
             //showProgress(false);
         }
 
         private void mostrarErroresRespuesta(){
 
-            if(error.equals("repositorio")){
-                repoInput.setError("URL no válida. Ejemplo: www.ejemplo.com/...");
-                repoInput.requestFocus();
-
-            }else{
-                Toast.makeText(NewProjectActivity.this, "Ha ocurrido algún problema." ,
-                        Toast.LENGTH_SHORT).show();
-            }
+            Toast.makeText(NewSprintActivity.this, "Ha ocurrido algún problema." ,
+                    Toast.LENGTH_SHORT).show();
 
         }
     }
-
 }

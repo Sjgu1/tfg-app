@@ -20,6 +20,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 
+import android.view.Window;
 import android.widget.Button;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -40,7 +41,7 @@ import sergiojuliogu.myapplication.Adapters.StatusClosedAdapter;
 import sergiojuliogu.myapplication.R;
 import sergiojuliogu.myapplication.Session;
 
-public class StatusActivity extends AppCompatActivity implements ActionBar.TabListener {
+public class StatusActivity extends AppCompatActivity implements ActionBar.TabListener, Window.Callback {
 
     /**
      * The {@link android.support.v4.view.PagerAdapter} that will provide
@@ -93,7 +94,7 @@ public class StatusActivity extends AppCompatActivity implements ActionBar.TabLi
         // Set up the ViewPager with the sections adapter.
         mViewPager = (ViewPager) findViewById(R.id.container);
         mViewPager.setAdapter(mSectionsPagerAdapter);
-        
+
         // Set up the action bar.
         final android.support.v7.app.ActionBar actionBar = getSupportActionBar();
         actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_TABS);
@@ -204,6 +205,15 @@ public class StatusActivity extends AppCompatActivity implements ActionBar.TabLi
     public void onTabReselected(ActionBar.Tab tab, FragmentTransaction fragmentTransaction) {
     }
 
+    public void message(String message){
+        System.out.println(message);
+
+        // to refresh activity
+        Intent intent = getIntent();
+        intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
+        finish();
+        startActivity(intent);
+    }
     /**
      * A placeholder fragment containing a simple view.
      */
@@ -215,7 +225,6 @@ public class StatusActivity extends AppCompatActivity implements ActionBar.TabLi
         private static final String ARG_SECTION_NUMBER = "section_number";
         private int numTab = 0;
 
-
         private Button buttonCerrar;
         private Button buttonNuevaTarea;
         private TextView nombreEstado;
@@ -226,6 +235,8 @@ public class StatusActivity extends AppCompatActivity implements ActionBar.TabLi
         private JSONArray statusObject;
         protected JSONArray statusOpenObject;
         private SprintInfoTask mSprintTask;
+
+        private Window.Callback callback;
 
 
 
@@ -267,22 +278,43 @@ public class StatusActivity extends AppCompatActivity implements ActionBar.TabLi
 
         private void pintarDatos(){
             try {
-                Log.i("Los abiertos", statusOpenObject.toString());
                 nombreEstado.setText("Probando");
-                JSONObject statusLeido = statusOpenObject.getJSONObject(numTab);
+                final JSONObject statusLeido = statusOpenObject.getJSONObject(numTab);
                 nombreEstado.setText(statusLeido.getString("name"));
-                buttonCerrar.setOnClickListener(new View.OnClickListener() {
+                nombreEstado.setOnFocusChangeListener(new View.OnFocusChangeListener() {
                     @Override
-                    public void onClick(View v) {
+                    public void onFocusChange(View v, boolean hasFocus) {
 
+                        try{
+                            if (!nombreEstado.getText().toString().equals(statusLeido.getString("name")) && !nombreEstado.getText().toString().isEmpty()){
+                                JSONObject statusLeido = statusOpenObject.getJSONObject(getArguments().getInt(ARG_SECTION_NUMBER ) -1);
+                                mStatusUpdateTask = new StatusUpdateTask(statusLeido.getString("_id"),nombreEstado.getText().toString(), true);
+                                mStatusUpdateTask.execute((Void) null);
+                            }
+                        }catch (JSONException e){
+                            Log.e("JSONException", e.toString());
+                        }
                     }
                 });
+                buttonCerrar.setOnClickListener(new View.OnClickListener() {
 
+                    @Override
+                    public void onClick(View v) {
+                        try{
+                            JSONObject statusLeido = statusOpenObject.getJSONObject(getArguments().getInt(ARG_SECTION_NUMBER ) -1);
+                            mStatusUpdateTask = new StatusUpdateTask(statusLeido.getString("_id"),statusLeido.getString("name"), false);
+                            mStatusUpdateTask.execute((Void) null);
+                        }catch (JSONException e){
+                            Log.e("JSONException", e.toString());
+                        }
+                    }
+                });
             }catch (Exception e){
                 Log.e("JSONException", e.toString());
             }
 
         }
+
 
         /**
          * Represents an asynchronous task used to open a status;
@@ -290,10 +322,12 @@ public class StatusActivity extends AppCompatActivity implements ActionBar.TabLi
         public class StatusUpdateTask extends AsyncTask<Void, Void, Boolean> {
             private String idStatus = null;
             private String name = "";
+            private boolean estado;
 
-            StatusUpdateTask(String  idStatus, String name) {
+            StatusUpdateTask(String  idStatus, String name, boolean estado) {
                 this.idStatus = idStatus;
                 this.name = name;
+                this.estado = estado;
             }
 
 
@@ -312,7 +346,7 @@ public class StatusActivity extends AppCompatActivity implements ActionBar.TabLi
                 JSONObject nuevoUsuario = new JSONObject();
                 try{
                     body.put("name", name);
-                    body.put("open", true);
+                    body.put("open", estado);
 
                     URL url = new URL(urlPedida);
                     HttpURLConnection connection = (HttpURLConnection) url.openConnection();
@@ -366,7 +400,10 @@ public class StatusActivity extends AppCompatActivity implements ActionBar.TabLi
             protected void onPostExecute(final Boolean success) {
                 mStatusUpdateTask = null;
                 if (success) {
-
+                    Intent intent = getActivity().getIntent();
+                    int activityBrequestCode =0;
+                    getActivity().finish();
+                    startActivity(intent);
                 } else {
 
                 }

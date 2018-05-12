@@ -1,6 +1,8 @@
 package sergiojuliogu.myapplication.Adapters;
 
+import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.os.AsyncTask;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -24,6 +26,7 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
+import sergiojuliogu.myapplication.Activities.ClosedStatusActivity;
 import sergiojuliogu.myapplication.R;
 import sergiojuliogu.myapplication.Session;
 
@@ -78,6 +81,7 @@ public class StatusClosedAdapter extends BaseAdapter{
 
             String num = String.valueOf(tasksObject.length());
             numTextView.setText(num);
+
             final TextView buttonActivar = (TextView)convertView.findViewById(R.id.button_open_status);
             buttonActivar.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -85,14 +89,12 @@ public class StatusClosedAdapter extends BaseAdapter{
                     try{
                         mStatusUpdateTask = new StatusUpdateTask(statusSprint.getString("_id"), name);
                         mStatusUpdateTask.execute((Void) null);
-
                     }catch (JSONException e){
                         Log.e("JSONException", e.toString());
                     }
                 }
             });
             // 4
-
 
 
         }catch (JSONException e){
@@ -194,6 +196,8 @@ public class StatusClosedAdapter extends BaseAdapter{
             if (success) {
                 Toast.makeText(mContext, "Sprint actualizado." ,
                         Toast.LENGTH_SHORT).show();
+                StatusClosedAdapter.super.notifyDataSetChanged();
+
             } else {
                 Toast.makeText(mContext, "Sprint no actualizado." ,
                         Toast.LENGTH_SHORT).show();

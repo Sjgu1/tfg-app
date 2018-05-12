@@ -1,6 +1,7 @@
 package sergiojuliogu.myapplication.Activities;
 
 import android.content.Context;
+import android.content.Intent;
 import android.os.AsyncTask;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -54,6 +55,9 @@ public class ClosedStatusActivity extends AppCompatActivity {
         mSprintTask.execute((Void) null);
     }
 
+    public void refrescar(){
+
+    }
     /**
      * Represents an asynchronous task used to get sprint info information.
      */

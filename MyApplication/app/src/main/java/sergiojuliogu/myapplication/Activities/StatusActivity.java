@@ -61,7 +61,7 @@ public class StatusActivity extends AppCompatActivity implements ActionBar.TabLi
 
     private JSONObject sprintObject;
     private JSONArray statusObject;
-    public JSONArray statusOpenObject;
+    protected JSONArray statusOpenObject;
     private int activityBrequestCode = 0;
     private Context c;
 
@@ -80,15 +80,20 @@ public class StatusActivity extends AppCompatActivity implements ActionBar.TabLi
         mSprintTask = new SprintInfoTask(Session.getSprintSelected());
         mSprintTask.execute((Void) null);
 
-        // Set up the ViewPager with the sections adapter.
-        mViewPager = (ViewPager) findViewById(R.id.container);
-        mViewPager.setAdapter(mSectionsPagerAdapter);
+
 
     }
 
     public void numberTabs(){
-        mSectionsPagerAdapter = new SectionsPagerAdapter(getFragmentManager(), statusOpenObject);
+        // Create the adapter that will return a fragment for each of the three
+        // primary sections of the activity.
+        mSectionsPagerAdapter = new SectionsPagerAdapter(getFragmentManager());
+        mSectionsPagerAdapter.setN(numeroEstados);
 
+        // Set up the ViewPager with the sections adapter.
+        mViewPager = (ViewPager) findViewById(R.id.container);
+        mViewPager.setAdapter(mSectionsPagerAdapter);
+        
         // Set up the action bar.
         final android.support.v7.app.ActionBar actionBar = getSupportActionBar();
         actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_TABS);
@@ -141,8 +146,7 @@ public class StatusActivity extends AppCompatActivity implements ActionBar.TabLi
             Toast.makeText(StatusActivity.this, "No existen estados." ,
                     Toast.LENGTH_SHORT).show();
         }
-        // Create the adapter that will return a fragment for each of the three
-        // primary sections of the activity.
+
     }
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
@@ -209,13 +213,20 @@ public class StatusActivity extends AppCompatActivity implements ActionBar.TabLi
          * fragment.
          */
         private static final String ARG_SECTION_NUMBER = "section_number";
+        private int numTab = 0;
+
+
         private Button buttonCerrar;
         private Button buttonNuevaTarea;
         private TextView nombreEstado;
         private ListView listaTareas;
         private StatusUpdateTask mStatusUpdateTask;
-        private static JSONArray statusActual;
-        private static int seleccionado;
+        private JSONObject statusActual;
+        private JSONObject sprintObject;
+        private JSONArray statusObject;
+        protected JSONArray statusOpenObject;
+        private SprintInfoTask mSprintTask;
+
 
 
         public PlaceholderFragment() {
@@ -225,44 +236,51 @@ public class StatusActivity extends AppCompatActivity implements ActionBar.TabLi
          * Returns a new instance of this fragment for the given section
          * number.
          */
-        public static PlaceholderFragment newInstance(int sectionNumber, JSONArray statusOpenObject) {
+        public static PlaceholderFragment newInstance(int sectionNumber) {
             PlaceholderFragment fragment = new PlaceholderFragment();
             Bundle args = new Bundle();
             args.putInt(ARG_SECTION_NUMBER, sectionNumber);
             fragment.setArguments(args);
-            statusActual = statusOpenObject;
-            seleccionado = sectionNumber-1;
             return fragment;
         }
 
         @Override
         public View onCreateView(LayoutInflater inflater, ViewGroup container,
                                  Bundle savedInstanceState) {
+
+            numTab = getArguments().getInt(ARG_SECTION_NUMBER)-1;
             View rootView = inflater.inflate(R.layout.fragment_status, container, false);
             //TextView textView = (TextView) rootView.findViewById(R.id.section_label);
             //textView.setText(getString(R.string.section_format, getArguments().getInt(ARG_SECTION_NUMBER)));
             findViews(rootView);
 
+            mSprintTask = new SprintInfoTask(Session.getSprintSelected());
+            mSprintTask.execute((Void) null);
             return rootView;
         }
 
         private void findViews(View rootView){
-            try{
-                nombreEstado = (TextView) rootView.findViewById(R.id.nombre_estado_columna);
+            nombreEstado = (TextView) rootView.findViewById(R.id.nombre_estado_columna);
+            buttonCerrar = (Button) rootView.findViewById(R.id.button_close_status);
+
+        }
+
+        private void pintarDatos(){
+            try {
+                Log.i("Los abiertos", statusOpenObject.toString());
                 nombreEstado.setText("Probando");
-                JSONObject status = statusActual.getJSONObject(seleccionado);
-                nombreEstado.setText(status.getString("name"));
-                buttonCerrar = (Button) rootView.findViewById(R.id.button_close_status);
+                JSONObject statusLeido = statusOpenObject.getJSONObject(numTab);
+                nombreEstado.setText(statusLeido.getString("name"));
                 buttonCerrar.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
 
                     }
                 });
-            }catch (JSONException e){
+
+            }catch (Exception e){
                 Log.e("JSONException", e.toString());
             }
-
 
         }
 
@@ -359,6 +377,100 @@ public class StatusActivity extends AppCompatActivity implements ActionBar.TabLi
                 mStatusUpdateTask = null;
             }
         }
+
+        /**
+         * Represents an asynchronous task used to get sprint info information.
+         */
+        public class SprintInfoTask extends AsyncTask<Void, Void, Boolean> {
+            private String sprint;
+            private String sprintObtenido;
+
+            SprintInfoTask(String idSprint) {
+                sprint = idSprint;
+            }
+
+
+            @Override
+            protected Boolean doInBackground(Void... params) {
+
+                //Some url endpoint that you may have
+                String urlPedida = Session.URL+"/users/" + Session.getUsername()+"/projects/"+ Session.getProjectSelected()+"/sprints/"+sprint;
+                //String to place our result in
+                String result;
+                //Instantiate new instance of our class
+                //Perform the doInBackground method, passing in our url
+
+                try{
+
+                    URL url = new URL(urlPedida);
+                    HttpURLConnection connection = (HttpURLConnection) url.openConnection();
+                    connection.setRequestProperty("Authorization", Session.getToken());
+                    connection.connect();
+
+
+                    BufferedReader br;
+                    if (200 <= connection.getResponseCode() && connection.getResponseCode() <= 299) {
+                        br = new BufferedReader(new InputStreamReader(connection.getInputStream()));
+                    } else {
+                        br = new BufferedReader(new InputStreamReader(connection.getErrorStream()));
+                    }
+                    // Response: 400
+                    StringBuffer sb = new StringBuffer();
+
+                    String inputLine = "";
+                    while ((inputLine = br.readLine()) != null) {
+                        sb.append(inputLine);
+                    }
+                    String status = connection.getResponseCode() + "";
+                    result = sb.toString();
+                    if(status.equals("200")) {
+                        try {
+
+                            JSONObject obj = new JSONObject(result);
+                            sprintObject = obj;
+                            statusObject = (JSONArray) sprintObject.get("status");
+                            JSONObject stadoLeido;
+                            statusOpenObject = new JSONArray();
+                            for (int i = 0; i< statusObject.length(); i++){
+                                stadoLeido = statusObject.getJSONObject(i);
+                                if(stadoLeido.getString("open").equals("true")){
+                                    statusOpenObject.put(stadoLeido);
+                                }
+                            }
+                            return true;
+
+                        } catch (Throwable t) {
+                            Log.e("My App", "Could not parse malformed JSON: \"" + result + "\"");
+                            return false;
+                        }
+                    }
+                    Thread.sleep(2000);
+                } catch (InterruptedException e) {
+                    Log.i("exception", e.toString());
+                } catch (Exception e){
+                    Log.i("exception", e.toString());
+                }
+
+                return false;
+            }
+
+
+            @Override
+            protected void onPostExecute(final Boolean success) {
+                mSprintTask = null;
+                if (success) {
+                    pintarDatos();
+                } else {
+
+                }
+            }
+
+            @Override
+            protected void onCancelled() {
+                mSprintTask = null;
+            }
+
+        }
     }
 
     /**
@@ -366,24 +478,28 @@ public class StatusActivity extends AppCompatActivity implements ActionBar.TabLi
      * one of the sections/tabs/pages.
      */
     public class SectionsPagerAdapter extends FragmentPagerAdapter {
-        private JSONArray statusOpenObject;
+        private int NUM_VIEWS = 2;
 
-        public SectionsPagerAdapter(FragmentManager fm, JSONArray obj) {
+
+        public SectionsPagerAdapter(FragmentManager fm) {
             super(fm);
-            statusOpenObject = obj;
+        }
+
+        public void setN(int N) {
+            this.NUM_VIEWS = N;
         }
 
         @Override
         public Fragment getItem(int position) {
             // getItem is called to instantiate the fragment for the given page.
             // Return a PlaceholderFragment (defined as a static inner class below).
-            return PlaceholderFragment.newInstance(position + 1, statusOpenObject);
+            return PlaceholderFragment.newInstance(position + 1);
         }
 
         @Override
         public int getCount() {
-            // Show 3 total pages.
-            return 3;
+
+            return NUM_VIEWS;
         }
 
         @Override

@@ -39,7 +39,9 @@ import java.io.OutputStreamWriter;
 import java.net.HttpURLConnection;
 import java.net.URL;
 
+import sergiojuliogu.myapplication.Adapters.StatusAdapter;
 import sergiojuliogu.myapplication.Adapters.StatusClosedAdapter;
+import sergiojuliogu.myapplication.Adapters.TasksAdapter;
 import sergiojuliogu.myapplication.R;
 import sergiojuliogu.myapplication.Session;
 
@@ -239,7 +241,9 @@ public class StatusActivity extends AppCompatActivity implements ActionBar.TabLi
         private JSONArray statusObject;
         protected JSONArray statusOpenObject;
         private SprintInfoTask mSprintTask;
+        private StatusGetInfo mStatusGetInfo;
 
+        private JSONArray tasksStatus;
         private Window.Callback callback;
 
 
@@ -333,6 +337,19 @@ public class StatusActivity extends AppCompatActivity implements ActionBar.TabLi
                         }
                     }
                 });
+
+                try{
+                    JSONObject statusLeido2 = statusOpenObject.getJSONObject(getArguments().getInt(ARG_SECTION_NUMBER ) -1);
+
+                    String idStatus = (String) statusLeido2.get("_id");
+                    mStatusGetInfo = new StatusGetInfo(getActivity().getApplicationContext(),idStatus);
+                    mStatusGetInfo.execute((Void) null);
+
+                    // finish();
+                }catch (JSONException e){
+                    Log.e("JsonException", e.toString());
+                }
+
             }catch (Exception e){
                 Log.e("JSONException", e.toString());
             }
@@ -340,6 +357,100 @@ public class StatusActivity extends AppCompatActivity implements ActionBar.TabLi
         }
 
 
+        /**
+         * Represents an asynchronous task used to open a status;
+         */
+        public class StatusGetInfo extends AsyncTask<Void, Void, Boolean> {
+            private String idStatus = null;
+            private String name = "";
+            private JSONArray arrayLeido;
+            private Context c;
+
+            StatusGetInfo(Context cont,String  idStatus) {
+                this.idStatus = idStatus;
+                this.c = cont;
+            }
+
+
+            @Override
+            protected Boolean doInBackground(Void... params) {
+
+
+                //Some url endpoint that you may have
+                String urlPedida = Session.URL+"/users/"+Session.getUsername()+"/projects/"+Session.getProjectSelected() +"/sprints/"+ Session.getSprintSelected()+"/status/" + idStatus;
+                //String to place our result in
+                String result;
+                //Instantiate new instance of our class
+                //Perform the doInBackground method, passing in our url
+
+                JSONObject body = new JSONObject();
+                try{
+
+                    URL url = new URL(urlPedida);
+                    HttpURLConnection connection = (HttpURLConnection) url.openConnection();
+                    connection.setRequestProperty("Authorization", Session.getToken());
+                    connection.connect();
+
+
+                    BufferedReader br;
+                    if (200 <= connection.getResponseCode() && connection.getResponseCode() <= 299) {
+                        br = new BufferedReader(new InputStreamReader(connection.getInputStream()));
+                    } else {
+                        br = new BufferedReader(new InputStreamReader(connection.getErrorStream()));
+                    }
+                    // Response: 400
+                    StringBuffer sb = new StringBuffer();
+
+                    String inputLine = "";
+                    while ((inputLine = br.readLine()) != null) {
+                        sb.append(inputLine);
+                    }
+                    String status = connection.getResponseCode() + "";
+                    result = sb.toString();
+
+                    if(status.equals("200")) {
+                        try {
+
+                            JSONObject obj = new JSONObject(result);
+                            JSONObject statusRecibido = new JSONObject(result);
+                            arrayLeido = statusRecibido.getJSONArray("tasks");
+                            return true;
+
+                        } catch (Throwable t) {
+                            Log.e("My App", "Could not parse malformed JSON: \"" + result + "\"");
+                            return false;
+                        }
+                    }
+                    Thread.sleep(2000);
+                    return false;
+                } catch (InterruptedException e) {
+                    Log.i("exception", e.toString());
+                } catch (Exception e){
+                    Log.i("exception", e.toString());
+                }
+
+                return false;
+            }
+
+            @Override
+            protected void onPostExecute(final Boolean success) {
+                mStatusGetInfo = null;
+                if (success) {
+                    tasksStatus = arrayLeido;
+
+                    TasksAdapter tasksAdapter = new TasksAdapter(c, idStatus, tasksStatus);
+                    listaTareas.setAdapter(tasksAdapter);
+                } else {
+                    Toast.makeText(getContext(), "Error al obtener las tareas." ,
+                            Toast.LENGTH_SHORT).show();
+                }
+            }
+
+            @Override
+            protected void onCancelled() {
+                mStatusGetInfo = null;
+            }
+        }
         /**
          * Represents an asynchronous task used to open a status;
          */

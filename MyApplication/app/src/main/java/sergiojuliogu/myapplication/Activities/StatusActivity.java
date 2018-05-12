@@ -9,6 +9,7 @@ import android.app.FragmentManager;
 import android.content.Context;
 import android.content.Intent;
 import android.os.AsyncTask;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v13.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.os.Bundle;
@@ -22,6 +23,7 @@ import android.view.ViewGroup;
 
 import android.view.Window;
 import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -214,6 +216,8 @@ public class StatusActivity extends AppCompatActivity implements ActionBar.TabLi
         finish();
         startActivity(intent);
     }
+
+
     /**
      * A placeholder fragment containing a simple view.
      */
@@ -226,7 +230,7 @@ public class StatusActivity extends AppCompatActivity implements ActionBar.TabLi
         private int numTab = 0;
 
         private Button buttonCerrar;
-        private Button buttonNuevaTarea;
+        private FloatingActionButton buttonNuevaTarea;
         private TextView nombreEstado;
         private ListView listaTareas;
         private StatusUpdateTask mStatusUpdateTask;
@@ -273,6 +277,8 @@ public class StatusActivity extends AppCompatActivity implements ActionBar.TabLi
         private void findViews(View rootView){
             nombreEstado = (TextView) rootView.findViewById(R.id.nombre_estado_columna);
             buttonCerrar = (Button) rootView.findViewById(R.id.button_close_status);
+            buttonNuevaTarea = (FloatingActionButton) rootView.findViewById(R.id.button_new_task);
+            listaTareas = (ListView) rootView.findViewById(R.id.list_tasks_status);
 
         }
 
@@ -297,7 +303,6 @@ public class StatusActivity extends AppCompatActivity implements ActionBar.TabLi
                     }
                 });
                 buttonCerrar.setOnClickListener(new View.OnClickListener() {
-
                     @Override
                     public void onClick(View v) {
                         try{
@@ -306,6 +311,25 @@ public class StatusActivity extends AppCompatActivity implements ActionBar.TabLi
                             mStatusUpdateTask.execute((Void) null);
                         }catch (JSONException e){
                             Log.e("JSONException", e.toString());
+                        }
+                    }
+                });
+
+                buttonNuevaTarea.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        try{
+                            JSONObject statusLeido = statusOpenObject.getJSONObject(getArguments().getInt(ARG_SECTION_NUMBER ) -1);
+
+                            Intent intent = new Intent(getActivity().getApplicationContext(), NewTaskActivity.class);
+                            Bundle b = new Bundle();
+                            b.putString("key", statusLeido.get("_id").toString()); //Your id
+                            intent.putExtras(b); //Put your id to your next Intent
+                            intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                            startActivityForResult(intent, 0);
+                            // finish();
+                        }catch (JSONException e){
+                            Log.e("JsonException", e.toString());
                         }
                     }
                 });

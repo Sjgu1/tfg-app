@@ -94,9 +94,13 @@
             android:name=".Activities.StatusActivity"
             android:label="Tablero"
             android:parentActivityName=".Activities.SprintActivity" />
-        <activity android:name=".Activities.ClosedStatusActivity"
+        <activity
+            android:name=".Activities.ClosedStatusActivity"
             android:label="Estados cerrados"
-            android:parentActivityName=".Activities.StatusActivity"></activity>
+            android:parentActivityName=".Activities.StatusActivity" />
+        <activity android:name=".Activities.NewTaskActivity"
+            android:label="Nueva Tarea"
+            android:parentActivityName=".Activities.SprintActivity"></activity>
     </application>
 
 </manifest>

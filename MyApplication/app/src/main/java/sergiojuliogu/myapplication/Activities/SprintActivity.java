@@ -66,6 +66,7 @@ public class SprintActivity extends AppCompatActivity {
                     intent.putExtras(b); //Put your id to your next Intent
                     intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                     startActivityForResult(intent, activityBrequestCode);
+                    return true;
                 case R.id.navigation_sprints_sprint:
                     Intent intent2 = new Intent(c, StatusActivity.class);
                     intent2.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);

@@ -1,9 +1,7 @@
-package sergiojuliogu.myapplication;
+package sergiojuliogu.myapplication.Activities;
 
-import android.app.ActionBar;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
-import android.content.Intent;
 import android.os.AsyncTask;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -16,7 +14,6 @@ import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.Toast;
 
-import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -27,6 +24,9 @@ import java.io.OutputStreamWriter;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.regex.Pattern;
+
+import sergiojuliogu.myapplication.R;
+import sergiojuliogu.myapplication.Session;
 
 public class ProfileActivity extends AppCompatActivity {
 

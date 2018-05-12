@@ -1,4 +1,4 @@
-package sergiojuliogu.myapplication;
+package sergiojuliogu.myapplication.Activities;
 
 import android.content.Context;
 import android.content.Intent;
@@ -26,6 +26,10 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Locale;
+
+import sergiojuliogu.myapplication.R;
+import sergiojuliogu.myapplication.Session;
+import sergiojuliogu.myapplication.Adapters.StatusAdapter;
 
 public class SprintActivity extends AppCompatActivity {
 
@@ -63,6 +67,9 @@ public class SprintActivity extends AppCompatActivity {
                     intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                     startActivityForResult(intent, activityBrequestCode);
                 case R.id.navigation_sprints_sprint:
+                    Intent intent2 = new Intent(c, StatusActivity.class);
+                    intent2.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                    startActivityForResult(intent2, activityBrequestCode);
                     return true;
             }
             return false;

@@ -1,4 +1,4 @@
-package sergiojuliogu.myapplication;
+package sergiojuliogu.myapplication.Adapters;
 
 import android.content.Context;
 import android.util.Log;
@@ -14,6 +14,8 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.Locale;
+
+import sergiojuliogu.myapplication.R;
 
 public class SearchUserAdapter extends BaseAdapter {
 

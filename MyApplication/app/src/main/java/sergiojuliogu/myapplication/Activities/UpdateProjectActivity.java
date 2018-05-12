@@ -1,4 +1,4 @@
-package sergiojuliogu.myapplication;
+package sergiojuliogu.myapplication.Activities;
 
 import android.app.AlertDialog;
 import android.app.DatePickerDialog;
@@ -11,7 +11,6 @@ import android.text.InputType;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
-import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
@@ -34,11 +33,13 @@ import java.net.URL;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
-import java.util.List;
 import java.util.Locale;
+
+import sergiojuliogu.myapplication.R;
+import sergiojuliogu.myapplication.Session;
+import sergiojuliogu.myapplication.Adapters.UsersUpdateAdapter;
 
 public class UpdateProjectActivity extends AppCompatActivity {
 

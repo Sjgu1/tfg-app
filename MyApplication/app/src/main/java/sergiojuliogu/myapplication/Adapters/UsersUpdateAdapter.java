@@ -1,4 +1,4 @@
-package sergiojuliogu.myapplication;
+package sergiojuliogu.myapplication.Adapters;
 
 import android.content.Context;
 import android.os.AsyncTask;
@@ -31,6 +31,9 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+
+import sergiojuliogu.myapplication.R;
+import sergiojuliogu.myapplication.Session;
 
 public class UsersUpdateAdapter extends BaseAdapter {
 

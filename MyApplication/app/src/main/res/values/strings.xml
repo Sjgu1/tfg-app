@@ -60,5 +60,12 @@
 
     <string name="lorem_75">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nam sit amet nisi eu tortor egestas blandit. Vivamus condimentum placerat ante, eget maximus urna ornare id. Maecenas vel nibh vel lorem tristique aliquam. Sed auctor, risus at tempor scelerisque, sapien nisl blandit libero, sit amet venenatis lectus mi ac felis. Sed mattis dignissim mauris eget blandit. Cras mollis mauris mauris, non iaculis sem volutpat a. Integer non orci erat. Nam bibendum erat tortor, et cursus eros dictum a.</string>
     <string name="title_activity_sprint">SprintActivity</string>
+    <string name="title_activity_probando">ProbandoActivity</string>
+    <string name="tab_text_1">Tab 1</string>
+    <string name="tab_text_2">Tab 2</string>
+    <string name="tab_text_3">Tab 3</string>
+    <string name="action_settings">Settings</string>
+    <string name="section_format">Hello World from section: %1$d</string>
+    <string name="title_activity_prrar">PrrarActivity</string>
 </resources>
 

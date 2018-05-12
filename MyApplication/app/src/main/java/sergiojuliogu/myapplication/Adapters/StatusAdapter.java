@@ -1,4 +1,4 @@
-package sergiojuliogu.myapplication;
+package sergiojuliogu.myapplication.Adapters;
 
 import android.content.Context;
 import android.util.Log;
@@ -12,6 +12,8 @@ import android.widget.TextView;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
+
+import sergiojuliogu.myapplication.R;
 
 public class StatusAdapter extends BaseAdapter {
 

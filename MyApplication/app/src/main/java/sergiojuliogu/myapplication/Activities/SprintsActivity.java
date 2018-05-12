@@ -1,4 +1,4 @@
-package sergiojuliogu.myapplication;
+package sergiojuliogu.myapplication.Activities;
 
 import android.content.Context;
 import android.content.Intent;
@@ -9,7 +9,6 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
-import android.widget.GridView;
 import android.widget.ListView;
 import android.widget.Toast;
 
@@ -21,11 +20,10 @@ import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
-import java.text.DateFormat;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.Date;
-import java.util.Locale;
+
+import sergiojuliogu.myapplication.Adapters.ProjectsAdapter;
+import sergiojuliogu.myapplication.R;
+import sergiojuliogu.myapplication.Session;
 
 public class SprintsActivity extends AppCompatActivity {
 
@@ -130,7 +128,7 @@ public class SprintsActivity extends AppCompatActivity {
         protected Boolean doInBackground(Void... params) {
 
             //Some url endpoint that you may have
-            String urlPedida = Session.URL+"/users/" + Session.getUsername()+"/projects/"+project;
+            String urlPedida = Session.URL+"/users/" + Session.getUsername()+"/projects/"+ Session.getProjectSelected();
             //String to place our result in
             String result;
             //Instantiate new instance of our class

@@ -1,31 +1,39 @@
 <?xml version="1.0" encoding="utf-8"?>
 <android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="sergiojuliogu.myapplication.AvatarsActivity">
+    tools:context="sergiojuliogu.myapplication.Activities.AvatarsActivity">
 
-    <ProgressBar
-        android:id="@+id/avatars_progress"
-        style="?android:attr/progressBarStyleLarge"
+    <!-- Login progress -->
+    <include
+        layout="@layout/progress_bar_layout"
+        android:id="@+id/customProgressDialog"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="8dp"
-        android:visibility="gone" />
+        android:layout_centerInParent="true"
+        />
 
     <LinearLayout
         android:id="@+id/avatars_form"
         android:layout_width="360dp"
         android:layout_height="300dp"
+        android:layout_marginBottom="8dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
         android:orientation="horizontal"
-        tools:layout_editor_absoluteX="0dp"
-        tools:layout_editor_absoluteY="105dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
         tools:ignore="MissingConstraints">
 
         <GridView
             android:id="@+id/gridview"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
             android:elevation="19dp"
             android:gravity="center_horizontal"
             android:numColumns="auto_fit"

@@ -1,4 +1,4 @@
-package sergiojuliogu.myapplication;
+package sergiojuliogu.myapplication.Activities;
 
 import android.app.DatePickerDialog;
 
@@ -29,6 +29,9 @@ import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.Locale;
+
+import sergiojuliogu.myapplication.R;
+import sergiojuliogu.myapplication.Session;
 
 public class NewProjectActivity extends AppCompatActivity {
 

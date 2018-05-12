@@ -1,4 +1,4 @@
-package sergiojuliogu.myapplication;
+package sergiojuliogu.myapplication.Activities;
 
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
@@ -19,12 +19,13 @@ import android.widget.Toast;
 
 import org.json.JSONObject;
 
-import java.io.BufferedReader;
 import java.io.BufferedWriter;
-import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
 import java.net.HttpURLConnection;
 import java.net.URL;
+
+import sergiojuliogu.myapplication.R;
+import sergiojuliogu.myapplication.Session;
 
 public class AvatarsActivity extends AppCompatActivity {
 
@@ -46,7 +47,7 @@ public class AvatarsActivity extends AppCompatActivity {
         GridView gridview = (GridView) findViewById(R.id.gridview);
         gridview.setAdapter(new AvatarsActivity.ImageAdapter(this));
 
-        mProgressView = findViewById(R.id.avatars_progress);
+        mProgressView = findViewById(R.id.progress);
         mAvatarsFormView = findViewById(R.id.avatars_form);
 
         gridview.setOnItemClickListener(new AdapterView.OnItemClickListener() {

@@ -1,17 +1,20 @@
-package sergiojuliogu.myapplication;
+package sergiojuliogu.myapplication.Activities;
 
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.annotation.TargetApi;
-import android.app.ActionBar;
-import android.os.AsyncTask;
-import android.os.Build;
+import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
+
+import android.os.AsyncTask;
+
+import android.os.Build;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
+import android.view.View.OnClickListener;
 import android.view.inputmethod.EditorInfo;
 import android.widget.AutoCompleteTextView;
 import android.widget.Button;
@@ -26,78 +29,105 @@ import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
 import java.net.HttpURLConnection;
 import java.net.URL;
-import java.util.regex.Pattern;
 
-public class RegisterActivity extends AppCompatActivity {
+import sergiojuliogu.myapplication.R;
+import sergiojuliogu.myapplication.Session;
+
+/**
+ * A login screen that offers login via email/password.
+ */
+public class LoginActivity extends AppCompatActivity {
+
     /**
-     * Keep track of the Register task to ensure we can cancel it if requested.
+     * Keep track of the login task to ensure we can cancel it if requested.
      */
-    private UserRegisterTask mAuthTask = null;
-
+    private UserLoginTask mAuthTask = null;
+    private JSONObject user = null;
 
     // UI references.
-    private EditText mUsernameView;
-    private EditText mEmailView;
+    private AutoCompleteTextView mUsernameView;
     private EditText mPasswordView;
     private View mProgressView;
-    private View mRegisterFormView;
+    private View mLoginFormView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        TextView b1;
         super.onCreate(savedInstanceState);
-        ActionBar actionBar = getActionBar();
-        setContentView(R.layout.activity_register);
 
-        mUsernameView = (EditText) findViewById(R.id.inputUsername);
-        mEmailView = (EditText) findViewById(R.id.inputEmail);
-        mPasswordView = (EditText) findViewById(R.id.inputPassword);
+        b1 = (TextView) findViewById(R.id.linkRegistro);
+        //b1.setOnClickListener(myhandler1);
+        setContentView(R.layout.activity_login);
+        // Set up the login form.
+        mUsernameView = (AutoCompleteTextView) findViewById(R.id.Username);
 
-        Button mRegisterButton = (Button) findViewById(R.id.buttonRegister);
-        mRegisterButton.setOnClickListener(new View.OnClickListener() {
+        mPasswordView = (EditText) findViewById(R.id.password);
+        mPasswordView.setOnEditorActionListener(new TextView.OnEditorActionListener() {
             @Override
-            public void onClick(View view) {
-                attemptRegister();
+            public boolean onEditorAction(TextView textView, int id, KeyEvent keyEvent) {
+                if (id == R.id.login || id == EditorInfo.IME_NULL) {
+                    attemptLogin();
+                    return true;
+                }
+                return false;
             }
         });
 
-        mRegisterFormView = findViewById(R.id.register_form);
-        mProgressView = findViewById(R.id.register_progress);
+        Button mEmailSignInButton = (Button) findViewById(R.id.email_sign_in_button);
+        mEmailSignInButton.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                attemptLogin();
+            }
+        });
+
+        mLoginFormView = findViewById(R.id.login_form);
+        mProgressView = findViewById(R.id.login_progress);
     }
 
-    private void attemptRegister() {
+    public void onClick(View v){
+        Intent i = new Intent(getApplicationContext(), RegisterActivity.class);
+        startActivity(i);
+
+    }
+    View.OnClickListener myhandler1 = new View.OnClickListener() {
+        public void onClick(View v){
+            Intent i = new Intent(getApplicationContext(), RegisterActivity.class);
+            startActivity(i);
+
+        }
+    };
+
+
+    /**
+     * Attempts to sign in or register the account specified by the login form.
+     * If there are form errors (invalid email, missing fields, etc.), the
+     * errors are presented and no actual login attempt is made.
+     */
+    private void attemptLogin() {
+        /*if(true){
+            changeLogedStatus();
+            return;
+        }*/
         if (mAuthTask != null) {
             return;
         }
 
+
         // Reset errors.
         mUsernameView.setError(null);
         mPasswordView.setError(null);
-        mEmailView.setError(null);
 
-        // Store values at the time of the register attempt.
+        // Store values at the time of the login attempt.
         String username = mUsernameView.getText().toString();
-        String email = mEmailView.getText().toString();
         String password = mPasswordView.getText().toString();
 
         boolean cancel = false;
         View focusView = null;
 
-
-        // Check for a valid password, if the user entered one.
-        if ( !isPasswordValid(password)) {
+        if(!isPasswordValid(password)){
             mPasswordView.setError(getString(R.string.error_invalid_password));
             focusView = mPasswordView;
-            cancel = true;
-        }
-
-        // Check for a valid email address.
-        if (TextUtils.isEmpty(email) ) {
-            mEmailView.setError(getString(R.string.error_field_required));
-            focusView = mEmailView;
-            cancel = true;
-        }else if(!isEmailValid(email)){
-            mEmailView.setError(getString(R.string.error_invalid_email));
-            focusView = mEmailView;
             cancel = true;
         }
 
@@ -109,30 +139,25 @@ public class RegisterActivity extends AppCompatActivity {
         }
 
         if (cancel) {
-            // There was an error; don't attempt register and focus the first
+            // There was an error; don't attempt login and focus the first
             // form field with an error.
             focusView.requestFocus();
         } else {
             // Show a progress spinner, and kick off a background task to
-            // perform the user register attempt.
-            //showProgress(true);
-            mAuthTask = new UserRegisterTask(username , email , password);
+            // perform the user login attempt.
+            showProgress(true);
+            mAuthTask = new UserLoginTask(username, password);
             mAuthTask.execute((Void) null);
         }
     }
 
+    private void changeLogedStatus(){
+        Intent i = new Intent(getApplicationContext(), HomeActivity.class);
 
-    private boolean isEmailValid(String email) {
-        String emailRegex = "^[a-zA-Z0-9_+&*-]+(?:\\."+
-                "[a-zA-Z0-9_+&*-]+)*@" +
-                "(?:[a-zA-Z0-9-]+\\.)+[a-z" +
-                "A-Z]{2,7}$";
-
-        Pattern pat = Pattern.compile(emailRegex);
-        if (email == null)
-            return false;
-        Log.i("Email valido", pat.matcher(email).matches() + "");
-        return pat.matcher(email).matches();
+        Bundle b = new Bundle();
+        b.putString("user", user.toString()); //Your id
+        i.putExtras(b); //Put your id to your next Intent
+        startActivity(i);
     }
 
     private boolean isPasswordValid(String password) {
@@ -140,7 +165,7 @@ public class RegisterActivity extends AppCompatActivity {
     }
 
     /**
-     * Shows the progress UI and hides the register form.
+     * Shows the progress UI and hides the login form.
      */
     @TargetApi(Build.VERSION_CODES.HONEYCOMB_MR2)
     private void showProgress(final boolean show) {
@@ -150,12 +175,12 @@ public class RegisterActivity extends AppCompatActivity {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB_MR2) {
             int shortAnimTime = getResources().getInteger(android.R.integer.config_shortAnimTime);
 
-            mRegisterFormView.setVisibility(show ? View.GONE : View.VISIBLE);
-            mRegisterFormView.animate().setDuration(shortAnimTime).alpha(
+            mLoginFormView.setVisibility(show ? View.GONE : View.VISIBLE);
+            mLoginFormView.animate().setDuration(shortAnimTime).alpha(
                     show ? 0 : 1).setListener(new AnimatorListenerAdapter() {
                 @Override
                 public void onAnimationEnd(Animator animation) {
-                    mRegisterFormView.setVisibility(show ? View.GONE : View.VISIBLE);
+                    mLoginFormView.setVisibility(show ? View.GONE : View.VISIBLE);
                 }
             });
 
@@ -171,44 +196,40 @@ public class RegisterActivity extends AppCompatActivity {
             // The ViewPropertyAnimator APIs are not available, so simply show
             // and hide the relevant UI components.
             mProgressView.setVisibility(show ? View.VISIBLE : View.GONE);
-            mRegisterFormView.setVisibility(show ? View.GONE : View.VISIBLE);
+            mLoginFormView.setVisibility(show ? View.GONE : View.VISIBLE);
         }
     }
 
 
     /**
-     * Represents an asynchronous register task used to authenticate
+     * Represents an asynchronous login task used to authenticate
      * the user.
      */
-    public class UserRegisterTask extends AsyncTask<Void, Void, Boolean> {
+    public class UserLoginTask extends AsyncTask<Void, Void, Boolean> {
 
         private final String mUsername;
         private final String mPassword;
-        private final String mEmail;
-        private  String error;
 
-        UserRegisterTask(String username,String email, String password ) {
-            mEmail = email;
-            mPassword = password;
+        UserLoginTask(String username, String password) {
             mUsername = username;
-            error = "false";
+            mPassword = password;
         }
 
         @Override
         protected Boolean doInBackground(Void... params) {
 
             //Some url endpoint that you may have
-            String urlPedida = Session.URL+"/auth/signup";
+            String urlPedida = Session.URL+"/auth/login";
             //String to place our result in
             String result;
             //Instantiate new instance of our class
             //Perform the doInBackground method, passing in our url
+            Log.i("La url", urlPedida);
 
             JSONObject body = new JSONObject();
             try{
                 body.put("username", mUsername);
                 body.put("password", mPassword);
-                body.put("email", mEmail);
 
 
                 URL url = new URL(urlPedida);
@@ -226,32 +247,34 @@ public class RegisterActivity extends AppCompatActivity {
                 connection.connect();
                 BufferedReader br;
                 if (200 <= connection.getResponseCode() && connection.getResponseCode() <= 299) {
-                    br = new BufferedReader(new InputStreamReader(connection.getInputStream()));
+                     br = new BufferedReader(new InputStreamReader(connection.getInputStream()));
                 } else {
                     br = new BufferedReader(new InputStreamReader(connection.getErrorStream()));
                 }
                 // Response: 400
-
+               // Log.e("Response", connection.getResponseMessage() + "");
                 StringBuffer sb = new StringBuffer();
 
                 String inputLine = "";
                 while ((inputLine = br.readLine()) != null) {
                     sb.append(inputLine);
                 }
-                result = sb.toString();
                 String status = connection.getResponseCode() + "";
+                result = sb.toString();
+                Log.i("res", result);
+                if(status.equals("200")) {
+                    try {
 
-                if(status.equals("409")){
+                        JSONObject obj = new JSONObject(result);
+                        user = obj;
+                        Session.setToken(obj.getString("token"));
+                        Session.setUsername(mUsername);
+                        return true;
 
-                    if(result.equals("Existe un usuario con el mismo nombre de usuario")){
-                        error = "username";
-                        return false;
-                    }else{
-                        error = "email";
-                        return false;
+                    } catch (Throwable t) {
+                        Log.e("My App", "Could not parse malformed JSON: \"" + result + "\"");
                     }
                 }
-
                 Thread.sleep(2000);
             } catch (InterruptedException e) {
                 Log.i("exception", e.toString());
@@ -259,7 +282,7 @@ public class RegisterActivity extends AppCompatActivity {
                 Log.i("exception", e.toString());
             }
 
-            return true;
+            return false;
         }
 
 
@@ -269,9 +292,12 @@ public class RegisterActivity extends AppCompatActivity {
             showProgress(false);
 
             if (success) {
-                finish();
+                Session.setLoged(true);
+                changeLogedStatus();
+                //finish();
             } else {
-                mostrarErroresRespuesta();
+                mPasswordView.setError(getString(R.string.error_incorrect_password));
+                mPasswordView.requestFocus();
             }
         }
 
@@ -280,22 +306,6 @@ public class RegisterActivity extends AppCompatActivity {
             mAuthTask = null;
             showProgress(false);
         }
-
-        private void mostrarErroresRespuesta(){
-
-            if(error.equals("username")){
-                mUsernameView.setError("Ya existe un usuario con ese nombre.");
-                mUsernameView.requestFocus();
-
-            }else{
-                mEmailView.setError("Ya existe el email en la base de datos");
-                mEmailView.requestFocus();
-            }
-
-        }
     }
 }
-
-
-
 

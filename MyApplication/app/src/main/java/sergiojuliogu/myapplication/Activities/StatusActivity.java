@@ -121,6 +121,11 @@ public class StatusActivity extends AppCompatActivity implements ActionBar.TabLi
 // When the given tab is selected, switch to the corresponding page in
                 // the ViewPager.
                 mViewPager.setCurrentItem(tab.getPosition());
+                if(Session.isCambios()){
+                    Session.setCambios(false);
+                    mSprintTask = new SprintInfoTask(Session.getSprintSelected());
+                    mSprintTask.execute((Void) null);
+                }
             }
 
             @Override
@@ -263,6 +268,17 @@ public class StatusActivity extends AppCompatActivity implements ActionBar.TabLi
             return fragment;
         }
 
+
+        public void onActivityResult(int requestCode, int resultCode, Intent data){
+            super.onActivityResult(requestCode, resultCode, data);
+            if (requestCode == 0 && resultCode == 300){
+                Intent refresh = new Intent(this.getActivity().getApplicationContext(), StatusActivity.class);
+                getActivity().finish(); //finish Activity.
+                startActivity(refresh);//Start the same Activity
+            }
+
+        }
+
         @Override
         public View onCreateView(LayoutInflater inflater, ViewGroup container,
                                  Bundle savedInstanceState) {
@@ -285,6 +301,7 @@ public class StatusActivity extends AppCompatActivity implements ActionBar.TabLi
             listaTareas = (ListView) rootView.findViewById(R.id.list_tasks_status);
 
         }
+
 
         private void pintarDatos(){
             try {
@@ -358,7 +375,7 @@ public class StatusActivity extends AppCompatActivity implements ActionBar.TabLi
 
 
         /**
-         * Represents an asynchronous task used to open a status;
+         * Represents an asynchronous task used to get info from an status;
          */
         public class StatusGetInfo extends AsyncTask<Void, Void, Boolean> {
             private String idStatus = null;
@@ -437,8 +454,7 @@ public class StatusActivity extends AppCompatActivity implements ActionBar.TabLi
                 mStatusGetInfo = null;
                 if (success) {
                     tasksStatus = arrayLeido;
-
-                    TasksAdapter tasksAdapter = new TasksAdapter(c, idStatus, tasksStatus);
+                    TasksAdapter tasksAdapter = new TasksAdapter(c, idStatus, tasksStatus, statusObject);
                     listaTareas.setAdapter(tasksAdapter);
                 } else {
                     Toast.makeText(getContext(), "Error al obtener las tareas." ,

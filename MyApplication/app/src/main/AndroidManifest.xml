@@ -100,7 +100,7 @@
             android:parentActivityName=".Activities.StatusActivity" />
         <activity android:name=".Activities.NewTaskActivity"
             android:label="Nueva Tarea"
-            android:parentActivityName=".Activities.SprintActivity"></activity>
+            android:parentActivityName=".Activities.StatusActivity"></activity>
     </application>
 
 </manifest>

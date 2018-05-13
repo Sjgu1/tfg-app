@@ -9,6 +9,7 @@ import com.pes.androidmaterialcolorpickerdialog.ColorPicker;
 import com.pes.androidmaterialcolorpickerdialog.ColorPickerCallback;
 
 import android.os.Bundle;
+import android.support.v7.widget.CardView;
 import android.text.InputType;
 import android.text.TextUtils;
 import android.util.Log;
@@ -54,6 +55,7 @@ public class NewTaskActivity extends AppCompatActivity {
     private Button colorTaskButton;
     private View mProgressView;
     private String colorElegido = "FFFFFF";
+    private CardView mCardView;
 
     private String statusID;
 
@@ -109,6 +111,9 @@ public class NewTaskActivity extends AppCompatActivity {
             }
         });
 
+        mCardView = (CardView) findViewById(R.id.color_selected);
+
+
         final ColorPicker cp = new ColorPicker(NewTaskActivity.this, 125, 125, 125);
 
         colorTaskButton = (Button) findViewById(R.id.newColor);
@@ -136,6 +141,9 @@ public class NewTaskActivity extends AppCompatActivity {
                         Log.d("#Hex with alpha", String.format("#%08X", (0xFFFFFFFF & color)));
                         colorElegido = Integer.toHexString(color);
                         Log.i("elegido", colorElegido);
+
+                        int colorSeleccionado = Color.parseColor("#"+colorElegido);
+                        mCardView.setCardBackgroundColor(colorSeleccionado);
 
                         // If the auto-dismiss option is not enable (disabled as default) you have to manually dimiss the dialog
                         // cp.dismiss();
@@ -352,7 +360,7 @@ public class NewTaskActivity extends AppCompatActivity {
             //showProgress(false);
 
             if (success) {
-                setResult(RESULT_OK);
+                setResult(300);
                 Toast.makeText(NewTaskActivity.this, "Se ha creado la tarea." ,
                         Toast.LENGTH_SHORT).show();
                 finish();

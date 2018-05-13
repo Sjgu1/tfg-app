@@ -10,7 +10,7 @@ public class Session {
     private static String username = null;
     private static String projectSelected = null;
     private static String sprintSelected = null;
-    private static int numStatusOpened = 0;
+    private static boolean cambios = false;
 
     //public static String URL = "https://sergiojuliogu-tfg-2018.herokuapp.com";
     public static String URL = "http://10.0.2.2:5000";
@@ -58,12 +58,12 @@ public class Session {
         Session.sprintSelected = sprintSelected;
     }
 
-    public static int getNumStatusOpened() {
-        return numStatusOpened;
+    public static void setCambios(boolean cambios) {
+        Session.cambios = cambios;
     }
 
-    public static void setNumStatusOpened(int numStatusOpened) {
-        Session.numStatusOpened = numStatusOpened;
+    public static boolean isCambios() {
+        return cambios;
     }
 
     public static  void logOut(){
@@ -72,6 +72,6 @@ public class Session {
         setUsername(null);
         setProjectSelected(null);
         setSprintSelected(null);
-        setNumStatusOpened(0);
+        setCambios(false);
     }
 }

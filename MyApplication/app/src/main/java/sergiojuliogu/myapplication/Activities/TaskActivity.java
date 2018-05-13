@@ -1,7 +1,9 @@
 package sergiojuliogu.myapplication.Activities;
 
+import android.app.AlertDialog;
 import android.app.DatePickerDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.AsyncTask;
@@ -57,6 +59,8 @@ public class TaskActivity extends AppCompatActivity {
     private InfoTask mInfoTask;
     private UpdateTask mUpdateTask;
     private UpdateTaskUser mUpdateTaskUser;
+    private DeleteTask mDeleteTask;
+
 
     private JSONArray usersObject;
 
@@ -74,6 +78,7 @@ public class TaskActivity extends AppCompatActivity {
 
     private Context c;
 
+    private ImageButton mDeleteButton;
     private GridView mListView;
     private Button updateTaskButton;
     private TextView asignarButton;
@@ -206,6 +211,35 @@ public class TaskActivity extends AppCompatActivity {
                 mUpdateTaskUser.execute((Void) null);
             }
         });
+
+        mDeleteButton = (ImageButton) findViewById(R.id.delete_task_button);
+        mDeleteButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                attemptDeleteTask(v);
+            }
+        });
+    }
+    private void  attemptDeleteTask(View v){
+        DialogInterface.OnClickListener dialogClickListener = new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                switch (which){
+                    case DialogInterface.BUTTON_POSITIVE:
+                        mDeleteTask = new DeleteTask();
+                        mDeleteTask.execute((Void) null);
+                        break;
+
+                    case DialogInterface.BUTTON_NEGATIVE:
+                        //No button clicked
+                        break;
+                }
+            }
+        };
+
+        AlertDialog.Builder builder = new AlertDialog.Builder(v.getContext());
+        builder.setMessage("¿Estás seguro que quieres eliminar el proyecto?").setPositiveButton("Yes", dialogClickListener)
+                .setNegativeButton("No", dialogClickListener).show();
 
     }
     private void setDateTimeField() {
@@ -474,7 +508,6 @@ public class TaskActivity extends AppCompatActivity {
             Toast.makeText(TaskActivity.this, "Ha ocurrido agún problema." , Toast.LENGTH_SHORT).show();
         }
     }
-
 
     /**
      * Represents an asynchronous task used to update a task adding a user.
@@ -767,5 +800,78 @@ public class TaskActivity extends AppCompatActivity {
             }
             return str;
         }
+    }
+
+    /**
+     * Represents an asynchronous task used to delete a task .
+     */
+    public class DeleteTask extends AsyncTask<Void, Void, Boolean> {
+
+
+        DeleteTask() {
+        }
+
+        @Override
+        protected Boolean doInBackground(Void... params) {
+
+            //Some url endpoint that you may have
+            //Some url endpoint that you may have
+            String urlPedida = Session.URL+"/users/"+Session.getUsername()+
+                    "/projects/"+Session.getProjectSelected()+
+                    "/sprints/"+Session.getSprintSelected()+
+                    "/status/"+Session.getStatusSelected()+
+                    "/tasks/"+Session.getTaskSelected();
+            //String to place our result in
+            String result;
+
+            try{
+
+                URL url = new URL(urlPedida);
+                HttpURLConnection connection = (HttpURLConnection) url.openConnection();
+
+                connection.setRequestMethod("DELETE");
+                connection.setRequestProperty("Content-Type", "application/json");
+                connection.setRequestProperty("Accept", "*/*");
+                connection.setRequestProperty("Authorization", Session.getToken());
+
+                connection.connect();
+
+                connection.connect();
+                BufferedReader br;
+                if (200 <= connection.getResponseCode() && connection.getResponseCode() <= 299) {
+                    Thread.sleep(2000);
+                    return true;
+                } else {
+                    Thread.sleep(2000);
+                    return false;
+                }
+            } catch (InterruptedException e) {
+                Log.i("exception", e.toString());
+            } catch (Exception e){
+                Log.i("exception", e.toString());
+            }
+
+            return false;
+        }
+
+
+        @Override
+        protected void onPostExecute(final Boolean success) {
+            mDeleteTask = null;
+            if (success) {
+                setResult(300);
+                finish();
+            } else {
+                Toast.makeText(TaskActivity.this, "No se ha podido eliminar el proyecto." ,
+                        Toast.LENGTH_SHORT).show();
+            }
+        }
+
+        @Override
+        protected void onCancelled() {
+            mDeleteTask = null;
+        }
+
+
     }
 }

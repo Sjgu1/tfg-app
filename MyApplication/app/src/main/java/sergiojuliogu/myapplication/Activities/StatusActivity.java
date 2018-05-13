@@ -165,8 +165,9 @@ public class StatusActivity extends AppCompatActivity implements ActionBar.TabLi
 
         if (resultCode == 300){
             activityBrequestCode =0;
-            setResult(RESULT_OK);
+            Intent refresh = new Intent(c, StatusActivity.class);
             finish(); //finish Activity.
+            startActivity(refresh);//Start the same Activity
         }
         if (requestCode == activityBrequestCode && resultCode == RESULT_OK){
             activityBrequestCode =0;

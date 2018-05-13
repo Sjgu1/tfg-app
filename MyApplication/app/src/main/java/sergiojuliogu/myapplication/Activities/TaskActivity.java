@@ -1,6 +1,8 @@
 package sergiojuliogu.myapplication.Activities;
 
 import android.app.DatePickerDialog;
+import android.content.Context;
+import android.content.Intent;
 import android.graphics.Color;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -17,7 +19,9 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
+import android.widget.GridView;
 import android.widget.ImageButton;
+import android.widget.ListView;
 import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -42,6 +46,8 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.Locale;
 
+import sergiojuliogu.myapplication.Adapters.UserTaskAdapter;
+import sergiojuliogu.myapplication.Adapters.UsersAdapter;
 import sergiojuliogu.myapplication.Adapters.UsersUpdateAdapter;
 import sergiojuliogu.myapplication.R;
 import sergiojuliogu.myapplication.Session;
@@ -50,6 +56,9 @@ public class TaskActivity extends AppCompatActivity {
 
     private InfoTask mInfoTask;
     private UpdateTask mUpdateTask;
+    private UpdateTaskUser mUpdateTaskUser;
+
+    private JSONArray usersObject;
 
     private JSONObject taskObject;
 
@@ -63,9 +72,11 @@ public class TaskActivity extends AppCompatActivity {
     private EditText nomInput;
     private EditText descrInput;
 
+    private Context c;
 
+    private GridView mListView;
     private Button updateTaskButton;
-    private Button colorTaskButton;
+    private TextView asignarButton;
     private View mProgressView;
     private String colorElegido = "FFFFFF";
     private CardView mCardView;
@@ -106,6 +117,7 @@ public class TaskActivity extends AppCompatActivity {
         BottomNavigationView navigation = (BottomNavigationView) findViewById(R.id.navigation);
         navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
 
+        c = getApplicationContext();
         dateFormatter = new SimpleDateFormat("MM/dd/yyyy", Locale.US);
 
         if(!Session.getLoged()){
@@ -122,7 +134,7 @@ public class TaskActivity extends AppCompatActivity {
         findViewsById();
         setDateTimeField();
 
-        mInfoTask = new InfoTask();
+        mInfoTask = new InfoTask(c);
         mInfoTask.execute((Void) null);
     }
     private void findViewsById() {
@@ -151,35 +163,24 @@ public class TaskActivity extends AppCompatActivity {
         });
 
         mCardView = (CardView) findViewById(R.id.color_selected_info);
-
+        mListView = (GridView) findViewById(R.id.list_view_update_task);
 
         final ColorPicker cp = new ColorPicker(TaskActivity.this, 125, 125, 125);
 
-        colorTaskButton = (Button) findViewById(R.id.newColor_info);
-        colorTaskButton.setOnClickListener(new View.OnClickListener() {
+       // colorTaskButton = (Button) findViewById(R.id.newColor_info);
+        mCardView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 /* Show color picker dialog */
                 cp.show();
-
-                //cp.enableAutoClose(); // Enable auto-dismiss for the dialog
 
                 /* Set a new Listener called when user click "select" */
                 cp.setCallback(new ColorPickerCallback() {
                     @Override
                     public void onColorChosen(@ColorInt int color) {
                         // Do whatever you want
-                        // Examples
-                        Log.d("Alpha", Integer.toString(Color.alpha(color)));
-                        Log.d("Red", Integer.toString(Color.red(color)));
-                        Log.d("Green", Integer.toString(Color.green(color)));
-                        Log.d("Blue", Integer.toString(Color.blue(color)));
 
-                        Log.i("Pure Hex", Integer.toHexString(color));
-                        Log.d("#Hex no alpha", String.format("#%06X", (0xFFFFFF & color)));
-                        Log.d("#Hex with alpha", String.format("#%08X", (0xFFFFFFFF & color)));
                         colorElegido = Integer.toHexString(color);
-                        Log.i("elegido", colorElegido);
 
                         int colorSeleccionado = Color.parseColor("#"+colorElegido);
                         mCardView.setCardBackgroundColor(colorSeleccionado);
@@ -190,6 +191,22 @@ public class TaskActivity extends AppCompatActivity {
                 });
             }
         });
+
+        asignarButton = (TextView) findViewById(R.id.asignar_tarea);
+        asignarButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                String operation;
+                if(asignarButton.getText().equals("Asignar")){
+                    operation = "asignarUsuario";
+                }else{
+                    operation = "eliminarUsuario";
+                }
+                mUpdateTaskUser = new UpdateTaskUser(operation);
+                mUpdateTaskUser.execute((Void) null);
+            }
+        });
+
     }
     private void setDateTimeField() {
         startDate.setOnClickListener(new View.OnClickListener() {
@@ -415,7 +432,12 @@ public class TaskActivity extends AppCompatActivity {
         protected void onPostExecute(final Boolean success) {
             mUpdateTask = null;
             if (success) {
-                setResult(300);
+                Intent intent = new Intent(c, TaskActivity.class);
+                Bundle b = new Bundle();
+                b.putString("key", statusID); //Your id
+                intent.putExtras(b); //Put your id to your next Intent
+                intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                startActivityForResult(intent, 0);
                 Toast.makeText(TaskActivity.this, "Tarea actualizada." ,
                         Toast.LENGTH_SHORT).show();
             } else {
@@ -453,12 +475,114 @@ public class TaskActivity extends AppCompatActivity {
         }
     }
 
+
+    /**
+     * Represents an asynchronous task used to update a task adding a user.
+     */
+    public class UpdateTaskUser extends AsyncTask<Void, Void, Boolean> {
+
+        private String operation = null;
+
+        UpdateTaskUser(String operation) {
+            this.operation=operation;
+        }
+
+        @Override
+        protected Boolean doInBackground(Void... params) {
+
+            //Some url endpoint that you may have
+            String urlPedida = Session.URL+"/users/"+Session.getUsername()+
+                    "/projects/"+Session.getProjectSelected()+
+                    "/sprints/"+Session.getSprintSelected()+
+                    "/status/"+Session.getStatusSelected()+
+                    "/tasks/"+Session.getTaskSelected();
+            //String to place our result in
+            String result;
+            //Instantiate new instance of our class
+            //Perform the doInBackground method, passing in our url
+
+            JSONObject body = new JSONObject();
+            try{
+
+                body.put("operation", operation);
+                body.put("user", Session.getUsername());
+
+                URL url = new URL(urlPedida);
+                HttpURLConnection connection = (HttpURLConnection) url.openConnection();
+
+                connection.setRequestMethod("PUT");
+                connection.setRequestProperty("Content-Type", "application/json");
+                connection.setRequestProperty("Accept", "*/*");
+                connection.setRequestProperty("Authorization", Session.getToken());
+
+                connection.setDoOutput(true);
+                BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(connection.getOutputStream()));
+                writer.write(body.toString());
+                writer.close();
+
+                connection.connect();
+                BufferedReader br;
+                if (200 <= connection.getResponseCode() && connection.getResponseCode() <= 299) {
+                    br = new BufferedReader(new InputStreamReader(connection.getInputStream()));
+                } else {
+                    br = new BufferedReader(new InputStreamReader(connection.getErrorStream()));
+                }
+
+                StringBuffer sb = new StringBuffer();
+
+                String inputLine = "";
+                while ((inputLine = br.readLine()) != null) {
+                    sb.append(inputLine);
+                }
+                result = sb.toString();
+                String status = connection.getResponseCode() + "";
+
+                if(status.equals("400")){
+                    return false;
+                }
+                Thread.sleep(2000);
+                return true;
+            } catch (InterruptedException e) {
+                Log.i("exception", e.toString());
+            } catch (Exception e){
+                Log.i("exception", e.toString());
+            }
+
+            return false;
+        }
+
+        @Override
+        protected void onPostExecute(final Boolean success) {
+            mUpdateTask = null;
+            if (success) {
+                Intent intent = new Intent(c, TaskActivity.class);
+                Bundle b = new Bundle();
+                b.putString("key", statusID); //Your id
+                intent.putExtras(b); //Put your id to your next Intent
+                intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                startActivityForResult(intent, 0);
+                Toast.makeText(TaskActivity.this, "Tarea actualizada." ,
+                        Toast.LENGTH_SHORT).show();
+            } else {
+                mostrarErroresRespuesta();
+            }
+        }
+
+        @Override
+        protected void onCancelled() {
+            mUpdateTask = null;
+        }
+        private void mostrarErroresRespuesta(){
+            Toast.makeText(TaskActivity.this, "Ha ocurrido agún problema." , Toast.LENGTH_SHORT).show();
+        }
+    }
     /**
      * Represents an asynchronous task used to get task info.
      */
     public class InfoTask extends AsyncTask<Void, Void, Boolean> {
-        InfoTask() {
-
+        Context c;
+        InfoTask(Context c) {
+            this.c=c;
         }
 
 
@@ -498,13 +622,11 @@ public class TaskActivity extends AppCompatActivity {
                 String status = connection.getResponseCode() + "";
                 result = sb.toString();
                 //Log.i("estado", result);
-                //Log.i("res", result);
-                //Log.i("La url", urlPedida);
+
                 if(status.equals("200")) {
                     try {
                         JSONObject obj = new JSONObject(result);
                         taskObject = obj;
-                        Log.i("El objeto", taskObject.toString());
                         return true;
                     } catch (Throwable t) {
                         Log.e("My App", "Could not parse malformed JSON: \"" + result + "\"");
@@ -596,17 +718,26 @@ public class TaskActivity extends AppCompatActivity {
                     mCardView.setCardBackgroundColor(colorSeleccionado);
                 }
 
-                /*
-                if(projectObject.get("users").toString().equals("[]") ){
-                    Toast.makeText(c, "No existen usuarios." ,
+
+                if(taskObject.get("users").toString().equals("[]") ){
+                    Toast.makeText(TaskActivity.this, "No hay usuarios asignados." ,
                             Toast.LENGTH_SHORT).show();
                 }else{
 
-                    usersObject = (JSONArray)projectObject.get("users");
+                    usersObject = (JSONArray)taskObject.get("users");
+                    JSONObject usuarioLeido;
+                    for(int i=0; i<usersObject.length(); i++){
+                        usuarioLeido = usersObject.getJSONObject(i);
+                        if(usuarioLeido.getString("username").equals(Session.getUsername())){
+                            asignarButton.setText("Desasignar");
+                        }
+                    }
 
-                    UsersUpdateAdapter usersAdapter = new UsersUpdateAdapter(c, usersObject, rolesObject);
-                    userListView.setAdapter(usersAdapter);
-                }*/
+                    String conectado = Session.getUsername();
+
+                    UserTaskAdapter usersAdapter = new UserTaskAdapter(c, usersObject);
+                    mListView.setAdapter(usersAdapter);
+                }
 
             }catch (JSONException e){
                 Log.e("JSONException", e.toString());

@@ -343,8 +343,6 @@ public class ProjectActivity extends AppCompatActivity {
         }
         public String parseDate(String time) {
 
-
-
             String inputPattern = "yyyy-MM-dd";
 
             String outputPattern = "MM/dd/yyyy";

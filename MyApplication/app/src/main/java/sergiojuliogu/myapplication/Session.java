@@ -11,6 +11,8 @@ public class Session {
     private static String projectSelected = null;
     private static String sprintSelected = null;
     private static boolean cambios = false;
+    private static String statusSelected = null;
+    private static String taskSelected = null;
 
     //public static String URL = "https://sergiojuliogu-tfg-2018.herokuapp.com";
     public static String URL = "http://10.0.2.2:5000";
@@ -58,6 +60,22 @@ public class Session {
         Session.sprintSelected = sprintSelected;
     }
 
+    public static String getStatusSelected() {
+        return statusSelected;
+    }
+
+    public static void setStatusSelected(String statusSelected) {
+        Session.statusSelected = statusSelected;
+    }
+
+    public static String getTaskSelected() {
+        return taskSelected;
+    }
+
+    public static void setTaskSelected(String taskSelected) {
+        Session.taskSelected = taskSelected;
+    }
+
     public static void setCambios(boolean cambios) {
         Session.cambios = cambios;
     }
@@ -73,5 +91,7 @@ public class Session {
         setProjectSelected(null);
         setSprintSelected(null);
         setCambios(false);
+        setStatusSelected(null);
+        setTaskSelected(null);
     }
 }

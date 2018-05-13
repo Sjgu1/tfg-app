@@ -2,6 +2,7 @@ package sergiojuliogu.myapplication.Activities;
 
 
 import android.app.ActionBar;
+import android.app.Activity;
 import android.app.FragmentTransaction;
 
 import android.app.Fragment;
@@ -305,13 +306,11 @@ public class StatusActivity extends AppCompatActivity implements ActionBar.TabLi
 
         private void pintarDatos(){
             try {
-                nombreEstado.setText("Probando");
                 final JSONObject statusLeido = statusOpenObject.getJSONObject(numTab);
                 nombreEstado.setText(statusLeido.getString("name"));
                 nombreEstado.setOnFocusChangeListener(new View.OnFocusChangeListener() {
                     @Override
                     public void onFocusChange(View v, boolean hasFocus) {
-
                         try{
                             if (!nombreEstado.getText().toString().equals(statusLeido.getString("name")) && !nombreEstado.getText().toString().isEmpty()){
                                 JSONObject statusLeido = statusOpenObject.getJSONObject(getArguments().getInt(ARG_SECTION_NUMBER ) -1);
@@ -335,7 +334,6 @@ public class StatusActivity extends AppCompatActivity implements ActionBar.TabLi
                         }
                     }
                 });
-
                 buttonNuevaTarea.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
@@ -359,7 +357,7 @@ public class StatusActivity extends AppCompatActivity implements ActionBar.TabLi
                     JSONObject statusLeido2 = statusOpenObject.getJSONObject(getArguments().getInt(ARG_SECTION_NUMBER ) -1);
 
                     String idStatus = (String) statusLeido2.get("_id");
-                    mStatusGetInfo = new StatusGetInfo(getActivity().getApplicationContext(),idStatus);
+                    mStatusGetInfo = new StatusGetInfo(getActivity(),getActivity().getApplicationContext(),idStatus);
                     mStatusGetInfo.execute((Void) null);
 
                     // finish();
@@ -382,9 +380,11 @@ public class StatusActivity extends AppCompatActivity implements ActionBar.TabLi
             private String name = "";
             private JSONArray arrayLeido;
             private Context c;
+            private Activity act;
 
-            StatusGetInfo(Context cont,String  idStatus) {
+            StatusGetInfo(Activity act,Context cont, String  idStatus) {
                 this.idStatus = idStatus;
+                this.act = act;
                 this.c = cont;
             }
 
@@ -454,7 +454,7 @@ public class StatusActivity extends AppCompatActivity implements ActionBar.TabLi
                 mStatusGetInfo = null;
                 if (success) {
                     tasksStatus = arrayLeido;
-                    TasksAdapter tasksAdapter = new TasksAdapter(c, idStatus, tasksStatus, statusObject);
+                    TasksAdapter tasksAdapter = new TasksAdapter(act,c, idStatus, tasksStatus, statusObject);
                     listaTareas.setAdapter(tasksAdapter);
                 } else {
                     Toast.makeText(getContext(), "Error al obtener las tareas." ,

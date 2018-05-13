@@ -98,9 +98,15 @@
             android:name=".Activities.ClosedStatusActivity"
             android:label="Estados cerrados"
             android:parentActivityName=".Activities.StatusActivity" />
-        <activity android:name=".Activities.NewTaskActivity"
+        <activity
+            android:name=".Activities.NewTaskActivity"
             android:label="Nueva Tarea"
-            android:parentActivityName=".Activities.StatusActivity"></activity>
+            android:parentActivityName=".Activities.StatusActivity" />
+        <activity
+            android:name=".Activities.TaskActivity"
+            android:label="Tarea"
+            android:parentActivityName=".Activities.StatusActivity"
+            ></activity>
     </application>
 
 </manifest>

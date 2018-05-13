@@ -262,7 +262,7 @@ public class NewTaskActivity extends AppCompatActivity {
     }
 
     /**
-     * Represents an asynchronous register task used to create new sprint.
+     * Represents an asynchronous register task used to create new task.
      */
     public class NewStatusTask extends AsyncTask<Void, Void, Boolean> {
 

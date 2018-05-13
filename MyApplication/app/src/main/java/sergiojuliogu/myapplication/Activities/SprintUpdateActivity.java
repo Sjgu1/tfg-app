@@ -611,8 +611,6 @@ public class SprintUpdateActivity extends AppCompatActivity {
                 writer.close();
 
                 connection.connect();
-
-                connection.connect();
                 BufferedReader br;
                 if (200 <= connection.getResponseCode() && connection.getResponseCode() <= 299) {
                     br = new BufferedReader(new InputStreamReader(connection.getInputStream()));

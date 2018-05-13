@@ -5,6 +5,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.AsyncTask;
+import android.os.Bundle;
 import android.support.v7.widget.CardView;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -33,7 +34,9 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+import sergiojuliogu.myapplication.Activities.ProjectActivity;
 import sergiojuliogu.myapplication.Activities.StatusActivity;
+import sergiojuliogu.myapplication.Activities.TaskActivity;
 import sergiojuliogu.myapplication.R;
 import sergiojuliogu.myapplication.Session;
 
@@ -44,8 +47,9 @@ public class TasksAdapter extends BaseAdapter {
     private  JSONArray statusArray;
     private Context c;
     private UpdateTaskStatus mUpdateTaskStatus;
+    private Activity act;
     // 1
-    public TasksAdapter(Context context,String idStatus, JSONArray tasks, JSONArray statusArray) {
+    public TasksAdapter(Activity act,Context context,String idStatus, JSONArray tasks, JSONArray statusArray) {
         //mStatusGetInfo = new StatusGetInfo(idStatus);
         //mStatusGetInfo.execute((Void) null);
         this.tasksArray = tasks;
@@ -53,6 +57,7 @@ public class TasksAdapter extends BaseAdapter {
         this.idStatus = idStatus;
         this.statusArray = statusArray;
         this.c = context;
+        this.act = act;
 
     }
 
@@ -90,7 +95,24 @@ public class TasksAdapter extends BaseAdapter {
             final TextView nameTextView = (TextView)convertView.findViewById(R.id.nombreTarea);
 
             final String name = taskObject.get("name").toString();
+            final String id = taskObject.getString("_id");
             nameTextView.setText(name);
+            nameTextView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Session.setTaskSelected(id);
+                    Session.setStatusSelected(idStatus);
+                    Intent intent = new Intent(c, TaskActivity.class);
+                    Bundle b = new Bundle();
+                    b.putString("key", idStatus); //Your id
+                    intent.putExtras(b); //Put your id to your next Intent
+                    intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                    //c.startActivity(intent);
+                    act.startActivityForResult(intent, 0);
+                   // ((Activity)c).startActivityForResult(intent, 0);
+                    //c.getApplicationContext().startActivityForResult(intent, 0);
+                }
+            });
             // 4
             final CardView colorTarjeta = (CardView)convertView.findViewById(R.id.colorTarea);
             int color = Color.parseColor("#"+taskObject.getString("color"));
@@ -109,7 +131,6 @@ public class TasksAdapter extends BaseAdapter {
                 spinnerArray.add(estadoLeido.getString("name"));
 
             }
-
 
             ArrayAdapter<String> adapter = new ArrayAdapter<String>(mContext.getApplicationContext(), R.layout.spinner_item,R.id.textview, spinnerArray);
             //adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);

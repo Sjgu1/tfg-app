@@ -9,6 +9,7 @@ import android.support.design.widget.BottomNavigationView;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.MenuItem;
+import android.view.MotionEvent;
 import android.view.View;
 import android.widget.GridView;
 import android.widget.ImageButton;
@@ -330,6 +331,16 @@ public class ProjectActivity extends AppCompatActivity {
 
                     UsersAdapter usersAdapter = new UsersAdapter(c, usersObject);
                     gridView.setAdapter(usersAdapter);
+                    // Setting on Touch Listener for handling the touch inside ScrollView
+
+                    gridView.setOnTouchListener(new View.OnTouchListener() {
+                        @Override
+                        public boolean onTouch(View v, MotionEvent event) {
+                            v.getParent().requestDisallowInterceptTouchEvent(true);
+                            return false;
+                        }
+
+                    });
 
                 }
 

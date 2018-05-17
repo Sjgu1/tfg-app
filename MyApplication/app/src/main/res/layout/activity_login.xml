@@ -69,17 +69,7 @@
 
             </android.support.design.widget.TextInputLayout>
 
-            <TextView
-                android:id="@+id/linkRegistro"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="50dp"
-                android:clickable="true"
-                android:gravity="center"
-                android:onClick="onClick"
-                android:text="Registrarse"
-                android:textAppearance="@android:style/TextAppearance.Material.Small.Inverse"
-                android:textColor="@color/colorAccent" />
+
 
             <Button
                 android:id="@+id/email_sign_in_button"
@@ -90,6 +80,16 @@
                 android:backgroundTint="?android:attr/textColorLinkInverse"
                 android:text="Log in"
                 android:textStyle="bold" />
+            <TextView
+                android:id="@+id/linkRegistro"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:clickable="true"
+                android:gravity="center"
+                android:onClick="onClick"
+                android:text="Registrarse"
+                android:textAppearance="@android:style/TextAppearance.Material.Small.Inverse"
+                android:textColor="@color/colorAccent" />
 
         </LinearLayout>
     </ScrollView>

@@ -15,6 +15,7 @@
         android:paddingRight="8dp"
         android:text="Nombre"
         android:textAppearance="@android:style/TextAppearance.Material.Title"
+        android:textColor="@android:color/background_light"
         android:textSize="30sp" />
 
 </LinearLayout>

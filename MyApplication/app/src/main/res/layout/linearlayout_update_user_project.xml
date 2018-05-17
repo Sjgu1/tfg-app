@@ -22,7 +22,8 @@
         android:paddingLeft="8dp"
         android:paddingRight="8dp"
         android:text="Nombre"
-        android:textAppearance="@android:style/TextAppearance.Material.Small" />
+        android:textAppearance="@android:style/TextAppearance.Material.Small"
+        android:textColor="@android:color/background_light" />
 
     <Spinner
         android:id="@+id/update_user_project_spinner"

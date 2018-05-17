@@ -9,6 +9,8 @@ import android.support.design.widget.BottomNavigationView;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.MenuItem;
+import android.view.MotionEvent;
+import android.view.View;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -115,6 +117,14 @@ public class SprintActivity extends AppCompatActivity {
         projectEstimateEndView = (TextView) findViewById(R.id.sprint_estimated_end);
         projectEndDateView = (TextView) findViewById(R.id.sprint_end_date);
         gridView = (ListView) findViewById(R.id.sprint_status_list_update);
+        gridView.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+                v.getParent().requestDisallowInterceptTouchEvent(true);
+                return false;
+            }
+
+        });
 
     }
 

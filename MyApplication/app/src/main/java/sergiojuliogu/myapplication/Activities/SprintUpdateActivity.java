@@ -10,6 +10,7 @@ import android.os.Bundle;
 import android.text.InputType;
 import android.text.TextUtils;
 import android.util.Log;
+import android.view.MotionEvent;
 import android.view.View;
 import android.widget.Button;
 import android.widget.DatePicker;
@@ -114,6 +115,14 @@ public class SprintUpdateActivity extends AppCompatActivity {
         mSwitch = (Switch) findViewById(R.id.switch_update_sprint);
         mSwitch.setChecked(false);
         statusListView = (ListView) findViewById(R.id.sprint_status_list_update);
+        statusListView.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+                v.getParent().requestDisallowInterceptTouchEvent(true);
+                return false;
+            }
+
+        });
 
         updateSprintButton = (Button) findViewById(R.id.update_sprint_button);
         updateSprintButton.setOnClickListener(new View.OnClickListener() {

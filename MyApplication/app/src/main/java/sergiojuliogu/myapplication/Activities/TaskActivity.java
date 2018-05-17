@@ -17,6 +17,7 @@ import android.text.InputType;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.MenuItem;
+import android.view.MotionEvent;
 import android.view.View;
 import android.widget.Button;
 import android.widget.DatePicker;
@@ -169,6 +170,14 @@ public class TaskActivity extends AppCompatActivity {
 
         mCardView = (CardView) findViewById(R.id.color_selected_info);
         mListView = (GridView) findViewById(R.id.list_view_update_task);
+        mListView.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+                v.getParent().requestDisallowInterceptTouchEvent(true);
+                return false;
+            }
+
+        });
 
         final ColorPicker cp = new ColorPicker(TaskActivity.this, 125, 125, 125);
 

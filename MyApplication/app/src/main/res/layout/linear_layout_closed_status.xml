@@ -16,6 +16,7 @@
         android:paddingRight="8dp"
         android:text="Nombre"
         android:textAppearance="@android:style/TextAppearance.Material.Large"
+        android:textColor="@android:color/background_light"
         android:textSize="18sp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
@@ -31,6 +32,7 @@
         android:paddingRight="8dp"
         android:text="Nombre"
         android:textAppearance="@android:style/TextAppearance.Material.Medium"
+        android:textColor="@android:color/background_light"
         android:textSize="14sp"
         app:layout_constraintEnd_toStartOf="@+id/textViewName2"
         app:layout_constraintTop_toTopOf="parent" />
@@ -46,6 +48,7 @@
         android:paddingRight="8dp"
         android:text="tareas"
         android:textAppearance="@android:style/TextAppearance.Material.Medium"
+        android:textColor="@color/Azure"
         android:textSize="14sp"
         app:layout_constraintEnd_toStartOf="@+id/button_open_status"
         app:layout_constraintTop_toTopOf="parent" />
@@ -57,6 +60,7 @@
         android:layout_marginEnd="8dp"
         android:layout_marginTop="8dp"
         android:text="Abrir"
+        android:textColor="@android:color/background_light"
         android:textSize="16sp"
         android:textStyle="bold"
         app:layout_constraintEnd_toEndOf="parent"

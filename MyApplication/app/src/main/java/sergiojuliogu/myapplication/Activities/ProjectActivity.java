@@ -322,6 +322,7 @@ public class ProjectActivity extends AppCompatActivity {
                         userObject =  userArrayObject.getJSONObject("user");
                         roleObject = userArrayObject.getJSONObject("role");
                         if(userObject.get("username").toString().equals(conectado)){
+                            Session.setIdUsername(userObject.getString("_id"));
                             projectRoleView.setText(roleObject.get("name").toString());
                             if(roleObject.get("name").toString().equals("Admin")){
                                 admin = true;

@@ -1,0 +1,114 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".Activities.PokerActivity">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+        <ScrollView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+                <TextView
+                    android:id="@+id/media_voto"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="23"
+                    android:gravity="center"
+                    android:textSize="50dp"/>
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_weight="0.2"
+                        android:text="Tu voto:"/>
+                    <TextView
+                        android:layout_width="0dp"
+                        android:id="@+id/voto_usuario"
+                        android:layout_height="match_parent"
+                        android:text="Aún no has votado"
+                        android:layout_weight="0.7"/>
+                </LinearLayout>
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:text="Votos actuales"/>
+
+                <GridView
+                    android:id="@+id/votos_grid"
+                    android:layout_width="match_parent"
+                    android:layout_height="100dp"></GridView>
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
+                    <TextView
+                        android:layout_width="0dp"
+                        android:id="@+id/selecciona_valor"
+                        android:layout_height="match_parent"
+                        android:layout_weight="0.5"
+                        android:text="Selecciona un valor"/>
+                    <TextView
+                        android:layout_width="0dp"
+                        android:id="@+id/voto_seleccionado"
+                        android:layout_height="match_parent"
+                        android:layout_weight="0.7"/>
+                </LinearLayout>
+
+
+                <GridView
+                    android:id="@+id/tarjetas_poll"
+                    android:layout_width="match_parent"
+                    android:layout_height="100dp"
+                    android:columnWidth="30dp"
+                    android:numColumns="3"></GridView>
+                <android.support.design.widget.TextInputLayout
+                    android:id="@+id/textInputLayout5"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_weight=".5">
+
+                    <EditText
+                        android:id="@+id/comentario_voto"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:hint="Comentario" />
+                </android.support.design.widget.TextInputLayout>
+            </LinearLayout>
+
+        </ScrollView>
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_alignParentBottom="true">
+        <TextView
+            android:id="@+id/delete_poll"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="0.3"
+            android:text="Eliminar"
+            android:gravity="center"/>
+        <Button
+            android:id="@+id/button_update_poll"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="0.7"
+            android:text="Votar" />
+    </LinearLayout>
+</RelativeLayout>

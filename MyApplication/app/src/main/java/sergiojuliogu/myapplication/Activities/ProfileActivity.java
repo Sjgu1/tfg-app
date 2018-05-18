@@ -215,9 +215,8 @@ public class ProfileActivity extends AppCompatActivity {
         };
 
         AlertDialog.Builder builder = new AlertDialog.Builder(v.getContext());
-        builder.setMessage("¿Estás seguro que quieres borrar tu perfil?").setPositiveButton("Yes", dialogClickListener)
+        builder.setMessage("¿Estás seguro que quieres borrar tu perfil?").setPositiveButton("Sí", dialogClickListener)
                 .setNegativeButton("No", dialogClickListener).show();
-
     }
 
     private boolean isEmailValid(String email) {

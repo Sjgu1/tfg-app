@@ -13,12 +13,23 @@ public class Session {
     private static boolean cambios = false;
     private static String statusSelected = null;
     private static String taskSelected = null;
+    private static String pollSeleceted = null;
+    private static String rolSelected = null;
+    private static String idUsername = null;
 
     //public static String URL = "https://sergiojuliogu-tfg-2018.herokuapp.com";
     public static String URL = "http://10.0.2.2:5000";
 
 
     protected Session(){}
+
+    public static String getIdUsername() {
+        return idUsername;
+    }
+
+    public static void setIdUsername(String idUsername) {
+        Session.idUsername = idUsername;
+    }
 
     public static String getToken() {
         return token;
@@ -68,6 +79,14 @@ public class Session {
         Session.statusSelected = statusSelected;
     }
 
+    public static String getPollSelected() {
+        return pollSeleceted;
+    }
+
+    public static void setPollSelected(String pollSeleceted) {
+        Session.pollSeleceted = pollSeleceted;
+    }
+
     public static String getTaskSelected() {
         return taskSelected;
     }
@@ -93,5 +112,6 @@ public class Session {
         setCambios(false);
         setStatusSelected(null);
         setTaskSelected(null);
+        setIdUsername(null);
     }
 }

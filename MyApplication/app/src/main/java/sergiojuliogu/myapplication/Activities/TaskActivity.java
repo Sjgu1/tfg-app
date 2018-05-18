@@ -61,6 +61,7 @@ public class TaskActivity extends AppCompatActivity {
     private UpdateTask mUpdateTask;
     private UpdateTaskUser mUpdateTaskUser;
     private DeleteTask mDeleteTask;
+    private NewPollTask mNewPollTask;
 
 
     private JSONArray usersObject;
@@ -92,6 +93,7 @@ public class TaskActivity extends AppCompatActivity {
 
 
     private String statusID;
+    private int activityBrequestCode =0;
 
     private DatePickerDialog fromDatePickerDialog;
     private DatePickerDialog toDatePickerDialog;
@@ -105,10 +107,27 @@ public class TaskActivity extends AppCompatActivity {
         public boolean onNavigationItemSelected(@NonNull MenuItem item) {
             switch (item.getItemId()) {
                 case R.id.navigation_log:
+                    Intent refresh = new Intent(c, ChangeActivity.class);
+                    startActivity(refresh);
                     return true;
                 case R.id.navigation_task:
                     return true;
                 case R.id.navigation_poker:
+                    try{
+                        if(!taskObject.getString("poll").toString().equals("null")){
+                            Session.setPollSelected(taskObject.getString("poll"));
+                            Intent intent = new Intent(c, PokerActivity.class);
+                            startActivityForResult(intent, 0);
+                            return true;
+
+                        }else{
+                            attemptNewPoll();
+                            return true;
+                        }
+
+                    }catch (JSONException e){
+                        Log.e("JSONException", e.toString());
+                    }
                     return true;
             }
             return false;
@@ -229,7 +248,7 @@ public class TaskActivity extends AppCompatActivity {
             }
         });
     }
-    private void  attemptDeleteTask(View v){
+    private void attemptDeleteTask(View v){
         DialogInterface.OnClickListener dialogClickListener = new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
@@ -360,6 +379,43 @@ public class TaskActivity extends AppCompatActivity {
             mUpdateTask.execute((Void) null);
         }
 
+    }
+    private void attemptNewPoll() {
+        DialogInterface.OnClickListener dialogClickListener = new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                switch (which){
+                    case DialogInterface.BUTTON_POSITIVE:
+                        mNewPollTask = new NewPollTask();
+                        mNewPollTask.execute((Void) null);
+                        break;
+
+                    case DialogInterface.BUTTON_NEGATIVE:
+                        //No button clicked
+                        break;
+                }
+            }
+        };
+
+        AlertDialog.Builder builder = new AlertDialog.Builder(TaskActivity.this);
+        builder.setMessage("¿No existe una votación sobre esta tarea, deseas crearla?").setPositiveButton("Sí", dialogClickListener)
+                .setNegativeButton("No", dialogClickListener).show();
+    }
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        if (resultCode == 300){
+            Intent intent = new Intent(c, TaskActivity.class);
+
+            activityBrequestCode =0;
+            Bundle b = new Bundle();
+            b.putString("key", statusID);
+            intent.putExtras(b); //Put your id to your next Intent
+            intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+            finish(); //finish Activity.
+            startActivity(intent);//Start the same Activity
+        }
     }
 
     /**
@@ -517,7 +573,6 @@ public class TaskActivity extends AppCompatActivity {
             Toast.makeText(TaskActivity.this, "Ha ocurrido agún problema." , Toast.LENGTH_SHORT).show();
         }
     }
-
     /**
      * Represents an asynchronous task used to update a task adding a user.
      */
@@ -810,7 +865,6 @@ public class TaskActivity extends AppCompatActivity {
             return str;
         }
     }
-
     /**
      * Represents an asynchronous task used to delete a task .
      */
@@ -882,5 +936,113 @@ public class TaskActivity extends AppCompatActivity {
         }
 
 
+    }
+
+    /**
+     * Represents an asynchronous task used to create new poll.
+     */
+    public class NewPollTask extends AsyncTask<Void, Void, Boolean> {
+
+        private  String error;
+
+        NewPollTask() { }
+
+        @Override
+        protected Boolean doInBackground(Void... params) {
+
+            //Some url endpoint that you may have
+            String urlPedida =  Session.URL+"/users/"+Session.getUsername()+
+                    "/projects/"+Session.getProjectSelected()+
+                    "/sprints/"+Session.getSprintSelected()+
+                    "/status/"+Session.getStatusSelected()+
+                    "/tasks/"+Session.getTaskSelected()+
+                    "/polls";
+            //String to place our result in
+            String result;
+            //Instantiate new instance of our class
+            //Perform the doInBackground method, passing in our url
+
+            JSONObject body = new JSONObject();
+            try{
+
+                body.put("end_date", "12/04/2018");
+
+                URL url = new URL(urlPedida);
+                HttpURLConnection connection = (HttpURLConnection) url.openConnection();
+
+                connection.setRequestMethod("POST");
+                connection.setRequestProperty("Content-Type", "application/json");
+                connection.setRequestProperty("Accept", "*/*");
+                connection.setRequestProperty("Authorization", Session.getToken());
+
+
+                connection.setDoOutput(true);
+                BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(connection.getOutputStream()));
+                writer.write(body.toString());
+                writer.close();
+
+                connection.connect();
+                BufferedReader br;
+                if (200 <= connection.getResponseCode() && connection.getResponseCode() <= 299) {
+                    br = new BufferedReader(new InputStreamReader(connection.getInputStream()));
+                } else {
+                    br = new BufferedReader(new InputStreamReader(connection.getErrorStream()));
+                }
+                // Response: 400
+
+                StringBuffer sb = new StringBuffer();
+
+                String inputLine = "";
+                while ((inputLine = br.readLine()) != null) {
+                    sb.append(inputLine);
+                }
+                result = sb.toString();
+                String status = connection.getResponseCode() + "";
+                if(!status.equals("201")){
+                    return false;
+                }
+
+                Thread.sleep(2000);
+            } catch (InterruptedException e) {
+                Log.i("exception", e.toString());
+            } catch (Exception e){
+                Log.i("exception", e.toString());
+            }
+
+            return true;
+        }
+
+        @Override
+        protected void onPostExecute(final Boolean success) {
+            mNewPollTask = null;
+            //showProgress(false);
+
+            if (success) {
+                Toast.makeText(TaskActivity.this, "Se ha creado una votación." ,
+                        Toast.LENGTH_SHORT).show();
+                Intent intent = new Intent(c, TaskActivity.class);
+                Bundle b = new Bundle();
+                b.putString("key", statusID); //Your id
+                intent.putExtras(b); //Put your id to your next Intent
+                intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                finish();
+                startActivityForResult(intent, 0);
+            } else {
+                mostrarErroresRespuesta();
+            }
+        }
+
+        @Override
+        protected void onCancelled() {
+            mNewPollTask = null;
+            //showProgress(false);
+        }
+
+        private void mostrarErroresRespuesta(){
+
+            Toast.makeText(TaskActivity.this, "Ha ocurrido algún problema." ,
+                    Toast.LENGTH_SHORT).show();
+
+        }
     }
 }

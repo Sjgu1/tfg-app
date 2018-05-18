@@ -104,8 +104,14 @@
         <activity
             android:name=".Activities.TaskActivity"
             android:label="Tarea"
-            android:parentActivityName=".Activities.StatusActivity"
-            ></activity>
+            android:parentActivityName=".Activities.StatusActivity" />
+        <activity
+            android:name=".Activities.ChangeActivity"
+            android:label="Historial"
+            android:parentActivityName=".Activities.TaskActivity" />
+        <activity android:name=".Activities.PokerActivity"
+            android:label="Poker"
+            android:parentActivityName=".Activities.TaskActivity"></activity>
     </application>
 
 </manifest>

@@ -224,7 +224,6 @@ public class LoginActivity extends AppCompatActivity {
             String result;
             //Instantiate new instance of our class
             //Perform the doInBackground method, passing in our url
-            Log.i("La url", urlPedida);
 
             JSONObject body = new JSONObject();
             try{
@@ -261,7 +260,6 @@ public class LoginActivity extends AppCompatActivity {
                 }
                 String status = connection.getResponseCode() + "";
                 result = sb.toString();
-                Log.i("res", result);
                 if(status.equals("200")) {
                     try {
 

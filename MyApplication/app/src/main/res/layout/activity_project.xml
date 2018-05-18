@@ -7,8 +7,23 @@
     android:layout_height="wrap_content"
     tools:context="sergiojuliogu.myapplication.Activities.ProjectActivity">
 
+    <!-- Progress -->
     <LinearLayout
-        android:id="@+id/wei"
+        android:layout_width="match_parent"
+        android:id="@+id/project_progress"
+        android:orientation="vertical"
+        android:layout_height="match_parent"
+        android:gravity="center"
+        android:visibility="gone">
+        <ProgressBar
+            android:layout_gravity="center"
+            style="?android:attr/progressBarStyleLarge"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:visibility="visible" />
+    </LinearLayout>
+    <LinearLayout
+        android:id="@+id/project_form"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginEnd="8dp"

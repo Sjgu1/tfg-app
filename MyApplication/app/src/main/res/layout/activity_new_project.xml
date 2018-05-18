@@ -6,13 +6,21 @@
     android:layout_height="match_parent"
     tools:context=".Activities.NewProjectActivity">
 
-    <ProgressBar
-        android:id="@+id/login_progress"
-        style="?android:attr/progressBarStyleLarge"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="8dp"
-        android:visibility="gone" />
+    <!-- Progress -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:id="@+id/new_project_progress"
+        android:orientation="vertical"
+        android:layout_height="match_parent"
+        android:gravity="center"
+        android:visibility="gone">
+        <ProgressBar
+            android:layout_gravity="center"
+            style="?android:attr/progressBarStyleLarge"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:visibility="visible" />
+    </LinearLayout>
 
     <ScrollView
         android:id="@+id/new_project_form"
@@ -159,13 +167,22 @@
 
         </LinearLayout>
     </ScrollView>
-    <Button
-        android:id="@+id/new_project_button"
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="50dp"
-        android:layout_gravity="bottom"
-        android:text="@string/prompt_new"
-        android:textStyle="bold"
-        android:layout_alignParentBottom="true"/>
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:id="@+id/view_boton_crear_proyecto"
+        android:layout_alignParentBottom="true">
+
+        <Button
+            android:id="@+id/new_project_button"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:layout_gravity="bottom"
+            android:text="@string/prompt_new"
+            android:textStyle="bold"
+            android:layout_alignParentBottom="true"/>
+    </LinearLayout>
+
 
 </RelativeLayout>

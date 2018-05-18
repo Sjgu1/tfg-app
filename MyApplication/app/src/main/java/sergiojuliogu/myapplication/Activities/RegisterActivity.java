@@ -118,7 +118,7 @@ public class RegisterActivity extends AppCompatActivity {
         } else {
             // Show a progress spinner, and kick off a background task to
             // perform the user register attempt.
-            //showProgress(true);
+            showProgress(true);
             mAuthTask = new UserRegisterTask(username , email , password);
             mAuthTask.execute((Void) null);
         }

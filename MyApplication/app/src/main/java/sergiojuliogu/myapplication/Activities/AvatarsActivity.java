@@ -47,7 +47,7 @@ public class AvatarsActivity extends AppCompatActivity {
         GridView gridview = (GridView) findViewById(R.id.gridview);
         gridview.setAdapter(new AvatarsActivity.ImageAdapter(this));
 
-        mProgressView = findViewById(R.id.progress);
+        mProgressView = findViewById(R.id.avatars_progress);
         mAvatarsFormView = findViewById(R.id.avatars_form);
 
         gridview.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -55,6 +55,7 @@ public class AvatarsActivity extends AppCompatActivity {
                                     int position, long id) {
                 showProgress(true);
 
+                showProgress(true);
                 mUserInfo = new UserUpdateAvatarTask(position);
                 mUserInfo.execute((Void) null);
             }

@@ -1,8 +1,12 @@
 package sergiojuliogu.myapplication.Activities;
 
+import android.animation.Animator;
+import android.animation.AnimatorListenerAdapter;
+import android.annotation.TargetApi;
 import android.app.DatePickerDialog;
 import android.graphics.Color;
 import android.os.AsyncTask;
+import android.os.Build;
 import android.support.annotation.ColorInt;
 import android.support.v7.app.AppCompatActivity;
 import com.pes.androidmaterialcolorpickerdialog.ColorPicker;
@@ -54,6 +58,8 @@ public class NewTaskActivity extends AppCompatActivity {
     private Button newTaskButton;
     private Button colorTaskButton;
     private View mProgressView;
+    private View mLoginFormView;
+    private View mBoton;
     private String colorElegido = "FFFFFF";
     private CardView mCardView;
 
@@ -90,6 +96,10 @@ public class NewTaskActivity extends AppCompatActivity {
     }
 
     private void findViewsById() {
+        mProgressView = findViewById(R.id.new_task_progress);
+        mLoginFormView = findViewById(R.id.new_task_form);
+        mBoton = findViewById(R.id.view_boton_crear_tarea);
+
         startDateInput = (EditText) findViewById(R.id.etxt_fromdate_tarea);
         startDateInput.setInputType(InputType.TYPE_NULL);
         startDateInput.requestFocus();
@@ -201,6 +211,48 @@ public class NewTaskActivity extends AppCompatActivity {
 
         },newCalendar.get(Calendar.YEAR), newCalendar.get(Calendar.MONTH), newCalendar.get(Calendar.DAY_OF_MONTH));
     }
+
+    @TargetApi(Build.VERSION_CODES.HONEYCOMB_MR2)
+    private void showProgress(final boolean show) {
+        // On Honeycomb MR2 we have the ViewPropertyAnimator APIs, which allow
+        // for very easy animations. If available, use these APIs to fade-in
+        // the progress spinner.
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB_MR2) {
+            int shortAnimTime = getResources().getInteger(android.R.integer.config_shortAnimTime);
+
+            mLoginFormView.setVisibility(show ? View.GONE : View.VISIBLE);
+            mLoginFormView.animate().setDuration(shortAnimTime).alpha(
+                    show ? 0 : 1).setListener(new AnimatorListenerAdapter() {
+                @Override
+                public void onAnimationEnd(Animator animation) {
+                    mLoginFormView.setVisibility(show ? View.GONE : View.VISIBLE);
+                }
+            });
+            mBoton.setVisibility(show ? View.GONE : View.VISIBLE);
+            mBoton.animate().setDuration(shortAnimTime).alpha(
+                    show ? 0 : 1).setListener(new AnimatorListenerAdapter() {
+                @Override
+                public void onAnimationEnd(Animator animation) {
+                    mBoton.setVisibility(show ? View.GONE : View.VISIBLE);
+                }
+            });
+
+            mProgressView.setVisibility(show ? View.VISIBLE : View.GONE);
+            mProgressView.animate().setDuration(shortAnimTime).alpha(
+                    show ? 1 : 0).setListener(new AnimatorListenerAdapter() {
+                @Override
+                public void onAnimationEnd(Animator animation) {
+                    mProgressView.setVisibility(show ? View.VISIBLE : View.GONE);
+                }
+            });
+        } else {
+            // The ViewPropertyAnimator APIs are not available, so simply show
+            // and hide the relevant UI components.
+            mProgressView.setVisibility(show ? View.VISIBLE : View.GONE);
+            mLoginFormView.setVisibility(show ? View.GONE : View.VISIBLE);
+            mBoton.setVisibility(show ? View.GONE : View.VISIBLE);
+        }
+    }
     private void attemptNewTask(){
         if (mNewStatusTask != null) {
             return;
@@ -255,7 +307,7 @@ public class NewTaskActivity extends AppCompatActivity {
             focusView.requestFocus();
         } else {
 
-            //showProgress(true);
+            showProgress(true);
             mNewStatusTask = new NewStatusTask(nameSprint , descriptionSprint , startSprint, endSprint, colorElegido);
             mNewStatusTask.execute((Void) null);
         }
@@ -357,7 +409,7 @@ public class NewTaskActivity extends AppCompatActivity {
         @Override
         protected void onPostExecute(final Boolean success) {
             mNewStatusTask = null;
-            //showProgress(false);
+            showProgress(false);
 
             if (success) {
                 setResult(300);
@@ -372,7 +424,7 @@ public class NewTaskActivity extends AppCompatActivity {
         @Override
         protected void onCancelled() {
             mNewStatusTask = null;
-            //showProgress(false);
+            showProgress(false);
         }
 
         private void mostrarErroresRespuesta(){

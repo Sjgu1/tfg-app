@@ -7,7 +7,23 @@
     tools:context=".Activities.UpdateProjectActivity">
 
 
+    <!-- Progress -->
     <LinearLayout
+        android:layout_width="match_parent"
+        android:id="@+id/update_project_progress"
+        android:orientation="vertical"
+        android:layout_height="match_parent"
+        android:gravity="center"
+        android:visibility="gone">
+        <ProgressBar
+            android:layout_gravity="center"
+            style="?android:attr/progressBarStyleLarge"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:visibility="visible" />
+    </LinearLayout>
+    <LinearLayout
+        android:id="@+id/update_project_form"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
@@ -174,28 +190,29 @@
                     android:layout_height="150dp" />
             </LinearLayout>
         </ScrollView>
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:layout_alignParentBottom="true">
-            <TextView
-                android:id="@+id/delete_project"
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_weight="0.3"
-                android:text="Eliminar"
-                android:gravity="center"/>
-            <Button
-                android:id="@+id/button_update_project"
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_weight="0.7"
-                android:text="@string/prompt_update" />
-        </LinearLayout>
+
     </LinearLayout>
 
 
-
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/botones_actualizar_proyecto"
+        android:orientation="horizontal"
+        android:layout_alignParentBottom="true">
+        <TextView
+            android:id="@+id/delete_project"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="0.3"
+            android:text="Eliminar"
+            android:gravity="center"/>
+        <Button
+            android:id="@+id/button_update_project"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="0.7"
+            android:text="@string/prompt_update" />
+    </LinearLayout>
 
 </RelativeLayout>

@@ -1,11 +1,16 @@
 package sergiojuliogu.myapplication.Activities;
 
+import android.animation.Animator;
+import android.animation.AnimatorListenerAdapter;
+import android.annotation.TargetApi;
 import android.content.Context;
 import android.graphics.Color;
 import android.os.AsyncTask;
+import android.os.Build;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
 import android.widget.GridView;
 import android.widget.ListView;
 import android.widget.Toast;
@@ -36,6 +41,8 @@ public class ChangeActivity extends AppCompatActivity {
     private ListView listView;
     private JSONObject taskObject;
     private JSONArray changesArray;
+    private View mProgressView;
+    private View mLoginFormView;
 
 
     private InfoTask mInfoTask;
@@ -50,14 +57,49 @@ public class ChangeActivity extends AppCompatActivity {
         }
 
         findViewsById();
+        showProgress(true);
         mInfoTask = new InfoTask(c);
         mInfoTask.execute((Void) null);
     }
 
     private void findViewsById(){
+        mProgressView = findViewById(R.id.change_progress);
+        mLoginFormView = findViewById(R.id.change_form);
         listView = (ListView) findViewById(R.id.changes_listview);
     }
 
+    @TargetApi(Build.VERSION_CODES.HONEYCOMB_MR2)
+    private void showProgress(final boolean show) {
+        // On Honeycomb MR2 we have the ViewPropertyAnimator APIs, which allow
+        // for very easy animations. If available, use these APIs to fade-in
+        // the progress spinner.
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB_MR2) {
+            int shortAnimTime = getResources().getInteger(android.R.integer.config_shortAnimTime);
+
+            mLoginFormView.setVisibility(show ? View.GONE : View.VISIBLE);
+            mLoginFormView.animate().setDuration(shortAnimTime).alpha(
+                    show ? 0 : 1).setListener(new AnimatorListenerAdapter() {
+                @Override
+                public void onAnimationEnd(Animator animation) {
+                    mLoginFormView.setVisibility(show ? View.GONE : View.VISIBLE);
+                }
+            });
+
+            mProgressView.setVisibility(show ? View.VISIBLE : View.GONE);
+            mProgressView.animate().setDuration(shortAnimTime).alpha(
+                    show ? 1 : 0).setListener(new AnimatorListenerAdapter() {
+                @Override
+                public void onAnimationEnd(Animator animation) {
+                    mProgressView.setVisibility(show ? View.VISIBLE : View.GONE);
+                }
+            });
+        } else {
+            // The ViewPropertyAnimator APIs are not available, so simply show
+            // and hide the relevant UI components.
+            mProgressView.setVisibility(show ? View.VISIBLE : View.GONE);
+            mLoginFormView.setVisibility(show ? View.GONE : View.VISIBLE);
+        }
+    }
     /**
      * Represents an asynchronous task used to get task info.
      */
@@ -132,6 +174,7 @@ public class ChangeActivity extends AppCompatActivity {
         @Override
         protected void onPostExecute(final Boolean success) {
             mInfoTask = null;
+            showProgress(false);
 
             if (success) {
                 pintarDatos();
@@ -143,6 +186,8 @@ public class ChangeActivity extends AppCompatActivity {
 
         @Override
         protected void onCancelled() {
+            showProgress(false);
+
             mInfoTask = null;
         }
 

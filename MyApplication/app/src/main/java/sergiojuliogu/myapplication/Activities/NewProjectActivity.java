@@ -1,8 +1,12 @@
 package sergiojuliogu.myapplication.Activities;
 
+import android.animation.Animator;
+import android.animation.AnimatorListenerAdapter;
+import android.annotation.TargetApi;
 import android.app.DatePickerDialog;
 
 import android.os.AsyncTask;
+import android.os.Build;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.InputType;
@@ -50,6 +54,8 @@ public class NewProjectActivity extends AppCompatActivity {
 
     private Button newProjButton;
     private View mProgressView;
+    private View mLoginFormView;
+    private View mBotonCrearProyecto;
 
 
     private DatePickerDialog fromDatePickerDialog;
@@ -70,6 +76,11 @@ public class NewProjectActivity extends AppCompatActivity {
     }
 
     private void findViewsById() {
+
+        mProgressView = findViewById(R.id.new_project_progress);
+        mLoginFormView = findViewById(R.id.new_project_form);
+        mBotonCrearProyecto = findViewById(R.id.view_boton_crear_proyecto);
+
         startDateInput = (EditText) findViewById(R.id.etxt_fromdate);
         startDateInput.setInputType(InputType.TYPE_NULL);
         startDateInput.requestFocus();
@@ -94,6 +105,51 @@ public class NewProjectActivity extends AppCompatActivity {
 
     }
 
+    /**
+     * Shows the progress UI and hides the login form.
+     */
+    @TargetApi(Build.VERSION_CODES.HONEYCOMB_MR2)
+    private void showProgress(final boolean show) {
+        // On Honeycomb MR2 we have the ViewPropertyAnimator APIs, which allow
+        // for very easy animations. If available, use these APIs to fade-in
+        // the progress spinner.
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB_MR2) {
+            int shortAnimTime = getResources().getInteger(android.R.integer.config_shortAnimTime);
+
+            mLoginFormView.setVisibility(show ? View.GONE : View.VISIBLE);
+            mLoginFormView.animate().setDuration(shortAnimTime).alpha(
+                    show ? 0 : 1).setListener(new AnimatorListenerAdapter() {
+                @Override
+                public void onAnimationEnd(Animator animation) {
+                    mLoginFormView.setVisibility(show ? View.GONE : View.VISIBLE);
+                }
+            });
+
+            mProgressView.setVisibility(show ? View.VISIBLE : View.GONE);
+            mProgressView.animate().setDuration(shortAnimTime).alpha(
+                    show ? 1 : 0).setListener(new AnimatorListenerAdapter() {
+                @Override
+                public void onAnimationEnd(Animator animation) {
+                    mProgressView.setVisibility(show ? View.VISIBLE : View.GONE);
+                }
+            });
+
+            mBotonCrearProyecto.setVisibility(show ? View.GONE : View.VISIBLE);
+            mBotonCrearProyecto.animate().setDuration(shortAnimTime).alpha(
+                    show ? 0 : 1).setListener(new AnimatorListenerAdapter() {
+                @Override
+                public void onAnimationEnd(Animator animation) {
+                    mBotonCrearProyecto.setVisibility(show ? View.GONE : View.VISIBLE);
+                }
+            });
+        } else {
+            // The ViewPropertyAnimator APIs are not available, so simply show
+            // and hide the relevant UI components.
+            mProgressView.setVisibility(show ? View.VISIBLE : View.GONE);
+            mLoginFormView.setVisibility(show ? View.GONE : View.VISIBLE);
+            mBotonCrearProyecto.setVisibility(show ? View.GONE : View.VISIBLE);
+        }
+    }
     private void attemptNewProject(){
         if (mNewProjectTask != null) {
             return;
@@ -150,7 +206,7 @@ public class NewProjectActivity extends AppCompatActivity {
             focusView.requestFocus();
         } else {
 
-            //showProgress(true);
+            showProgress(true);
             mNewProjectTask = new NewProjectTask(nameProject , descriptionProject , repositoryProject, startProject, endProject);
             mNewProjectTask.execute((Void) null);
         }
@@ -316,7 +372,7 @@ public class NewProjectActivity extends AppCompatActivity {
         @Override
         protected void onPostExecute(final Boolean success) {
             mNewProjectTask = null;
-            //showProgress(false);
+            showProgress(false);
 
             if (success) {
                 setResult(RESULT_OK);
@@ -332,7 +388,7 @@ public class NewProjectActivity extends AppCompatActivity {
         @Override
         protected void onCancelled() {
             mNewProjectTask = null;
-            //showProgress(false);
+            showProgress(false);
         }
 
         private void mostrarErroresRespuesta(){

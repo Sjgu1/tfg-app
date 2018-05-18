@@ -1,11 +1,15 @@
 package sergiojuliogu.myapplication.Activities;
 
+import android.animation.Animator;
+import android.animation.AnimatorListenerAdapter;
+import android.annotation.TargetApi;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.AsyncTask;
+import android.os.Build;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -67,6 +71,10 @@ public class PokerActivity extends AppCompatActivity {
     private DeletePollTask mDeletePollTask;
 
 
+    private View mProgressView;
+    private View mLoginFormView;
+    private View mButton;
+
     private boolean actualizarVoto = false;
     private String idVoto = "";
 
@@ -87,11 +95,61 @@ public class PokerActivity extends AppCompatActivity {
         c = getApplicationContext();
         findViewsById();
 
+
+        showProgress(true);
         mInfoPollTask = new InfoPollTask(c);
         mInfoPollTask.execute((Void) null);
     }
 
+    @TargetApi(Build.VERSION_CODES.HONEYCOMB_MR2)
+    private void showProgress(final boolean show) {
+        // On Honeycomb MR2 we have the ViewPropertyAnimator APIs, which allow
+        // for very easy animations. If available, use these APIs to fade-in
+        // the progress spinner.
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB_MR2) {
+            int shortAnimTime = getResources().getInteger(android.R.integer.config_shortAnimTime);
+
+            mLoginFormView.setVisibility(show ? View.GONE : View.VISIBLE);
+            mLoginFormView.animate().setDuration(shortAnimTime).alpha(
+                    show ? 0 : 1).setListener(new AnimatorListenerAdapter() {
+                @Override
+                public void onAnimationEnd(Animator animation) {
+                    mLoginFormView.setVisibility(show ? View.GONE : View.VISIBLE);
+                }
+            });
+
+            mButton.setVisibility(show ? View.GONE : View.VISIBLE);
+            mButton.animate().setDuration(shortAnimTime).alpha(
+                    show ? 0 : 1).setListener(new AnimatorListenerAdapter() {
+                @Override
+                public void onAnimationEnd(Animator animation) {
+                    mButton.setVisibility(show ? View.GONE : View.VISIBLE);
+                }
+            });
+
+            mProgressView.setVisibility(show ? View.VISIBLE : View.GONE);
+            mProgressView.animate().setDuration(shortAnimTime).alpha(
+                    show ? 1 : 0).setListener(new AnimatorListenerAdapter() {
+                @Override
+                public void onAnimationEnd(Animator animation) {
+                    mProgressView.setVisibility(show ? View.VISIBLE : View.GONE);
+                }
+            });
+        } else {
+            // The ViewPropertyAnimator APIs are not available, so simply show
+            // and hide the relevant UI components.
+            mProgressView.setVisibility(show ? View.VISIBLE : View.GONE);
+            mLoginFormView.setVisibility(show ? View.GONE : View.VISIBLE);
+            mButton.setVisibility(show ? View.GONE : View.VISIBLE);
+
+        }
+    }
+
     private void findViewsById(){
+        mProgressView = findViewById(R.id.poker_progress);
+        mLoginFormView = findViewById(R.id.poker_form);
+        mButton = findViewById(R.id.botones_poker);
+
         votosGrid = (GridView) findViewById(R.id.votos_grid);
         tarjetasGrid = (GridView) findViewById(R.id.tarjetas_poll);
 
@@ -166,9 +224,13 @@ public class PokerActivity extends AppCompatActivity {
         }
 
         if(actualizarVoto){
+            showProgress(true);
+
             mUpdateVoteTask = new UpdateVoteTask(c, newVoto.getText().toString(), comentarioEnviar);
             mUpdateVoteTask.execute((Void) null);
         }else{
+            showProgress(true);
+
             mNewVoteTask = new NewVoteTask(c, newVoto.getText().toString(),comentarioEnviar);
             mNewVoteTask.execute((Void) null);
         }
@@ -180,6 +242,7 @@ public class PokerActivity extends AppCompatActivity {
             public void onClick(DialogInterface dialog, int which) {
                 switch (which){
                     case DialogInterface.BUTTON_POSITIVE:
+                        showProgress(true);
                         mDeletePollTask = new DeletePollTask(c);
                         mDeletePollTask.execute((Void) null);
                         break;
@@ -265,6 +328,7 @@ public class PokerActivity extends AppCompatActivity {
         @Override
         protected void onPostExecute(final Boolean success) {
             mInfoPollTask = null;
+            showProgress(false);
 
             if (success) {
                 pintarDatos();
@@ -276,6 +340,8 @@ public class PokerActivity extends AppCompatActivity {
 
         @Override
         protected void onCancelled() {
+            showProgress(false);
+
             mInfoPollTask = null;
         }
 
@@ -401,7 +467,7 @@ public class PokerActivity extends AppCompatActivity {
         @Override
         protected void onPostExecute(final Boolean success) {
             mNewVoteTask = null;
-            //showProgress(false);
+            showProgress(false);
 
             if (success) {
                 Toast.makeText(PokerActivity.this, "Se ha agreado un voto." ,
@@ -418,7 +484,7 @@ public class PokerActivity extends AppCompatActivity {
         @Override
         protected void onCancelled() {
             mNewVoteTask = null;
-            //showProgress(false);
+            showProgress(false);
         }
 
         private void mostrarErroresRespuesta(){
@@ -515,7 +581,7 @@ public class PokerActivity extends AppCompatActivity {
         @Override
         protected void onPostExecute(final Boolean success) {
             mNewVoteTask = null;
-            //showProgress(false);
+            showProgress(false);
 
             if (success) {
                 Toast.makeText(PokerActivity.this, "Se ha actualizado un voto." ,
@@ -532,7 +598,7 @@ public class PokerActivity extends AppCompatActivity {
         @Override
         protected void onCancelled() {
             mNewVoteTask = null;
-            //showProgress(false);
+            showProgress(false);
         }
 
         private void mostrarErroresRespuesta(){
@@ -606,6 +672,7 @@ public class PokerActivity extends AppCompatActivity {
         @Override
         protected void onPostExecute(final Boolean success) {
             mInfoPollTask = null;
+            showProgress(false);
 
             if (success) {
                 Session.setPollSelected(null);
@@ -619,6 +686,7 @@ public class PokerActivity extends AppCompatActivity {
 
         @Override
         protected void onCancelled() {
+            showProgress(false);
             mInfoPollTask = null;
         }
 

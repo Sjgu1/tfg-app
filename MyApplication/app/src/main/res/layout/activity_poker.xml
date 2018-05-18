@@ -6,9 +6,26 @@
     android:layout_height="match_parent"
     tools:context=".Activities.PokerActivity">
 
+
+    <!-- Progress -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:id="@+id/poker_progress"
+        android:orientation="vertical"
+        android:layout_height="match_parent"
+        android:gravity="center"
+        android:visibility="gone">
+        <ProgressBar
+            android:layout_gravity="center"
+            style="?android:attr/progressBarStyleLarge"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:visibility="visible" />
+    </LinearLayout>
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:id="@+id/poker_form"
         android:orientation="vertical">
         <ScrollView
             android:layout_width="match_parent"
@@ -96,7 +113,8 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        android:layout_alignParentBottom="true">
+        android:layout_alignParentBottom="true"
+        android:id="@+id/botones_poker">
         <TextView
             android:id="@+id/delete_poll"
             android:layout_width="0dp"

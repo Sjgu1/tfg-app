@@ -1,10 +1,15 @@
 package sergiojuliogu.myapplication.Activities;
 
+import android.animation.Animator;
+import android.animation.AnimatorListenerAdapter;
+import android.annotation.TargetApi;
 import android.app.AlertDialog;
 import android.app.DatePickerDialog;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.os.AsyncTask;
+import android.os.Build;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.InputType;
@@ -54,6 +59,8 @@ public class UpdateProjectActivity extends AppCompatActivity {
     private DatePickerDialog toDatePickerDialog;
     private SimpleDateFormat dateFormatter;
 
+    private int activityBrequestCode =0;
+
 
     private ImageButton startDate;
     private ImageButton endDate;
@@ -68,6 +75,8 @@ public class UpdateProjectActivity extends AppCompatActivity {
     private Button updateProjButton;
     private ListView userListView;
     private View mProgressView;
+    private View mLoginFormView;
+    private View mBotones;
 
 
     private GetRolesTask mGetRolesTask = null;
@@ -90,6 +99,12 @@ public class UpdateProjectActivity extends AppCompatActivity {
             projectID = value;
             Session.setProjectSelected(value);
         }
+        mLoginFormView = findViewById(R.id.update_project_form);
+        mProgressView = findViewById(R.id.update_project_progress);
+        mBotones = findViewById(R.id.botones_actualizar_proyecto);
+
+        showProgress(true);
+
         mGetRolesTask = new GetRolesTask();
         mGetRolesTask.execute((Void) null);
 
@@ -97,6 +112,7 @@ public class UpdateProjectActivity extends AppCompatActivity {
         findViewsById();
         setDateTimeField();
 
+        showProgress(true);
         mGetProjectTask = new ProjectInfoTask(projectID);
         mGetProjectTask.execute((Void) null);
 
@@ -104,6 +120,8 @@ public class UpdateProjectActivity extends AppCompatActivity {
     }
 
     private void findViewsById() {
+
+
         startDateInput = (EditText) findViewById(R.id.etxt_fromdate_update);
         startDateInput.setInputType(InputType.TYPE_NULL);
         startDateInput.requestFocus();
@@ -148,12 +166,58 @@ public class UpdateProjectActivity extends AppCompatActivity {
         });
 
     }
+
+    @TargetApi(Build.VERSION_CODES.HONEYCOMB_MR2)
+    private void showProgress(final boolean show) {
+        // On Honeycomb MR2 we have the ViewPropertyAnimator APIs, which allow
+        // for very easy animations. If available, use these APIs to fade-in
+        // the progress spinner.
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB_MR2) {
+            int shortAnimTime = getResources().getInteger(android.R.integer.config_shortAnimTime);
+
+            mLoginFormView.setVisibility(show ? View.GONE : View.VISIBLE);
+            mLoginFormView.animate().setDuration(shortAnimTime).alpha(
+                    show ? 0 : 1).setListener(new AnimatorListenerAdapter() {
+                @Override
+                public void onAnimationEnd(Animator animation) {
+                    mLoginFormView.setVisibility(show ? View.GONE : View.VISIBLE);
+                }
+            });
+
+            mProgressView.setVisibility(show ? View.VISIBLE : View.GONE);
+            mProgressView.animate().setDuration(shortAnimTime).alpha(
+                    show ? 1 : 0).setListener(new AnimatorListenerAdapter() {
+                @Override
+                public void onAnimationEnd(Animator animation) {
+                    mProgressView.setVisibility(show ? View.VISIBLE : View.GONE);
+                }
+            });
+
+            mBotones.setVisibility(show ? View.GONE : View.VISIBLE);
+            mBotones.animate().setDuration(shortAnimTime).alpha(
+                    show ? 0 : 1).setListener(new AnimatorListenerAdapter() {
+                @Override
+                public void onAnimationEnd(Animator animation) {
+                    mBotones.setVisibility(show ? View.GONE : View.VISIBLE);
+                }
+            });
+        } else {
+            // The ViewPropertyAnimator APIs are not available, so simply show
+            // and hide the relevant UI components.
+            mProgressView.setVisibility(show ? View.VISIBLE : View.GONE);
+            mLoginFormView.setVisibility(show ? View.GONE : View.VISIBLE);
+            mBotones.setVisibility(show ? View.GONE : View.VISIBLE);
+        }
+    }
+
     private void  attemptDeleteProject(View v){
         DialogInterface.OnClickListener dialogClickListener = new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 switch (which){
                     case DialogInterface.BUTTON_POSITIVE:
+                        showProgress(true);
+
                         mProjectDeleteTask = new ProjectDeleteTask(Session.getProjectSelected());
                         mProjectDeleteTask.execute((Void) null);
                         break;
@@ -229,7 +293,7 @@ public class UpdateProjectActivity extends AppCompatActivity {
             focusView.requestFocus();
         } else {
 
-            //showProgress(true);
+            showProgress(true);
             mUpdateUserTask = new UpdateUserProjectTask(nameProject , repositoryProject, descriptionProject , startProject, endProject, finalizado);
             mUpdateUserTask.execute((Void) null);
         }
@@ -283,6 +347,24 @@ public class UpdateProjectActivity extends AppCompatActivity {
             }
 
         },newCalendar.get(Calendar.YEAR), newCalendar.get(Calendar.MONTH), newCalendar.get(Calendar.DAY_OF_MONTH));
+    }
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        if (requestCode == activityBrequestCode && resultCode == RESULT_OK){
+            activityBrequestCode =0;
+            Intent intent = getIntent();
+            finish();
+            startActivity(intent);
+
+        }if (requestCode == activityBrequestCode && resultCode == 300){
+            activityBrequestCode =0;
+            Intent intent = getIntent();
+            finish();
+            startActivity(intent);
+
+        }
     }
 
     /**
@@ -338,6 +420,8 @@ public class UpdateProjectActivity extends AppCompatActivity {
         @Override
         protected void onPostExecute(final Boolean success) {
             mProjectDeleteTask = null;
+            showProgress(false);
+
             if (success) {
                 Session.setProjectSelected("");
                 setResult(300);
@@ -350,6 +434,9 @@ public class UpdateProjectActivity extends AppCompatActivity {
 
         @Override
         protected void onCancelled() {
+
+            showProgress(false);
+
             mProjectDeleteTask = null;
         }
 
@@ -428,6 +515,7 @@ public class UpdateProjectActivity extends AppCompatActivity {
         @Override
         protected void onPostExecute(final Boolean success) {
             mGetProjectTask = null;
+            showProgress(false);
 
             if (success) {
                 pintarDatos();
@@ -439,6 +527,8 @@ public class UpdateProjectActivity extends AppCompatActivity {
 
         @Override
         protected void onCancelled() {
+            showProgress(false);
+
             mGetProjectTask = null;
         }
 
@@ -495,7 +585,7 @@ public class UpdateProjectActivity extends AppCompatActivity {
 
                     usersObject = (JSONArray)projectObject.get("users");
 
-                    UsersUpdateAdapter usersAdapter = new UsersUpdateAdapter(c, usersObject, rolesObject);
+                    UsersUpdateAdapter usersAdapter = new UsersUpdateAdapter(c, usersObject, rolesObject, mProgressView, mLoginFormView);
                     userListView.setAdapter(usersAdapter);
                 }
 
@@ -600,6 +690,7 @@ public class UpdateProjectActivity extends AppCompatActivity {
         @Override
         protected void onPostExecute(final Boolean success) {
             mGetRolesTask = null;
+            showProgress(false);
 
             if (success) {
                 //Toast.makeText(c, "He conseguido los roles." ,
@@ -611,7 +702,9 @@ public class UpdateProjectActivity extends AppCompatActivity {
         }
         @Override
         protected void onCancelled() {
-                mGetRolesTask = null;
+
+            showProgress(false);
+            mGetRolesTask = null;
         }
     }
 
@@ -737,6 +830,8 @@ public class UpdateProjectActivity extends AppCompatActivity {
         @Override
         protected void onPostExecute(final Boolean success) {
             mUpdateUserTask = null;
+            showProgress(false);
+
             if (success) {
                 setResult(RESULT_OK);
                 finish();
@@ -747,6 +842,8 @@ public class UpdateProjectActivity extends AppCompatActivity {
 
         @Override
         protected void onCancelled() {
+            showProgress(false);
+
             mUpdateUserTask = null;
         }
         public String parseDate(String time) {

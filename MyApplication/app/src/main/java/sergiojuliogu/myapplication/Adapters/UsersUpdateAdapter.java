@@ -1,7 +1,12 @@
 package sergiojuliogu.myapplication.Adapters;
 
+import android.animation.Animator;
+import android.animation.AnimatorListenerAdapter;
+import android.annotation.TargetApi;
+import android.app.Activity;
 import android.content.Context;
 import android.os.AsyncTask;
+import android.os.Build;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -32,6 +37,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+import sergiojuliogu.myapplication.Activities.UpdateProjectActivity;
 import sergiojuliogu.myapplication.R;
 import sergiojuliogu.myapplication.Session;
 
@@ -41,16 +47,57 @@ public class UsersUpdateAdapter extends BaseAdapter {
     private final JSONArray users;
     private final JSONArray roles;
 
+
+    private View mProgressView;
+    private View mLoginFormView;
+
+
+
     private UpdateProjectUserTask mUpdateProjectUser;
 
     // 1
-    public UsersUpdateAdapter(Context context, JSONArray users, JSONArray roles) {
+    public UsersUpdateAdapter(Context context, JSONArray users, JSONArray roles, View mProgressView, View mLoginFormView) {
         this.mContext = context;
         this.users = users;
         this.roles = roles;
         mUpdateProjectUser = null;
+        this.mProgressView = mProgressView;
+        this.mLoginFormView = mLoginFormView;
     }
 
+
+    @TargetApi(Build.VERSION_CODES.HONEYCOMB_MR2)
+    private void showProgress(final boolean show) {
+        // On Honeycomb MR2 we have the ViewPropertyAnimator APIs, which allow
+        // for very easy animations. If available, use these APIs to fade-in
+        // the progress spinner.
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB_MR2) {
+            int shortAnimTime = mContext.getResources().getInteger(android.R.integer.config_shortAnimTime);
+
+            mLoginFormView.setVisibility(show ? View.GONE : View.VISIBLE);
+            mLoginFormView.animate().setDuration(shortAnimTime).alpha(
+                    show ? 0 : 1).setListener(new AnimatorListenerAdapter() {
+                @Override
+                public void onAnimationEnd(Animator animation) {
+                    mLoginFormView.setVisibility(show ? View.GONE : View.VISIBLE);
+                }
+            });
+
+            mProgressView.setVisibility(show ? View.VISIBLE : View.GONE);
+            mProgressView.animate().setDuration(shortAnimTime).alpha(
+                    show ? 1 : 0).setListener(new AnimatorListenerAdapter() {
+                @Override
+                public void onAnimationEnd(Animator animation) {
+                    mProgressView.setVisibility(show ? View.VISIBLE : View.GONE);
+                }
+            });
+        } else {
+            // The ViewPropertyAnimator APIs are not available, so simply show
+            // and hide the relevant UI components.
+            mProgressView.setVisibility(show ? View.VISIBLE : View.GONE);
+            mLoginFormView.setVisibility(show ? View.GONE : View.VISIBLE);
+        }
+    }
     // 2
     @Override
     public int getCount() {
@@ -97,6 +144,8 @@ public class UsersUpdateAdapter extends BaseAdapter {
                                     Toast.LENGTH_LONG).show();
                             return;
                         }
+
+                        showProgress(true);
                         mUpdateProjectUser = new UpdateProjectUserTask("null", userObject.get("username").toString(), "DeleteUser");
                         mUpdateProjectUser.execute((Void) null);
                     }catch (JSONException e){
@@ -138,6 +187,7 @@ public class UsersUpdateAdapter extends BaseAdapter {
                             roleLeido = roles.getJSONObject(i);
                             if(roleLeido.getString("name").equals(text))
                                 if(!roleLeido.getString("name").equals(roleObject.getString("name"))){
+                                    showProgress(true);
                                     mUpdateProjectUser = new UpdateProjectUserTask(roleLeido.getString("name"), userObject.get("username").toString(), "UpdateRole");
                                     mUpdateProjectUser.execute((Void) null);
                                 }
@@ -188,6 +238,7 @@ public class UsersUpdateAdapter extends BaseAdapter {
         private String username = null;
         private String role = null;
         private String method = null;
+        private boolean cambio = false;
 
         UpdateProjectUserTask(String role, String username, String  method) {
                 this.username = username;
@@ -260,6 +311,8 @@ public class UsersUpdateAdapter extends BaseAdapter {
                             users.remove(i);
                         }
                     }
+                }else{
+                    cambio = true;
                 }
                 Thread.sleep(2000);
                 return true;
@@ -276,6 +329,9 @@ public class UsersUpdateAdapter extends BaseAdapter {
         protected void onPostExecute(final Boolean success) {
             mUpdateProjectUser = null;
             if (success) {
+                showProgress(false);
+                if(!cambio)
+                    UsersUpdateAdapter.super.notifyDataSetChanged();
                 Toast.makeText(mContext, "Proyecto actualizado." ,
                         Toast.LENGTH_SHORT).show();
             } else {
@@ -286,6 +342,8 @@ public class UsersUpdateAdapter extends BaseAdapter {
 
         @Override
         protected void onCancelled() {
+
+            showProgress(false);
             mUpdateProjectUser = null;
         }
         public String parseDate(String time) {

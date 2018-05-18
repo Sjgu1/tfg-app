@@ -1,7 +1,11 @@
 package sergiojuliogu.myapplication.Activities;
 
+import android.animation.Animator;
+import android.animation.AnimatorListenerAdapter;
+import android.annotation.TargetApi;
 import android.app.DatePickerDialog;
 import android.os.AsyncTask;
+import android.os.Build;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.InputType;
@@ -47,8 +51,10 @@ public class NewSprintActivity extends AppCompatActivity {
     private EditText descrInput;
 
     private Button newSprintButton;
-    private View mProgressView;
 
+    private View mProgressView;
+    private View mLoginFormView;
+    private View mBoton;
 
     private DatePickerDialog fromDatePickerDialog;
     private DatePickerDialog toDatePickerDialog;
@@ -68,7 +74,56 @@ public class NewSprintActivity extends AppCompatActivity {
         setDateTimeField();
     }
 
+    @TargetApi(Build.VERSION_CODES.HONEYCOMB_MR2)
+    private void showProgress(final boolean show) {
+        // On Honeycomb MR2 we have the ViewPropertyAnimator APIs, which allow
+        // for very easy animations. If available, use these APIs to fade-in
+        // the progress spinner.
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB_MR2) {
+            int shortAnimTime = getResources().getInteger(android.R.integer.config_shortAnimTime);
+
+            mLoginFormView.setVisibility(show ? View.GONE : View.VISIBLE);
+            mLoginFormView.animate().setDuration(shortAnimTime).alpha(
+                    show ? 0 : 1).setListener(new AnimatorListenerAdapter() {
+                @Override
+                public void onAnimationEnd(Animator animation) {
+                    mLoginFormView.setVisibility(show ? View.GONE : View.VISIBLE);
+                }
+            });
+
+            mProgressView.setVisibility(show ? View.VISIBLE : View.GONE);
+            mProgressView.animate().setDuration(shortAnimTime).alpha(
+                    show ? 1 : 0).setListener(new AnimatorListenerAdapter() {
+                @Override
+                public void onAnimationEnd(Animator animation) {
+                    mProgressView.setVisibility(show ? View.VISIBLE : View.GONE);
+                }
+            });
+
+
+
+            mBoton.setVisibility(show ? View.GONE : View.VISIBLE);
+            mBoton.animate().setDuration(shortAnimTime).alpha(
+                    show ? 0 : 1).setListener(new AnimatorListenerAdapter() {
+                @Override
+                public void onAnimationEnd(Animator animation) {
+                    mBoton.setVisibility(show ? View.GONE : View.VISIBLE);
+                }
+            });
+        } else {
+            // The ViewPropertyAnimator APIs are not available, so simply show
+            // and hide the relevant UI components.
+            mProgressView.setVisibility(show ? View.VISIBLE : View.GONE);
+            mLoginFormView.setVisibility(show ? View.GONE : View.VISIBLE);
+            mBoton.setVisibility(show ? View.GONE : View.VISIBLE);
+        }
+    }
+
     private void findViewsById() {
+        mLoginFormView = findViewById(R.id.new_sprint_form);
+        mProgressView = findViewById(R.id.new_sprint_progress);
+        mBoton = findViewById(R.id.view_boton_crear_sprint);
+
         startDateInput = (EditText) findViewById(R.id.etxt_fromdate_sprint);
         startDateInput.setInputType(InputType.TYPE_NULL);
         startDateInput.requestFocus();
@@ -196,7 +251,7 @@ public class NewSprintActivity extends AppCompatActivity {
             focusView.requestFocus();
         } else {
 
-            //showProgress(true);
+            showProgress(true);
             mNewSprintTask = new NewSprintTask(nameSprint , descriptionSprint , startSprint, endSprint);
             mNewSprintTask.execute((Void) null);
         }
@@ -294,7 +349,7 @@ public class NewSprintActivity extends AppCompatActivity {
         @Override
         protected void onPostExecute(final Boolean success) {
             mNewSprintTask = null;
-            //showProgress(false);
+            showProgress(false);
 
             if (success) {
                 setResult(RESULT_OK);
@@ -309,7 +364,7 @@ public class NewSprintActivity extends AppCompatActivity {
         @Override
         protected void onCancelled() {
             mNewSprintTask = null;
-            //showProgress(false);
+            showProgress(false);
         }
 
         private void mostrarErroresRespuesta(){

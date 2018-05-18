@@ -1,7 +1,11 @@
 package sergiojuliogu.myapplication.Activities;
 
+import android.animation.Animator;
+import android.animation.AnimatorListenerAdapter;
+import android.annotation.TargetApi;
 import android.content.Context;
 import android.os.AsyncTask;
+import android.os.Build;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -43,6 +47,8 @@ public class SearchUserActivity extends AppCompatActivity implements SearchView.
     private Spinner dropDown;
 
     private View mProgressView;
+    private View mLoginFormView;
+
 
 
     private JSONArray users = new JSONArray();
@@ -59,11 +65,13 @@ public class SearchUserActivity extends AppCompatActivity implements SearchView.
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_search_user);
+        setContentView(R.layout.activity_search_users);
         c = this.getApplicationContext();
 
         dropDown = (Spinner) findViewById(R.id.spinner_roles_search);
 
+        mProgressView = findViewById(R.id.search_user_progress);
+        mLoginFormView = findViewById(R.id.search_user_form);
         Bundle b = getIntent().getExtras();
         String value = ""; // or other values
         String valueProject = "";
@@ -79,8 +87,11 @@ public class SearchUserActivity extends AppCompatActivity implements SearchView.
             Log.e("My App", "Could not parse malformed JSON: \"" + value + "\"");
         }
 
+        showProgress(true);
         mGetUsersTask = new GetUsersTask();
         mGetUsersTask.execute((Void) null);
+
+        showProgress(true);
 
         mGetRolesTask = new GetRolesTask();
         mGetRolesTask.execute((Void) null);
@@ -94,6 +105,8 @@ public class SearchUserActivity extends AppCompatActivity implements SearchView.
 
                 try{
                     JSONObject userSeleccionado = (JSONObject) users.get(position);
+                    showProgress(true);
+
                     mAddUserTask = new AddUserTask(project, userSeleccionado.getString("username"), dropDown.getSelectedItem().toString());
                     mAddUserTask.execute((Void) null);
                 }catch (JSONException e){
@@ -122,7 +135,38 @@ public class SearchUserActivity extends AppCompatActivity implements SearchView.
         return false;
     }
 
-    ///setResult(RESULT_OK);
+    @TargetApi(Build.VERSION_CODES.HONEYCOMB_MR2)
+    private void showProgress(final boolean show) {
+        // On Honeycomb MR2 we have the ViewPropertyAnimator APIs, which allow
+        // for very easy animations. If available, use these APIs to fade-in
+        // the progress spinner.
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB_MR2) {
+            int shortAnimTime = getResources().getInteger(android.R.integer.config_shortAnimTime);
+
+            mLoginFormView.setVisibility(show ? View.GONE : View.VISIBLE);
+            mLoginFormView.animate().setDuration(shortAnimTime).alpha(
+                    show ? 0 : 1).setListener(new AnimatorListenerAdapter() {
+                @Override
+                public void onAnimationEnd(Animator animation) {
+                    mLoginFormView.setVisibility(show ? View.GONE : View.VISIBLE);
+                }
+            });
+
+            mProgressView.setVisibility(show ? View.VISIBLE : View.GONE);
+            mProgressView.animate().setDuration(shortAnimTime).alpha(
+                    show ? 1 : 0).setListener(new AnimatorListenerAdapter() {
+                @Override
+                public void onAnimationEnd(Animator animation) {
+                    mProgressView.setVisibility(show ? View.VISIBLE : View.GONE);
+                }
+            });
+        } else {
+            // The ViewPropertyAnimator APIs are not available, so simply show
+            // and hide the relevant UI components.
+            mProgressView.setVisibility(show ? View.VISIBLE : View.GONE);
+            mLoginFormView.setVisibility(show ? View.GONE : View.VISIBLE);
+        }
+    }
 
 
     /**
@@ -191,6 +235,7 @@ public class SearchUserActivity extends AppCompatActivity implements SearchView.
         @Override
         protected void onPostExecute(final Boolean success) {
             mGetRolesTask = null;
+            showProgress(false);
 
             if (success) {
                 try{
@@ -218,6 +263,7 @@ public class SearchUserActivity extends AppCompatActivity implements SearchView.
 
         @Override
         protected void onCancelled() {
+            showProgress(false);
             mGetRolesTask = null;
         }
     }
@@ -288,6 +334,7 @@ public class SearchUserActivity extends AppCompatActivity implements SearchView.
         protected void onPostExecute(final Boolean success) {
             mGetUsersTask = null;
 
+            showProgress(false);
             if (success) {
                 try{
                     // Pass results to ListViewAdapter Class
@@ -324,6 +371,8 @@ public class SearchUserActivity extends AppCompatActivity implements SearchView.
 
         @Override
         protected void onCancelled() {
+
+            showProgress(false);
             mGetUsersTask = null;
         }
     }
@@ -476,6 +525,7 @@ public class SearchUserActivity extends AppCompatActivity implements SearchView.
         @Override
         protected void onPostExecute(final Boolean success) {
             mAddUserTask = null;
+            showProgress(false);
             if (success) {
                 setResult(RESULT_OK);
                 finish();
@@ -486,6 +536,8 @@ public class SearchUserActivity extends AppCompatActivity implements SearchView.
 
         @Override
         protected void onCancelled() {
+
+            showProgress(false);
             mAddUserTask = null;
         }
         public String parseDate(String time) {

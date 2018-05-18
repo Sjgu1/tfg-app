@@ -7,7 +7,24 @@
     tools:context=".Activities.NewTaskActivity">
 
 
+    <!-- Progress -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:id="@+id/new_task_progress"
+        android:orientation="vertical"
+        android:layout_height="match_parent"
+        android:gravity="center"
+        android:visibility="gone">
+        <ProgressBar
+            android:layout_gravity="center"
+            style="?android:attr/progressBarStyleLarge"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:visibility="visible" />
+    </LinearLayout>
+
     <android.support.v4.widget.NestedScrollView
+        android:id="@+id/new_task_form"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_centerInParent="true">
@@ -158,31 +175,23 @@
     </android.support.v4.widget.NestedScrollView>
 
 
-
-
-    <ProgressBar
-        android:id="@+id/login_progress"
-        style="?android:attr/progressBarStyleLarge"
-        android:layout_width="60dp"
-        android:layout_height="84dp"
-        android:layout_marginBottom="8dp"
-        android:layout_marginEnd="8dp"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="8dp"
-        android:visibility="gone"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-
-    <Button
-        android:id="@+id/new_task_button"
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="46dp"
+        android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
-        android:gravity="center_horizontal"
-        android:text="@string/prompt_new"
-        android:textStyle="bold" />
+        android:orientation="vertical"
+        android:id="@+id/view_boton_crear_tarea">
+        <Button
+            android:id="@+id/new_task_button"
+            android:layout_width="match_parent"
+            android:layout_height="46dp"
+            android:layout_alignParentBottom="true"
+            android:gravity="center_horizontal"
+            android:text="@string/prompt_new"
+            android:textStyle="bold" />
+
+    </LinearLayout>
+
 
 
 

@@ -6,14 +6,21 @@
     android:layout_height="match_parent"
     tools:context="sergiojuliogu.myapplication.Activities.AvatarsActivity">
 
-    <!-- Login progress -->
-    <include
-        layout="@layout/progress_bar_layout"
-        android:id="@+id/customProgressDialog"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_centerInParent="true"
-        />
+    <!-- Progress -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:id="@+id/avatars_progress"
+        android:orientation="vertical"
+        android:layout_height="match_parent"
+        android:gravity="center"
+        android:visibility="gone">
+        <ProgressBar
+            android:layout_gravity="center"
+            style="?android:attr/progressBarStyleLarge"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:visibility="visible" />
+    </LinearLayout>
 
     <LinearLayout
         android:id="@+id/avatars_form"

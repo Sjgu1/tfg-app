@@ -1,6 +1,10 @@
 package sergiojuliogu.myapplication.Adapters;
 
+import android.animation.Animator;
+import android.animation.AnimatorListenerAdapter;
+import android.annotation.TargetApi;
 import android.content.Context;
+import android.os.Build;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -20,11 +24,15 @@ public class UsersAdapter extends BaseAdapter {
     private final Context mContext;
     private final JSONArray users;
 
+
     // 1
     public UsersAdapter(Context context, JSONArray users) {
         this.mContext = context;
         this.users = users;
+
     }
+
+
 
     // 2
     @Override

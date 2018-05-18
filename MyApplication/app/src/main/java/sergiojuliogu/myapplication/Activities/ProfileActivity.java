@@ -1,8 +1,12 @@
 package sergiojuliogu.myapplication.Activities;
 
+import android.animation.Animator;
+import android.animation.AnimatorListenerAdapter;
+import android.annotation.TargetApi;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.os.AsyncTask;
+import android.os.Build;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.TextUtils;
@@ -42,6 +46,8 @@ public class ProfileActivity extends AppCompatActivity {
     private ImageView mAvatarView;
     private View mUpdateFormView;
     private View mProgressView;
+    private View mLoginFormView;
+
 
     private int activityBrequestCode = 0;
 
@@ -59,7 +65,10 @@ public class ProfileActivity extends AppCompatActivity {
         mSurnameView = (EditText) findViewById(R.id.input_surname);
         mAvatarView = (ImageView) findViewById(R.id.input_avatar);
 
-        mUpdateFormView = findViewById(R.id.update_form);
+        mLoginFormView = findViewById(R.id.profile_form);
+        mProgressView = findViewById(R.id.profile_progress);
+
+        mUpdateFormView = findViewById(R.id.profile_form);
         pintarDatos();
 
         Button mUpdateButton = (Button) findViewById(R.id.update_user_button);
@@ -186,11 +195,7 @@ public class ProfileActivity extends AppCompatActivity {
         } else {
             // Show a progress spinner, and kick off a background task to
             // perform the user register attempt.
-            //showProgress(true);
-            Log.i("Username", username);
-            Log.i("Email", email);
-            Log.i("name", name);
-            Log.i("surname", surname);
+            showProgress(true);
 
             mUserUpdateTask = new UserUpdateTask(username , email , name, surname);
             mUserUpdateTask.execute((Void) null);
@@ -203,6 +208,7 @@ public class ProfileActivity extends AppCompatActivity {
             public void onClick(DialogInterface dialog, int which) {
                 switch (which){
                     case DialogInterface.BUTTON_POSITIVE:
+                        showProgress(true);
                         mUserDeleteTask = new UserDeleteTask();
                         mUserDeleteTask.execute((Void) null);
                         break;
@@ -229,6 +235,39 @@ public class ProfileActivity extends AppCompatActivity {
         if (email == null)
             return false;
         return pat.matcher(email).matches();
+    }
+
+    @TargetApi(Build.VERSION_CODES.HONEYCOMB_MR2)
+    private void showProgress(final boolean show) {
+        // On Honeycomb MR2 we have the ViewPropertyAnimator APIs, which allow
+        // for very easy animations. If available, use these APIs to fade-in
+        // the progress spinner.
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB_MR2) {
+            int shortAnimTime = getResources().getInteger(android.R.integer.config_shortAnimTime);
+
+            mLoginFormView.setVisibility(show ? View.GONE : View.VISIBLE);
+            mLoginFormView.animate().setDuration(shortAnimTime).alpha(
+                    show ? 0 : 1).setListener(new AnimatorListenerAdapter() {
+                @Override
+                public void onAnimationEnd(Animator animation) {
+                    mLoginFormView.setVisibility(show ? View.GONE : View.VISIBLE);
+                }
+            });
+
+            mProgressView.setVisibility(show ? View.VISIBLE : View.GONE);
+            mProgressView.animate().setDuration(shortAnimTime).alpha(
+                    show ? 1 : 0).setListener(new AnimatorListenerAdapter() {
+                @Override
+                public void onAnimationEnd(Animator animation) {
+                    mProgressView.setVisibility(show ? View.VISIBLE : View.GONE);
+                }
+            });
+        } else {
+            // The ViewPropertyAnimator APIs are not available, so simply show
+            // and hide the relevant UI components.
+            mProgressView.setVisibility(show ? View.VISIBLE : View.GONE);
+            mLoginFormView.setVisibility(show ? View.GONE : View.VISIBLE);
+        }
     }
     /**
      * Represents an asynchronous task used to update users information.
@@ -330,6 +369,7 @@ public class ProfileActivity extends AppCompatActivity {
         @Override
         protected void onPostExecute(final Boolean success) {
             mUserUpdateTask = null;
+            showProgress(false);
             if (success) {
                 Toast.makeText(ProfileActivity.this, "Perfil actualizado." ,
                         Toast.LENGTH_SHORT).show();
@@ -341,6 +381,8 @@ public class ProfileActivity extends AppCompatActivity {
 
         @Override
         protected void onCancelled() {
+
+            showProgress(false);
             mUserUpdateTask = null;
         }
 
@@ -404,6 +446,8 @@ public class ProfileActivity extends AppCompatActivity {
         @Override
         protected void onPostExecute(final Boolean success) {
             mUserDeleteTask = null;
+            showProgress(false);
+
             if (success) {
                 Session.logOut();
                 setResult(RESULT_OK);
@@ -416,6 +460,7 @@ public class ProfileActivity extends AppCompatActivity {
 
         @Override
         protected void onCancelled() {
+            showProgress(false);
             mUserDeleteTask = null;
         }
 

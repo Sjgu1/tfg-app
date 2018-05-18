@@ -1,8 +1,12 @@
 package sergiojuliogu.myapplication.Activities;
 
+import android.animation.Animator;
+import android.animation.AnimatorListenerAdapter;
+import android.annotation.TargetApi;
 import android.content.Context;
 import android.content.Intent;
 import android.os.AsyncTask;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.util.Log;
@@ -18,6 +22,7 @@ import android.view.MenuItem;
 import android.widget.AdapterView;
 import android.widget.GridView;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -49,6 +54,8 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
     private TextView nombreUsuario;
     private GridView gridView;
 
+    private View mProgressView;
+    private View mLoginFormView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -76,6 +83,9 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
                 this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
         drawer.setDrawerListener(toggle);
         toggle.syncState();
+
+        mProgressView = findViewById(R.id.home_progress);
+        mLoginFormView = findViewById(R.id.home_form);
 
         navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
@@ -132,6 +142,7 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
             Log.e("My App", "Could not parse malformed JSON: \"" + value + "\"");
         }
 
+        showProgress(true);
         mUserTask = new UserInfoTask();
         mUserTask.execute((Void) null);
     }
@@ -232,6 +243,42 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
     }
 
     /**
+     * Shows the progress UI and hides the login form.
+     */
+    @TargetApi(Build.VERSION_CODES.HONEYCOMB_MR2)
+    private void showProgress(final boolean show) {
+        // On Honeycomb MR2 we have the ViewPropertyAnimator APIs, which allow
+        // for very easy animations. If available, use these APIs to fade-in
+        // the progress spinner.
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB_MR2) {
+            int shortAnimTime = getResources().getInteger(android.R.integer.config_shortAnimTime);
+
+            mLoginFormView.setVisibility(show ? View.GONE : View.VISIBLE);
+            mLoginFormView.animate().setDuration(shortAnimTime).alpha(
+                    show ? 0 : 1).setListener(new AnimatorListenerAdapter() {
+                @Override
+                public void onAnimationEnd(Animator animation) {
+                    mLoginFormView.setVisibility(show ? View.GONE : View.VISIBLE);
+                }
+            });
+
+            mProgressView.setVisibility(show ? View.VISIBLE : View.GONE);
+            mProgressView.animate().setDuration(shortAnimTime).alpha(
+                    show ? 1 : 0).setListener(new AnimatorListenerAdapter() {
+                @Override
+                public void onAnimationEnd(Animator animation) {
+                    mProgressView.setVisibility(show ? View.VISIBLE : View.GONE);
+                }
+            });
+        } else {
+            // The ViewPropertyAnimator APIs are not available, so simply show
+            // and hide the relevant UI components.
+            mProgressView.setVisibility(show ? View.VISIBLE : View.GONE);
+            mLoginFormView.setVisibility(show ? View.GONE : View.VISIBLE);
+        }
+    }
+
+    /**
      * Represents an asynchronous task used to get users information.
      */
     public class UserInfoTask extends AsyncTask<Void, Void, Boolean> {
@@ -301,6 +348,8 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
         @Override
         protected void onPostExecute(final Boolean success) {
             mUserTask = null;
+            showProgress(false);
+
 
             if (success) {
                 pintarDatos(user);
@@ -312,6 +361,8 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
 
         @Override
         protected void onCancelled() {
+            showProgress(true);
+
             mUserTask = null;
         }
 

@@ -72,8 +72,11 @@ public class ProjectActivity extends AppCompatActivity {
 
         @Override
         public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+
             switch (item.getItemId()) {
                 case R.id.navigation_charts:
+                    Intent intent2 = new Intent(c, ChartProjectActivity.class);
+                    startActivityForResult(intent2, activityBrequestCode);
                     return true;
                 case R.id.navigation_edit:
                     if(admin){

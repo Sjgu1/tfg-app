@@ -109,9 +109,13 @@
             android:name=".Activities.ChangeActivity"
             android:label="Historial"
             android:parentActivityName=".Activities.TaskActivity" />
-        <activity android:name=".Activities.PokerActivity"
+        <activity
+            android:name=".Activities.PokerActivity"
             android:label="Poker"
-            android:parentActivityName=".Activities.TaskActivity"></activity>
+            android:parentActivityName=".Activities.TaskActivity" />
+        <activity android:name=".Activities.ChartProjectActivity"
+            android:label="Gráficos de proyecto"
+            android:parentActivityName=".Activities.ProjectActivity"></activity>
     </application>
 
 </manifest>

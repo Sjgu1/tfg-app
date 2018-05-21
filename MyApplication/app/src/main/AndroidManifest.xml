@@ -47,7 +47,7 @@
             android:name=".Activities.AvatarsActivity"
             android:excludeFromRecents="true"
             android:label="Avatares"
-            android:parentActivityName=".Activities.HomeActivity"
+            android:parentActivityName=".Activities.ProfileActivity"
             android:theme="@style/AppTheme.Dialog" />
         <activity
             android:name=".Activities.ProjectActivity"
@@ -113,9 +113,13 @@
             android:name=".Activities.PokerActivity"
             android:label="Poker"
             android:parentActivityName=".Activities.TaskActivity" />
-        <activity android:name=".Activities.ChartProjectActivity"
+        <activity
+            android:name=".Activities.ChartProjectActivity"
             android:label="Gráficos de proyecto"
-            android:parentActivityName=".Activities.ProjectActivity"></activity>
+            android:parentActivityName=".Activities.ProjectActivity" />
+        <activity android:name=".Activities.ChartSprintActivity"
+            android:label="Gráficos de sprint"
+            android:parentActivityName=".Activities.SprintActivity"></activity>
     </application>
 
 </manifest>

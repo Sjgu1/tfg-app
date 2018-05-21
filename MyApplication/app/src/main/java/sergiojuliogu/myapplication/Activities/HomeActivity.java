@@ -93,14 +93,6 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
 
         hView =  navigationView.getHeaderView(0);
         userAvatar = (ImageView) hView.findViewById(R.id.imageViewLogo);
-        userAvatar.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                showAvatarBox();
-            }
-
-        });
-
         nombreUsuario = (TextView) hView.findViewById(R.id.textViewName);
         nombreUsuario.setText(Session.getUsername());
 
@@ -199,31 +191,12 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
             startActivityForResult(intent, activityBrequestCode);
             // finish();
             // Handle the camera action
-        } else if (id == R.id.nav_gallery) {
-
-        } else if (id == R.id.nav_slideshow) {
-
-        } else if (id == R.id.nav_manage) {
-
-        } else if (id == R.id.nav_share) {
-
-        } else if (id == R.id.nav_send) {
-
         }
-
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
         return true;
     }
 
-    public void showAvatarBox() {
-        Intent i = new Intent(getApplicationContext(), AvatarsActivity.class);
-        Bundle b = new Bundle();
-        b.putString("user", userObject.toString()); //Your id
-        i.putExtras(b); //Put your id to your next Intent
-        startActivityForResult(i, activityBrequestCode);
-
-    }
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);

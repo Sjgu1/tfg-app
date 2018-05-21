@@ -17,20 +17,27 @@ import android.widget.GridView;
 import android.widget.ImageView;
 import android.widget.Toast;
 
+import org.json.JSONArray;
+import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.BufferedReader;
 import java.io.BufferedWriter;
+import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
 import java.net.HttpURLConnection;
 import java.net.URL;
 
+import sergiojuliogu.myapplication.Adapters.ProjectsAdapter;
 import sergiojuliogu.myapplication.R;
 import sergiojuliogu.myapplication.Session;
 
 public class AvatarsActivity extends AppCompatActivity {
 
-    private JSONObject user;
+    private JSONObject userObject;
     private Context c;
+    private UserInfoTask mUserTask = null;
+
 
     private UserUpdateAvatarTask mUserInfo = null;
     private View mProgressView;
@@ -69,11 +76,18 @@ public class AvatarsActivity extends AppCompatActivity {
         try {
 
             JSONObject obj = new JSONObject(value);
-            user = obj;
+            userObject = obj;
+            System.out.println("el user");
+            System.out.println(userObject.toString());
+
 
         } catch (Throwable t) {
             Log.e("My App", "Could not parse malformed JSON: \"" + value + "\"");
         }
+
+        showProgress(true);
+        mUserTask = new UserInfoTask();
+        mUserTask.execute((Void) null);
     }
 
     /**
@@ -203,9 +217,9 @@ public class AvatarsActivity extends AppCompatActivity {
 
             JSONObject body = new JSONObject();
             try{
-                Log.i("user", user.toString());
-                if(user.has("avatar") ){
-                    body.put("avatar", user.get("avatar").toString());
+                Log.i("user", userObject.toString());
+                if(userObject.has("avatar") ){
+                    body.put("avatar", userObject.get("avatar").toString());
                 }
                 position  = position + 1;
                 String avatar = "";
@@ -218,20 +232,20 @@ public class AvatarsActivity extends AppCompatActivity {
                 }
                 body.put("avatar", avatar);
 
-                if(user.has("username") ){
-                    body.put("username", user.get("username").toString());
+                if(userObject.has("username") ){
+                    body.put("username", userObject.get("username").toString());
                 }
-                if(user.has("password") ){
-                    body.put("password", user.get("password").toString());
+                if(userObject.has("password") ){
+                    body.put("password", userObject.get("password").toString());
                 }
-                if(user.has("name") ){
-                    body.put("name", user.get("name").toString());
+                if(userObject.has("name") ){
+                    body.put("name", userObject.get("name").toString());
                 }
-                if(user.has("email") ){
-                    body.put("email", user.get("email").toString());
+                if(userObject.has("email") ){
+                    body.put("email", userObject.get("email").toString());
                 }
-                if(user.has("surname") ){
-                    body.put("surname", user.get("surname").toString());
+                if(userObject.has("surname") ){
+                    body.put("surname", userObject.get("surname").toString());
                 }
 
 
@@ -270,7 +284,7 @@ public class AvatarsActivity extends AppCompatActivity {
             showProgress(false);
 
             if (success) {
-                setResult(RESULT_OK);
+                setResult(300);
 
                 finish();
             } else {
@@ -284,5 +298,92 @@ public class AvatarsActivity extends AppCompatActivity {
             showProgress(false);
             mUserInfo = null;
         }
+    }
+
+    /**
+     * Represents an asynchronous task used to get users information.
+     */
+    public class UserInfoTask extends AsyncTask<Void, Void, Boolean> {
+        private String user;
+
+
+        UserInfoTask() { }
+
+
+        @Override
+        protected Boolean doInBackground(Void... params) {
+
+            //Some url endpoint that you may have
+            String urlPedida = Session.URL+"/users/" + Session.getUsername();
+            //String to place our result in
+            String result;
+            //Instantiate new instance of our class
+            //Perform the doInBackground method, passing in our url
+
+            try{
+
+
+                URL url = new URL(urlPedida);
+                HttpURLConnection connection = (HttpURLConnection) url.openConnection();
+                connection.setRequestProperty("Authorization", Session.getToken());
+                connection.connect();
+
+
+                BufferedReader br;
+                if (200 <= connection.getResponseCode() && connection.getResponseCode() <= 299) {
+                    br = new BufferedReader(new InputStreamReader(connection.getInputStream()));
+                } else {
+                    br = new BufferedReader(new InputStreamReader(connection.getErrorStream()));
+                }
+                // Response: 400
+                // Log.e("Response", connection.getResponseMessage() + "");
+                StringBuffer sb = new StringBuffer();
+
+                String inputLine = "";
+                while ((inputLine = br.readLine()) != null) {
+                    sb.append(inputLine);
+                }
+                String status = connection.getResponseCode() + "";
+                result = sb.toString();
+                if(status.equals("200")) {
+                    try {
+
+                        JSONObject obj = new JSONObject(result);
+                        userObject = obj;
+                        return true;
+
+                    } catch (Throwable t) {
+                        Log.e("My App", "Could not parse malformed JSON good: \"" + result + "\"");
+                    }
+                }
+                Thread.sleep(2000);
+            } catch (InterruptedException e) {
+                Log.i("exception", e.toString());
+            } catch (Exception e){
+                Log.i("exception", e.toString());
+            }
+
+            return false;
+        }
+
+
+        @Override
+        protected void onPostExecute(final Boolean success) {
+            mUserTask = null;
+            showProgress(false);
+            if (success) {
+            } else {
+                Toast.makeText(AvatarsActivity.this, "Error al obtener los datos del usuario." ,
+                        Toast.LENGTH_SHORT).show();
+            }
+        }
+
+        @Override
+        protected void onCancelled() {
+            showProgress(true);
+
+            mUserTask = null;
+        }
+
     }
 }

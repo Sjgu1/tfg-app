@@ -68,6 +68,8 @@ public class SprintActivity extends AppCompatActivity {
         public boolean onNavigationItemSelected(@NonNull MenuItem item) {
             switch (item.getItemId()) {
                 case R.id.navigation_charts_sprint:
+                    Intent intent3 = new Intent(c, ChartSprintActivity.class);
+                    startActivity(intent3);
                     return true;
                 case R.id.navigation_edit_sprint:
                     Intent intent = new Intent(c, SprintUpdateActivity.class);

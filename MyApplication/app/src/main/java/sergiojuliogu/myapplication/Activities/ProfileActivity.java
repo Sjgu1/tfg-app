@@ -5,6 +5,7 @@ import android.animation.AnimatorListenerAdapter;
 import android.annotation.TargetApi;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.support.v7.app.AppCompatActivity;
@@ -37,6 +38,7 @@ public class ProfileActivity extends AppCompatActivity {
     private JSONObject user;
     private UserUpdateTask mUserUpdateTask = null;
     private UserDeleteTask mUserDeleteTask = null;
+    private UserInfoTask mUserTask = null;
 
     // UI references.
     private EditText mUsernameView;
@@ -47,6 +49,7 @@ public class ProfileActivity extends AppCompatActivity {
     private View mUpdateFormView;
     private View mProgressView;
     private View mLoginFormView;
+    String usuario;
 
 
     private int activityBrequestCode = 0;
@@ -65,11 +68,11 @@ public class ProfileActivity extends AppCompatActivity {
         mSurnameView = (EditText) findViewById(R.id.input_surname);
         mAvatarView = (ImageView) findViewById(R.id.input_avatar);
 
+
         mLoginFormView = findViewById(R.id.profile_form);
         mProgressView = findViewById(R.id.profile_progress);
 
         mUpdateFormView = findViewById(R.id.profile_form);
-        pintarDatos();
 
         Button mUpdateButton = (Button) findViewById(R.id.update_user_button);
         mUpdateButton.setOnClickListener(new View.OnClickListener() {
@@ -88,6 +91,16 @@ public class ProfileActivity extends AppCompatActivity {
         });
 
 
+        mUserTask = new UserInfoTask();
+        mUserTask.execute((Void) null);
+
+    }
+    public void showAvatarBox(String user) {
+        Intent i = new Intent(getApplicationContext(), AvatarsActivity.class);
+        Bundle b = new Bundle();
+        b.putString("user", Session.getUsername()); //Your id
+        i.putExtras(b); //Put your id to your next Intent
+        startActivityForResult(i, activityBrequestCode);
 
     }
 
@@ -115,17 +128,40 @@ public class ProfileActivity extends AppCompatActivity {
             if(user.has("avatar") ){
                 if(!user.get("avatar").toString().equals("") && !user.get("avatar").toString().equals("null") ){
                     int resourceId = this.getApplicationContext().getResources().getIdentifier(user.get("avatar").toString(), "drawable",this.getApplicationContext().getPackageName());
-                    Log.i("LA id", resourceId+"" );
                     mAvatarView.setImageResource(resourceId);
                 }else{
                     int resourceId = this.getApplicationContext().getResources().getIdentifier("avatar_051", "drawable",this.getApplicationContext().getPackageName());
                     mAvatarView.setImageResource(resourceId);
                 }
             }
+
+            usuario = user.toString();
+            System.out.println(usuario);
+            mAvatarView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    showAvatarBox(usuario);
+                }
+            });
         }catch(JSONException e){
             Log.e("JSONException", e.toString());
         }
 
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        if (resultCode == 300){
+            Intent intent = new Intent( getApplicationContext(), ProfileActivity.class);
+            activityBrequestCode =0;
+            Bundle b = new Bundle();
+            b.putString("user", user.toString());
+            intent.putExtras(b);
+            intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+            startActivityForResult(intent, activityBrequestCode);
+        }
     }
 
     private void obtenerBundle(Bundle b){
@@ -462,6 +498,92 @@ public class ProfileActivity extends AppCompatActivity {
         protected void onCancelled() {
             showProgress(false);
             mUserDeleteTask = null;
+        }
+
+    }
+
+    /**
+     * Represents an asynchronous task used to get users information.
+     */
+    public class UserInfoTask extends AsyncTask<Void, Void, Boolean> {
+
+        UserInfoTask() { }
+
+
+        @Override
+        protected Boolean doInBackground(Void... params) {
+
+            //Some url endpoint that you may have
+            String urlPedida = Session.URL+"/users/" + Session.getUsername();
+            //String to place our result in
+            String result;
+            //Instantiate new instance of our class
+            //Perform the doInBackground method, passing in our url
+
+            try{
+
+
+                URL url = new URL(urlPedida);
+                HttpURLConnection connection = (HttpURLConnection) url.openConnection();
+                connection.setRequestProperty("Authorization", Session.getToken());
+                connection.connect();
+
+
+                BufferedReader br;
+                if (200 <= connection.getResponseCode() && connection.getResponseCode() <= 299) {
+                    br = new BufferedReader(new InputStreamReader(connection.getInputStream()));
+                } else {
+                    br = new BufferedReader(new InputStreamReader(connection.getErrorStream()));
+                }
+                // Response: 400
+                // Log.e("Response", connection.getResponseMessage() + "");
+                StringBuffer sb = new StringBuffer();
+
+                String inputLine = "";
+                while ((inputLine = br.readLine()) != null) {
+                    sb.append(inputLine);
+                }
+                String status = connection.getResponseCode() + "";
+                result = sb.toString();
+                if(status.equals("200")) {
+                    try {
+
+                        JSONObject obj = new JSONObject(result);
+                        user = obj;
+                        return true;
+
+                    } catch (Throwable t) {
+                        Log.e("My App", "Could not parse malformed JSON good: \"" + result + "\"");
+                    }
+                }
+                Thread.sleep(2000);
+            } catch (InterruptedException e) {
+                Log.i("exception", e.toString());
+            } catch (Exception e){
+                Log.i("exception", e.toString());
+            }
+
+            return false;
+        }
+
+
+        @Override
+        protected void onPostExecute(final Boolean success) {
+            mUserTask = null;
+            showProgress(false);
+            if (success) {
+                pintarDatos();
+            } else {
+                Toast.makeText(ProfileActivity.this, "Error al obtener los datos del usuario." ,
+                        Toast.LENGTH_SHORT).show();
+            }
+        }
+
+        @Override
+        protected void onCancelled() {
+            showProgress(true);
+
+            mUserTask = null;
         }
 
     }

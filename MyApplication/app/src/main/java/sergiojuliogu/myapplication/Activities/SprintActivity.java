@@ -72,12 +72,17 @@ public class SprintActivity extends AppCompatActivity {
                     startActivity(intent3);
                     return true;
                 case R.id.navigation_edit_sprint:
-                    Intent intent = new Intent(c, SprintUpdateActivity.class);
-                    Bundle b = new Bundle();
-                    b.putString("sprintID", sprintID.toString());
-                    intent.putExtras(b); //Put your id to your next Intent
-                    intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                    startActivityForResult(intent, activityBrequestCode);
+                    if(Session.getRolSelected().equals("Admin") || Session.getRolSelected().equals("Jefe")){
+                        Intent intent = new Intent(c, SprintUpdateActivity.class);
+                        Bundle b = new Bundle();
+                        b.putString("sprintID", sprintID.toString());
+                        intent.putExtras(b); //Put your id to your next Intent
+                        intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                        startActivityForResult(intent, activityBrequestCode);
+                    }else{
+                        Toast.makeText(SprintActivity.this, "Solo disponible para administradores y jefes." ,
+                                Toast.LENGTH_SHORT).show();
+                    }
                     return true;
                 case R.id.navigation_sprints_sprint:
                     Intent intent2 = new Intent(c, StatusActivity.class);

@@ -381,12 +381,17 @@ public class StatusActivity extends AppCompatActivity implements ActionBar.TabLi
                         try{
                             JSONObject statusLeido = statusOpenObject.getJSONObject(getArguments().getInt(ARG_SECTION_NUMBER ) -1);
 
-                            Intent intent = new Intent(getActivity().getApplicationContext(), NewTaskActivity.class);
-                            Bundle b = new Bundle();
-                            b.putString("key", statusLeido.get("_id").toString()); //Your id
-                            intent.putExtras(b); //Put your id to your next Intent
-                            intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                            startActivityForResult(intent, 0);
+                            if(Session.getRolSelected().equals("Admin") || Session.getRolSelected().equals("Jefe")) {
+                                Intent intent = new Intent(getActivity().getApplicationContext(), NewTaskActivity.class);
+                                Bundle b = new Bundle();
+                                b.putString("key", statusLeido.get("_id").toString()); //Your id
+                                intent.putExtras(b); //Put your id to your next Intent
+                                intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                                startActivityForResult(intent, 0);
+                            }else{
+                                Toast.makeText(getContext(), "Solo disponible para admin y jefes." ,
+                                        Toast.LENGTH_SHORT).show();
+                            }
                             // finish();
                         }catch (JSONException e){
                             Log.e("JsonException", e.toString());

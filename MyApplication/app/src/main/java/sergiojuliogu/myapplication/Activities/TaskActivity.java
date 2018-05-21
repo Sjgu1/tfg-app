@@ -128,7 +128,12 @@ public class TaskActivity extends AppCompatActivity {
                             return true;
 
                         }else{
-                            attemptNewPoll();
+                            if(Session.getRolSelected().equals("Admin") || Session.getRolSelected().equals("Jefe")){
+                                attemptNewPoll();
+                            }else{
+                                Toast.makeText(TaskActivity.this, "No existe una votación y no tienes permisos para crearla." ,
+                                        Toast.LENGTH_SHORT).show();
+                            }
                             return true;
                         }
 
@@ -316,28 +321,31 @@ public class TaskActivity extends AppCompatActivity {
         });
     }
     private void attemptDeleteTask(View v){
-        DialogInterface.OnClickListener dialogClickListener = new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                switch (which){
-                    case DialogInterface.BUTTON_POSITIVE:
-                        showProgress(true);
+        if(Session.getRolSelected().equals("Admin") || Session.getRolSelected().equals("Jefe")){
+            DialogInterface.OnClickListener dialogClickListener = new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    switch (which){
+                        case DialogInterface.BUTTON_POSITIVE:
+                            showProgress(true);
 
-                        mDeleteTask = new DeleteTask();
-                        mDeleteTask.execute((Void) null);
-                        break;
+                            mDeleteTask = new DeleteTask();
+                            mDeleteTask.execute((Void) null);
+                            break;
 
-                    case DialogInterface.BUTTON_NEGATIVE:
-                        //No button clicked
-                        break;
+                        case DialogInterface.BUTTON_NEGATIVE:
+                            //No button clicked
+                            break;
+                    }
                 }
-            }
-        };
-
-        AlertDialog.Builder builder = new AlertDialog.Builder(v.getContext());
-        builder.setMessage("¿Estás seguro que quieres eliminar el proyecto?").setPositiveButton("Yes", dialogClickListener)
-                .setNegativeButton("No", dialogClickListener).show();
-
+            };
+            AlertDialog.Builder builder = new AlertDialog.Builder(v.getContext());
+            builder.setMessage("¿Estás seguro que quieres eliminar el proyecto?").setPositiveButton("Yes", dialogClickListener)
+                    .setNegativeButton("No", dialogClickListener).show();
+        }else{
+            Toast.makeText(TaskActivity.this, "No tienes permisos para realizar esta accion." ,
+                    Toast.LENGTH_SHORT).show();
+        }
     }
     private void setDateTimeField() {
         startDate.setOnClickListener(new View.OnClickListener() {
@@ -443,7 +451,6 @@ public class TaskActivity extends AppCompatActivity {
             focusView.requestFocus();
         } else {
 
-            Log.i("isChecked", String.valueOf(finalizado));
             showProgress(true);
             mUpdateTask = new UpdateTask(nameSprint , descriptionSprint , startSprint, endSprint,colorElegido, finalizado);
             mUpdateTask.execute((Void) null);
@@ -512,7 +519,6 @@ public class TaskActivity extends AppCompatActivity {
             this.start_date = startDate;
             this.estimated_end = estimatedEnd;
             this.color = color;
-            Log.i("llega" , String.valueOf(finalizado));
             if(finalizado){
                 DateFormat dateFormat = new SimpleDateFormat("MM/dd/yyyy");
                 Date date = new Date();

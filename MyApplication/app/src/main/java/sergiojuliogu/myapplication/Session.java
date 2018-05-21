@@ -23,6 +23,14 @@ public class Session {
 
     protected Session(){}
 
+    public static void setRolSelected(String rolSelected) {
+        Session.rolSelected = rolSelected;
+    }
+
+    public static String getRolSelected() {
+        return rolSelected;
+    }
+
     public static String getIdUsername() {
         return idUsername;
     }

@@ -65,9 +65,15 @@ public class SprintsActivity extends AppCompatActivity {
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent(c, NewSprintActivity.class);
-                intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                startActivityForResult(intent, activityBrequestCode);
+
+                if(Session.getRolSelected().equals("Admin") || Session.getRolSelected().equals("Jefe")){
+                    Intent intent = new Intent(c, NewSprintActivity.class);
+                    intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                    startActivityForResult(intent, activityBrequestCode);
+                }else{
+                    Toast.makeText(SprintsActivity.this, "Solo accesible para admins." ,
+                            Toast.LENGTH_SHORT).show();
+                }
             }
         });
         findViewsById();
@@ -151,7 +157,6 @@ public class SprintsActivity extends AppCompatActivity {
             Intent intent = getIntent();
             finish();
             startActivity(intent);
-
         }
     }
 
@@ -179,12 +184,10 @@ public class SprintsActivity extends AppCompatActivity {
 
             try{
 
-
                 URL url = new URL(urlPedida);
                 HttpURLConnection connection = (HttpURLConnection) url.openConnection();
                 connection.setRequestProperty("Authorization", Session.getToken());
                 connection.connect();
-
 
                 BufferedReader br;
                 if (200 <= connection.getResponseCode() && connection.getResponseCode() <= 299) {

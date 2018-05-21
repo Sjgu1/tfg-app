@@ -87,7 +87,7 @@ public class ProjectActivity extends AppCompatActivity {
                         intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                         startActivityForResult(intent, activityBrequestCode);
                     }else{
-                        Toast.makeText(ProjectActivity.this, "Solo disponible para administradores." ,
+                        Toast.makeText(ProjectActivity.this, "Solo disponible para administradores y jefes." ,
                                 Toast.LENGTH_SHORT).show();
                     }
                     return true;
@@ -373,6 +373,7 @@ public class ProjectActivity extends AppCompatActivity {
                         if(userObject.get("username").toString().equals(conectado)){
                             Session.setIdUsername(userObject.getString("_id"));
                             projectRoleView.setText(roleObject.get("name").toString());
+                            Session.setRolSelected(roleObject.get("name").toString());
                             if(roleObject.get("name").toString().equals("Admin")){
                                 admin = true;
                             }

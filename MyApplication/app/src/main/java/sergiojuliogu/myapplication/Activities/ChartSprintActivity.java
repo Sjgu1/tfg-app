@@ -15,6 +15,7 @@ import android.widget.Toast;
 import com.github.mikephil.charting.charts.BarChart;
 import com.github.mikephil.charting.charts.LineChart;
 import com.github.mikephil.charting.components.AxisBase;
+import com.github.mikephil.charting.components.Description;
 import com.github.mikephil.charting.components.XAxis;
 import com.github.mikephil.charting.data.BarData;
 import com.github.mikephil.charting.data.BarDataSet;
@@ -25,6 +26,7 @@ import com.github.mikephil.charting.data.LineDataSet;
 import com.github.mikephil.charting.formatter.IAxisValueFormatter;
 import com.github.mikephil.charting.formatter.IndexAxisValueFormatter;
 import com.github.mikephil.charting.interfaces.datasets.ILineDataSet;
+import com.github.mikephil.charting.utils.ColorTemplate;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -216,12 +218,15 @@ public class ChartSprintActivity extends AppCompatActivity {
                 }
 
                 BarDataSet dataset = new BarDataSet(entries,"Datos");
+                dataset.setColors(ColorTemplate.COLORFUL_COLORS);
                 BarData data = new BarData(dataset);
                 XAxis xAxis = chart.getXAxis();
                 xAxis.setValueFormatter(new IndexAxisValueFormatter(labels));
                 xAxis.setPosition(XAxis.XAxisPosition.BOTTOM);
                 xAxis.setTextSize(10);
-                xAxis.setTextColor(Color.RED);
+                Description description = new Description();
+                description.setText("Estados y número de tareas por estado");
+                chart.setDescription(description);
                 xAxis.setCenterAxisLabels(true);
                 xAxis.setAxisMinimum(0);
                 xAxis.setGranularityEnabled(true);

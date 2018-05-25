@@ -23,160 +23,146 @@
             android:visibility="visible" />
     </LinearLayout>
 
-    <android.support.v4.widget.NestedScrollView
+    <LinearLayout
         android:id="@+id/new_task_form"
+        android:orientation="vertical"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_centerInParent="true">
+        android:layout_height="match_parent"
+        android:layout_marginTop="8dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginBottom="50dp">
+
+        <android.support.design.widget.TextInputLayout
+            android:id="@+id/textInputLayout"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1">
+
+            <EditText
+                android:id="@+id/input_nombre_tarea"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:hint="@string/prompt_name"
+                android:inputType="text"
+                android:maxLines="1"
+                android:singleLine="true" />
+        </android.support.design.widget.TextInputLayout>
+
+        <android.support.design.widget.TextInputLayout
+            android:id="@+id/textInputLayout3"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1">
+            <EditText
+                android:id="@+id/input_description_task"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:hint="@string/prompt_description"
+                android:inputType="text"
+                android:maxLines="10"
+                android:singleLine="true" />
+        </android.support.design.widget.TextInputLayout>
         <LinearLayout
-            android:id="@+id/datos_entrada"
-            android:orientation="vertical"
+            android:id="@+id/botones_calendario"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_centerInParent="true">
+            android:layout_gravity="center"
+            android:orientation="horizontal">
+            <TextView
+                android:id="@+id/label_start_date"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="0.3"
+                android:gravity="center"
+                android:text="@string/prompt_start_date"
+                android:textAppearance="@android:style/TextAppearance.Material.Small" />
 
-            <android.support.design.widget.TextInputLayout
-                android:id="@+id/textInputLayout"
-                android:layout_width="match_parent"
+            <ImageButton
+                android:id="@+id/imageButton_task_new"
+                android:layout_width="0dp"
+                android:layout_height="48dp"
+                android:layout_weight="0.2"
+                android:background="@android:color/transparent"
+                app:srcCompat="@drawable/icono_today_48_white" />
+
+            <TextView
+                android:id="@+id/label_end_date"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_marginBottom="20dp"
-                android:layout_marginEnd="8dp"
-                android:layout_marginStart="8dp">
-
-                <EditText
-                    android:id="@+id/input_nombre_tarea"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:hint="@string/prompt_name"
-                    android:inputType="text"
-                    android:maxLines="1"
-                    android:singleLine="true" />
-            </android.support.design.widget.TextInputLayout>
-
-            <android.support.design.widget.TextInputLayout
-                android:id="@+id/textInputLayout3"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginEnd="8dp"
-                android:layout_marginBottom="20dp"
-                android:layout_marginStart="8dp">
-                <EditText
-                    android:id="@+id/input_description_task"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:hint="@string/prompt_description"
-                    android:inputType="text"
-                    android:maxLines="10"
-                    android:singleLine="true" />
-            </android.support.design.widget.TextInputLayout>
-            <LinearLayout
-                android:id="@+id/botones_calendario"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginEnd="8dp"
-                android:layout_marginStart="8dp"
-                android:layout_marginBottom="20dp"
-                android:orientation="horizontal">
-                <TextView
-                    android:id="@+id/label_start_date"
-                    android:layout_width="0dp"
-                    android:layout_height="match_parent"
-                    android:layout_weight="0.3"
-                    android:gravity="center"
-                    android:text="@string/prompt_start_date"
-                    android:textAppearance="@android:style/TextAppearance.Material.Small" />
-
-                <ImageButton
-                    android:id="@+id/imageButton_task_new"
-                    android:layout_width="0dp"
-                    android:layout_height="48dp"
-                    android:layout_weight="0.2"
-                    android:background="@android:color/transparent"
-                    app:srcCompat="@drawable/icono_today_48_white" />
-
-                <TextView
-                    android:id="@+id/label_end_date"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="0.3"
-                    android:gravity="center"
-                    android:text="@string/prompt_stimated_end_date"
-                    android:textAppearance="@android:style/TextAppearance.Material.Small" />
-                <ImageButton
-                    android:id="@+id/imageButton2_task_new"
-                    android:layout_width="0dp"
-                    android:layout_height="match_parent"
-                    android:layout_weight="0.2"
-                    android:background="@android:color/transparent"
-                    app:srcCompat="@drawable/icono_today_48_white" />
-            </LinearLayout>
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_below="@id/botones_calendario"
-                android:layout_marginEnd="8dp"
-                android:layout_marginStart="8dp"
-                android:layout_marginBottom="20dp"
-                android:orientation="horizontal">
-
-                <android.support.design.widget.TextInputLayout
-                    android:id="@+id/textInputLayout4"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight=".5">
-                    <EditText
-                        android:id="@+id/etxt_fromdate_tarea"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_weight=".5"
-                        android:editable="false"
-                        android:hint="Inicio"
-                        android:inputType="none" />
-                </android.support.design.widget.TextInputLayout>
-
-                <android.support.design.widget.TextInputLayout
-                    android:id="@+id/textInputLayout5"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight=".5">
-
-                    <EditText
-                        android:id="@+id/etxt_todate_tarea"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_weight=".5"
-                        android:editable="false"
-                        android:hint="Fin"
-                        android:inputType="none" />
-                </android.support.design.widget.TextInputLayout>
-            </LinearLayout>
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:layout_marginBottom="20dp"
-                >
-                <Button
-                    android:id="@+id/newColor"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="0.5"
-                    android:text="Color" />
-
-                <android.support.v7.widget.CardView
-                    android:id="@+id/color_selected"
-                    android:layout_width="0dp"
-                    android:layout_height="26dp"
-                    app:cardBackgroundColor="@android:color/white"
-                    app:cardCornerRadius="5dp"
-                    android:layout_gravity="center"
-                    android:layout_weight="0.5"/>
-            </LinearLayout>
-
-
+                android:layout_weight="0.3"
+                android:gravity="center"
+                android:text="@string/prompt_stimated_end_date"
+                android:textAppearance="@android:style/TextAppearance.Material.Small" />
+            <ImageButton
+                android:id="@+id/imageButton2_task_new"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="0.2"
+                android:background="@android:color/transparent"
+                app:srcCompat="@drawable/icono_today_48_white" />
         </LinearLayout>
-    </android.support.v4.widget.NestedScrollView>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_below="@id/botones_calendario"
+           android:layout_weight="1"
+            android:orientation="horizontal">
 
+            <android.support.design.widget.TextInputLayout
+                android:id="@+id/textInputLayout4"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight=".5">
+                <EditText
+                    android:id="@+id/etxt_fromdate_tarea"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_weight=".5"
+                    android:editable="false"
+                    android:hint="Inicio"
+                    android:inputType="none" />
+            </android.support.design.widget.TextInputLayout>
+
+            <android.support.design.widget.TextInputLayout
+                android:id="@+id/textInputLayout5"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight=".5">
+                <EditText
+                    android:id="@+id/etxt_todate_tarea"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight=".5"
+                    android:editable="false"
+                    android:hint="Fin"
+                    android:inputType="none" />
+            </android.support.design.widget.TextInputLayout>
+        </LinearLayout>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:orientation="horizontal"
+            android:gravity="center"
+            android:layout_weight="1"
+            >
+            <Button
+                android:id="@+id/newColor"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="0.5"
+                android:text="Color" />
+
+            <android.support.v7.widget.CardView
+                android:id="@+id/color_selected"
+                android:layout_width="0dp"
+                android:layout_height="26dp"
+                app:cardBackgroundColor="@android:color/white"
+                app:cardCornerRadius="5dp"
+                android:layout_gravity="center"
+                android:layout_weight="0.5"/>
+        </LinearLayout>
+    </LinearLayout>
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -192,10 +178,5 @@
             android:gravity="center_horizontal"
             android:text="@string/prompt_new"
             android:textStyle="bold" />
-
     </LinearLayout>
-
-
-
-
 </RelativeLayout>

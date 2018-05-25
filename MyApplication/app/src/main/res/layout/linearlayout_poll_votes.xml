@@ -13,6 +13,7 @@
             android:layout_height="match_parent"
             android:layout_weight="0.2"
             android:layout_gravity="center"
+            android:textColor="@color/White"
             android:textSize="25dp"
             android:id="@+id/user_vote_vote"/>
         <TextView
@@ -20,6 +21,8 @@
             android:textSize="18dp"
             android:layout_gravity="center"
             android:layout_height="match_parent"
+            android:textColor="@color/White"
+            android:gravity="center"
             android:layout_weight="0.8"
             android:id="@+id/user_vote_comment"/>
     </LinearLayout>

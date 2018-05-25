@@ -26,17 +26,18 @@
     <LinearLayout
         android:id="@+id/new_sprint_form"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:layout_centerInParent="true">
+        android:layout_height="match_parent"
+        android:layout_marginBottom="46dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
+        android:orientation="vertical">
 
         <android.support.design.widget.TextInputLayout
             android:id="@+id/textInputLayout"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginEnd="8dp"
-            android:layout_marginStart="8dp"
-            android:layout_marginBottom="20dp">
+            android:layout_height="0dp"
+            android:layout_weight="1">
 
             <EditText
                 android:id="@+id/input_nombre_sprint"
@@ -52,17 +53,13 @@
         <android.support.design.widget.TextInputLayout
             android:id="@+id/textInputLayout3"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_below="@+id/textInputLayout"
-            android:layout_marginEnd="8dp"
-            android:layout_marginStart="8dp"
-            android:layout_marginBottom="20dp">
+            android:layout_height="0dp"
+            android:layout_weight="1">
 
             <EditText
                 android:id="@+id/input_description_sprint"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="20dp"
+                android:layout_height="match_parent"
                 android:hint="@string/prompt_description"
                 android:inputType="text"
                 android:maxLines="10"
@@ -72,11 +69,10 @@
         <LinearLayout
             android:id="@+id/botones_calendario"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="0dp"
             android:layout_below="@id/textInputLayout3"
-            android:layout_marginEnd="8dp"
-            android:layout_marginStart="8dp"
-            android:layout_marginBottom="20dp"
+            android:layout_weight="1"
+            android:gravity="center"
             android:orientation="horizontal">
 
             <TextView
@@ -119,10 +115,8 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_below="@id/botones_calendario"
-            android:layout_marginEnd="8dp"
-
-            android:layout_marginStart="8dp"
-            android:layout_marginBottom="20dp"            android:orientation="horizontal">
+            android:layout_weight="1"
+            android:orientation="horizontal">
 
             <android.support.design.widget.TextInputLayout
                 android:id="@+id/textInputLayout4"

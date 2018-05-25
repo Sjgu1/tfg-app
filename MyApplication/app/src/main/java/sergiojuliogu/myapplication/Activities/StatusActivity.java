@@ -79,7 +79,6 @@ public class StatusActivity extends AppCompatActivity implements ActionBar.TabLi
     private View mProgressView;
     private View mLoginFormView;
 
-
     private int numeroEstados=0;
 
     @Override
@@ -89,6 +88,8 @@ public class StatusActivity extends AppCompatActivity implements ActionBar.TabLi
 
         c = this.getApplicationContext();
 
+        mProgressView = findViewById(R.id.status_progress);
+        mLoginFormView = findViewById(R.id.status_form);
 
         mSprintTask = new SprintInfoTask(Session.getSprintSelected());
         mSprintTask.execute((Void) null);
@@ -131,7 +132,7 @@ public class StatusActivity extends AppCompatActivity implements ActionBar.TabLi
                 mViewPager.setCurrentItem(tab.getPosition());
                 if(Session.isCambios()){
                     Session.setCambios(false);
-                    showProgress(true);
+                   // showProgress(true);
                     mSprintTask = new SprintInfoTask(Session.getSprintSelected());
                     mSprintTask.execute((Void) null);
                 }
@@ -368,8 +369,17 @@ public class StatusActivity extends AppCompatActivity implements ActionBar.TabLi
                     public void onClick(View v) {
                         try{
                             JSONObject statusLeido = statusOpenObject.getJSONObject(getArguments().getInt(ARG_SECTION_NUMBER ) -1);
-                            mStatusUpdateTask = new StatusUpdateTask(statusLeido.getString("_id"),statusLeido.getString("name"), false);
-                            mStatusUpdateTask.execute((Void) null);
+                            if(Session.getRolSelected().equals("Admin")||Session.getRolSelected().equals("Jefe")){
+                                Toast.makeText(getContext(), "Se está cerrando el estado." ,
+                                        Toast.LENGTH_SHORT).show();
+                                mStatusUpdateTask = new StatusUpdateTask(statusLeido.getString("_id"),statusLeido.getString("name"), false);
+                                mStatusUpdateTask.execute((Void) null);
+
+                            }else{
+                                Toast.makeText(getContext(), "Solo disponible para admin y jefes." ,
+                                        Toast.LENGTH_SHORT).show();
+                            }
+
                         }catch (JSONException e){
                             Log.e("JSONException", e.toString());
                         }

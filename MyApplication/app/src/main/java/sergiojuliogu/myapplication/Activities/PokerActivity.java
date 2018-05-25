@@ -474,8 +474,9 @@ public class PokerActivity extends AppCompatActivity {
                         Toast.LENGTH_SHORT).show();
                 Intent intent = new Intent(c, TaskActivity.class);
                 intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                finish();
                 startActivityForResult(intent, 0);
+                finish();
+
             } else {
                 mostrarErroresRespuesta();
             }
@@ -588,8 +589,9 @@ public class PokerActivity extends AppCompatActivity {
                         Toast.LENGTH_SHORT).show();
                 Intent intent = new Intent(c, PokerActivity.class);
                 intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                finish();
                 startActivityForResult(intent, 0);
+                finish();
+
             } else {
                 mostrarErroresRespuesta();
             }

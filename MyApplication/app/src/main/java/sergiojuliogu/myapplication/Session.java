@@ -17,8 +17,8 @@ public class Session {
     private static String rolSelected = null;
     private static String idUsername = null;
 
-    //public static String URL = "https://sergiojuliogu-tfg-2018.herokuapp.com";
-    public static String URL = "http://10.0.2.2:5000";
+    public static String URL = "https://sergiojuliogu-tfg-2018.herokuapp.com";
+    //public static String URL = "http://10.0.2.2:5000";
 
 
     protected Session(){}

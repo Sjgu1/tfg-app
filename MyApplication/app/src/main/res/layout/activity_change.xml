@@ -30,10 +30,13 @@
         android:layout_marginTop="8dp"
         android:layout_marginStart="8dp"
         android:layout_marginEnd="8dp">
+
         <ListView
+            android:id="@+id/changes_listview"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:id="@+id/changes_listview"></ListView>
+            android:divider="@android:color/transparent"
+            android:dividerHeight="10dp"></ListView>
     </LinearLayout>
 
 </RelativeLayout>

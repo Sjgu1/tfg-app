@@ -30,6 +30,8 @@
             android:id="@+id/textViewNameSearch"
             android:layout_width="match_parent"
             android:layout_height="20dp"
+            android:text="Username"
+            android:textColor="@color/White"
             android:gravity="center"
             android:paddingLeft="8dp"
             android:paddingRight="8dp"

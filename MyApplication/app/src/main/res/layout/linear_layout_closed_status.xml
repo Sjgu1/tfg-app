@@ -5,64 +5,58 @@
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
-    <TextView
-        android:id="@+id/nom_tareas_status_closed"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="6dp"
-        android:gravity="center"
-        android:paddingLeft="8dp"
-        android:paddingRight="8dp"
-        android:text="Nombre"
-        android:textAppearance="@android:style/TextAppearance.Material.Large"
-        android:textColor="@android:color/background_light"
-        android:textSize="18sp"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
 
-    <TextView
-        android:id="@+id/num_tareas_status_closed"
-        android:layout_width="wrap_content"
+    <LinearLayout
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginEnd="8dp"
-        android:layout_marginTop="8dp"
+        android:orientation="horizontal"
         android:gravity="center"
-        android:paddingLeft="8dp"
-        android:paddingRight="8dp"
-        android:text="Nombre"
-        android:textAppearance="@android:style/TextAppearance.Material.Medium"
-        android:textColor="@android:color/background_light"
-        android:textSize="14sp"
-        app:layout_constraintEnd_toStartOf="@+id/textViewName2"
-        app:layout_constraintTop_toTopOf="parent" />
+        android:layout_marginEnd="4dp"
+        android:layout_marginStart="4dp">
+        <TextView
+            android:id="@+id/nom_tareas_status_closed"
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="match_parent"
+            android:gravity="left"
+            android:text="Nombre"
+            android:textAppearance="@android:style/TextAppearance.Material.Large"
+            android:textColor="@android:color/background_light"
+            android:textSize="18sp" />
 
-    <TextView
-        android:id="@+id/textViewName2"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginEnd="12dp"
-        android:layout_marginTop="8dp"
-        android:gravity="center"
-        android:paddingLeft="8dp"
-        android:paddingRight="8dp"
-        android:text="tareas"
-        android:textAppearance="@android:style/TextAppearance.Material.Medium"
-        android:textColor="@color/Azure"
-        android:textSize="14sp"
-        app:layout_constraintEnd_toStartOf="@+id/button_open_status"
-        app:layout_constraintTop_toTopOf="parent" />
+        <TextView
+            android:id="@+id/num_tareas_status_closed"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight=".5"
+            android:gravity="center"
+            android:text="Nombre"
+            android:textAppearance="@android:style/TextAppearance.Material.Medium"
+            android:textColor="@android:color/background_light"
+            android:textSize="14sp" />
 
-    <TextView
-        android:id="@+id/button_open_status"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginEnd="8dp"
-        android:layout_marginTop="8dp"
-        android:text="Abrir"
-        android:textColor="@android:color/background_light"
-        android:textSize="16sp"
-        android:textStyle="bold"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        <TextView
+            android:id="@+id/textViewName2"
+            android:layout_width="0dp"
+            android:layout_weight=".5"
+            android:layout_height="match_parent"
+            android:gravity="center"
+            android:text="tareas"
+            android:textAppearance="@android:style/TextAppearance.Material.Medium"
+            android:textColor="@color/Azure"
+            android:textSize="14sp" />
+
+        <TextView
+            android:id="@+id/button_open_status"
+            android:layout_width="0dp"
+            android:gravity="right"
+            android:layout_height="match_parent"
+            android:layout_weight=".7"
+            android:text="Abrir"
+            android:textColor="@android:color/background_light"
+            android:textSize="16sp"
+            android:textStyle="bold" />
+
+    </LinearLayout>
+
 </android.support.constraint.ConstraintLayout>

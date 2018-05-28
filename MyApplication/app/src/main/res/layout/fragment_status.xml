@@ -1,80 +1,90 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/constraintLayout"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".Activities.StatusActivity$PlaceholderFragment">
-
-
-    <!-- Progress -->
+    android:padding="5dp"
+    android:fillViewport="true" >
     <LinearLayout
         android:layout_width="match_parent"
-        android:id="@+id/status_progress"
-        android:orientation="vertical"
         android:layout_height="match_parent"
-        android:gravity="center"
-        android:visibility="gone">
-        <ProgressBar
-            android:layout_gravity="center"
-            style="?android:attr/progressBarStyleLarge"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:visibility="visible" />
-    </LinearLayout>
-    <LinearLayout
-        android:id="@+id/status_form"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:layout_marginTop="16dp"
-        android:layout_marginEnd="8dp"
-        android:layout_marginStart="8dp">
-        <LinearLayout
+        android:orientation="vertical" >
+        <android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+            xmlns:app="http://schemas.android.com/apk/res-auto"
+            xmlns:tools="http://schemas.android.com/tools"
+            android:id="@+id/constraintLayout"
             android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_weight="1"
-            android:orientation="horizontal">
-            <android.support.design.widget.TextInputLayout
-                android:id="@+id/textInputLayout2"
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_weight="0.7"
-                app:layout_constraintEnd_toStartOf="@+id/button_close_status">
+            android:layout_height="match_parent"
+            tools:context=".Activities.StatusActivity$PlaceholderFragment">
 
-                <android.support.design.widget.TextInputEditText
-                    android:id="@+id/nombre_estado_columna"
+            <!-- Progress -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:id="@+id/status_progress"
+                android:orientation="vertical"
+                android:layout_height="match_parent"
+                android:gravity="center"
+                android:visibility="gone">
+                <ProgressBar
+                    android:layout_gravity="center"
+                    style="?android:attr/progressBarStyleLarge"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:visibility="visible" />
+            </LinearLayout>
+            <LinearLayout
+                android:id="@+id/status_form"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:layout_marginTop="16dp"
+                android:layout_marginEnd="8dp"
+                android:layout_marginStart="8dp">
+                <LinearLayout
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:hint="Estado" />
-            </android.support.design.widget.TextInputLayout>
-            <Button
-                android:id="@+id/button_close_status"
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_weight="0.3"
-                android:text="Cerrar Estado" />
-        </LinearLayout>
-        <ListView
-            android:id="@+id/list_tasks_status"
-            android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_weight="9"/>
+                    android:layout_height="0dp"
+                    android:layout_weight="1.5"
+                    android:orientation="horizontal">
+                    <android.support.design.widget.TextInputLayout
+                        android:id="@+id/textInputLayout2"
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_weight="0.7"
+                        app:layout_constraintEnd_toStartOf="@+id/button_close_status">
+
+                        <android.support.design.widget.TextInputEditText
+                            android:id="@+id/nombre_estado_columna"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:hint="Estado" />
+                    </android.support.design.widget.TextInputLayout>
+                    <Button
+                        android:id="@+id/button_close_status"
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_weight="0.3"
+                        android:text="Cerrar" />
+                </LinearLayout>
+                <ListView
+                    android:id="@+id/list_tasks_status"
+                    android:layout_width="match_parent"
+                    android:layout_height="0dp"
+                    android:layout_weight="9"/>
+            </LinearLayout>
+
+            <android.support.design.widget.FloatingActionButton
+                android:id="@+id/button_new_task"
+                android:layout_width="70dp"
+                android:layout_height="61dp"
+                android:layout_marginBottom="8dp"
+                android:layout_marginEnd="8dp"
+                android:clickable="true"
+                android:src="@drawable/icono_plus"
+                android:tint="@android:color/white"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:rippleColor="@color/White" />
+
+
+        </android.support.constraint.ConstraintLayout>
     </LinearLayout>
-
-    <android.support.design.widget.FloatingActionButton
-        android:id="@+id/button_new_task"
-        android:layout_width="70dp"
-        android:layout_height="61dp"
-        android:layout_marginBottom="8dp"
-        android:layout_marginEnd="8dp"
-        android:clickable="true"
-        android:src="@drawable/icono_plus"
-        android:tint="@android:color/white"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:rippleColor="@color/White" />
-
-
-</android.support.constraint.ConstraintLayout>
+</ScrollView>

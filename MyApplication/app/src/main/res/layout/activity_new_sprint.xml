@@ -1,171 +1,182 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".Activities.NewSprintActivity">
-
-
-    <!-- Progress -->
+    android:padding="5dp"
+    android:fillViewport="true" >
     <LinearLayout
-        android:layout_width="match_parent"
-        android:id="@+id/new_sprint_progress"
-        android:orientation="vertical"
-        android:layout_height="match_parent"
-        android:gravity="center"
-        android:visibility="gone">
-        <ProgressBar
-            android:layout_gravity="center"
-            style="?android:attr/progressBarStyleLarge"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:visibility="visible" />
-    </LinearLayout>
-
-    <LinearLayout
-        android:id="@+id/new_sprint_form"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_marginBottom="46dp"
-        android:layout_marginEnd="8dp"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="8dp"
-        android:orientation="vertical">
-
-        <android.support.design.widget.TextInputLayout
-            android:id="@+id/textInputLayout"
+        android:orientation="vertical" >
+        <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+            xmlns:app="http://schemas.android.com/apk/res-auto"
+            xmlns:tools="http://schemas.android.com/tools"
             android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_weight="1">
+            android:layout_height="match_parent"
+            tools:context=".Activities.NewSprintActivity">
 
-            <EditText
-                android:id="@+id/input_nombre_sprint"
+
+            <!-- Progress -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:id="@+id/new_sprint_progress"
+                android:orientation="vertical"
+                android:layout_height="match_parent"
+                android:gravity="center"
+                android:visibility="gone">
+                <ProgressBar
+                    android:layout_gravity="center"
+                    style="?android:attr/progressBarStyleLarge"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:visibility="visible" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/new_sprint_form"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:layout_marginTop="20dp"
-                android:hint="@string/prompt_name"
-                android:inputType="text"
-                android:maxLines="1"
-                android:singleLine="true" />
-        </android.support.design.widget.TextInputLayout>
+                android:layout_marginBottom="46dp"
+                android:layout_marginEnd="8dp"
+                android:layout_marginStart="8dp"
+                android:layout_marginTop="8dp"
+                android:orientation="vertical">
 
-        <android.support.design.widget.TextInputLayout
-            android:id="@+id/textInputLayout3"
-            android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_weight="1">
+                <android.support.design.widget.TextInputLayout
+                    android:id="@+id/textInputLayout"
+                    android:layout_width="match_parent"
+                    android:layout_height="0dp"
+                    android:layout_weight="1">
 
-            <EditText
-                android:id="@+id/input_description_sprint"
+                    <EditText
+                        android:id="@+id/input_nombre_sprint"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_marginTop="20dp"
+                        android:hint="@string/prompt_name"
+                        android:inputType="text"
+                        android:maxLines="1"
+                        android:singleLine="true" />
+                </android.support.design.widget.TextInputLayout>
+
+                <android.support.design.widget.TextInputLayout
+                    android:id="@+id/textInputLayout3"
+                    android:layout_width="match_parent"
+                    android:layout_height="0dp"
+                    android:layout_weight="1">
+
+                    <EditText
+                        android:id="@+id/input_description_sprint"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:hint="@string/prompt_description"
+                        android:inputType="text"
+                        android:maxLines="10"
+                        android:singleLine="true" />
+                </android.support.design.widget.TextInputLayout>
+
+                <LinearLayout
+                    android:id="@+id/botones_calendario"
+                    android:layout_width="match_parent"
+                    android:layout_height="0dp"
+                    android:layout_below="@id/textInputLayout3"
+                    android:layout_weight="1"
+                    android:gravity="center"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:id="@+id/label_start_date"
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_weight="0.3"
+                        android:gravity="center"
+                        android:text="@string/prompt_start_date"
+                        android:textAppearance="@android:style/TextAppearance.Material.Small" />
+
+                    <ImageButton
+                        android:id="@+id/imageButton_sprint_update"
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_weight="0.2"
+                        android:background="@android:color/transparent"
+                        app:srcCompat="@drawable/icono_today_48_white" />
+
+                    <TextView
+                        android:id="@+id/label_end_date"
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_weight="0.3"
+                        android:gravity="center"
+                        android:text="@string/prompt_stimated_end_date"
+                        android:textAppearance="@android:style/TextAppearance.Material.Small" />
+
+                    <ImageButton
+                        android:id="@+id/imageButton2_sprint_update"
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_weight="0.2"
+                        android:background="@android:color/transparent"
+                        app:srcCompat="@drawable/icono_today_48_white" />
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@id/botones_calendario"
+                    android:layout_weight="1"
+                    android:orientation="horizontal">
+
+                    <android.support.design.widget.TextInputLayout
+                        android:id="@+id/textInputLayout4"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight=".5">
+
+                        <EditText
+                            android:id="@+id/etxt_fromdate_sprint"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_weight=".5"
+                            android:editable="false"
+                            android:hint="Inicio"
+                            android:inputType="none" />
+                    </android.support.design.widget.TextInputLayout>
+
+                    <android.support.design.widget.TextInputLayout
+                        android:id="@+id/textInputLayout5"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight=".5">
+
+                        <EditText
+                            android:id="@+id/etxt_todate_sprint"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_weight=".5"
+                            android:editable="false"
+                            android:hint="Fin"
+                            android:inputType="none" />
+                    </android.support.design.widget.TextInputLayout>
+                </LinearLayout>
+
+            </LinearLayout>
+            <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:hint="@string/prompt_description"
-                android:inputType="text"
-                android:maxLines="10"
-                android:singleLine="true" />
-        </android.support.design.widget.TextInputLayout>
-
-        <LinearLayout
-            android:id="@+id/botones_calendario"
-            android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_below="@id/textInputLayout3"
-            android:layout_weight="1"
-            android:gravity="center"
-            android:orientation="horizontal">
-
-            <TextView
-                android:id="@+id/label_start_date"
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_weight="0.3"
-                android:gravity="center"
-                android:text="@string/prompt_start_date"
-                android:textAppearance="@android:style/TextAppearance.Material.Small" />
-
-            <ImageButton
-                android:id="@+id/imageButton_sprint_update"
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_weight="0.2"
-                android:background="@android:color/transparent"
-                app:srcCompat="@drawable/icono_today_48_white" />
-
-            <TextView
-                android:id="@+id/label_end_date"
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_weight="0.3"
-                android:gravity="center"
-                android:text="@string/prompt_stimated_end_date"
-                android:textAppearance="@android:style/TextAppearance.Material.Small" />
-
-            <ImageButton
-                android:id="@+id/imageButton2_sprint_update"
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_weight="0.2"
-                android:background="@android:color/transparent"
-                app:srcCompat="@drawable/icono_today_48_white" />
-
-        </LinearLayout>
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_below="@id/botones_calendario"
-            android:layout_weight="1"
-            android:orientation="horizontal">
-
-            <android.support.design.widget.TextInputLayout
-                android:id="@+id/textInputLayout4"
-                android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_weight=".5">
-
-                <EditText
-                    android:id="@+id/etxt_fromdate_sprint"
+                android:orientation="vertical"
+                android:layout_alignParentBottom="true"
+                android:id="@+id/view_boton_crear_sprint">
+                <Button
+                    android:id="@+id/update_sprint_button"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_weight=".5"
-                    android:editable="false"
-                    android:hint="Inicio"
-                    android:inputType="none" />
-            </android.support.design.widget.TextInputLayout>
+                    android:layout_height="46dp"
+                    android:text="@string/prompt_new"
+                    android:textStyle="bold"
+                    android:layout_alignParentBottom="true"/>
+            </LinearLayout>
 
-            <android.support.design.widget.TextInputLayout
-                android:id="@+id/textInputLayout5"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight=".5">
 
-                <EditText
-                    android:id="@+id/etxt_todate_sprint"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_weight=".5"
-                    android:editable="false"
-                    android:hint="Fin"
-                    android:inputType="none" />
-            </android.support.design.widget.TextInputLayout>
-        </LinearLayout>
-
+        </RelativeLayout>
     </LinearLayout>
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:layout_alignParentBottom="true"
-        android:id="@+id/view_boton_crear_sprint">
-        <Button
-            android:id="@+id/update_sprint_button"
-            android:layout_width="match_parent"
-            android:layout_height="46dp"
-            android:text="@string/prompt_new"
-            android:textStyle="bold"
-            android:layout_alignParentBottom="true"/>
-    </LinearLayout>
-
-
-</RelativeLayout>
+</ScrollView>

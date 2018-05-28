@@ -340,7 +340,7 @@ public class TaskActivity extends AppCompatActivity {
                 }
             };
             AlertDialog.Builder builder = new AlertDialog.Builder(v.getContext());
-            builder.setMessage("¿Estás seguro que quieres eliminar el proyecto?").setPositiveButton("Yes", dialogClickListener)
+            builder.setMessage("¿Estás seguro que quieres eliminar la tarea?").setPositiveButton("Sí", dialogClickListener)
                     .setNegativeButton("No", dialogClickListener).show();
         }else{
             Toast.makeText(TaskActivity.this, "No tienes permisos para realizar esta accion." ,

@@ -27,6 +27,7 @@
             android:layout_weight="1"
             android:gravity="center"
             android:text="Nombre"
+            android:textColor="@color/White"
             android:textAppearance="@android:style/TextAppearance.Material.Medium" />
 
         <TextView
@@ -35,6 +36,7 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:gravity="center"
+            android:textColor="@color/White"
             android:text="tareas"
             android:textAppearance="@android:style/TextAppearance.Material.Medium" />
     </LinearLayout>

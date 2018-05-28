@@ -1,54 +1,50 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".Activities.ProfileActivity">
-
-    <!-- Progress -->
+    android:padding="5dp"
+    android:fillViewport="true" >
     <LinearLayout
         android:layout_width="match_parent"
-        android:id="@+id/profile_progress"
-        android:orientation="vertical"
         android:layout_height="match_parent"
-        android:gravity="center"
-        android:visibility="gone">
-        <ProgressBar
-            android:layout_gravity="center"
-            style="?android:attr/progressBarStyleLarge"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:visibility="visible" />
-    </LinearLayout>
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:layout_centerInParent="true"
-        android:layout_marginTop="8dp"
-        android:layout_marginEnd="8dp"
-        android:layout_marginStart="8dp">
-        <ScrollView
-            android:id="@+id/profile_form"
+        android:orientation="vertical" >
+        <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+            xmlns:app="http://schemas.android.com/apk/res-auto"
+            xmlns:tools="http://schemas.android.com/tools"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:foregroundGravity="center"
-            android:layout_gravity="center">
+            android:layout_height="match_parent"
+            tools:context=".Activities.ProfileActivity">
 
+            <!-- Progress -->
             <LinearLayout
-                android:id="@+id/email_login_form"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:foregroundGravity="center"
-                android:gravity="center"
+                android:id="@+id/profile_progress"
                 android:orientation="vertical"
-                android:weightSum="1">
+                android:layout_height="match_parent"
+                android:gravity="center"
+                android:visibility="gone">
+                <ProgressBar
+                    android:layout_gravity="center"
+                    style="?android:attr/progressBarStyleLarge"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:visibility="visible" />
+            </LinearLayout>
+            <LinearLayout
+                android:id="@+id/profile_form"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginBottom="50dp"
+                android:orientation="vertical"
+                android:layout_marginTop="8dp"
+                android:layout_marginEnd="8dp"
+                android:layout_marginStart="8dp">
 
                 <ImageView
                     android:id="@+id/input_avatar"
                     android:layout_width="match_parent"
-                    android:layout_height="110dp"
+                    android:layout_height="0dp"
+                    android:layout_weight="3"
                     android:layout_gravity="center"
                     app:srcCompat="@drawable/avatar_051"
                     tools:layout_editor_absoluteX="120dp"
@@ -56,14 +52,15 @@
 
                 <android.support.design.widget.TextInputLayout
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent"
+                    android:layout_height="0dp"
+                    android:layout_weight="1"
                     android:gravity="center_vertical|center_horizontal|center"
                     android:orientation="vertical">
 
                     <AutoCompleteTextView
                         android:id="@+id/input_username"
                         android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
+                        android:layout_height="match_parent"
                         android:completionHint="Username"
                         android:hint="@string/username"
                         android:inputType="text"
@@ -74,13 +71,13 @@
 
                 <android.support.design.widget.TextInputLayout
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content">
+                    android:layout_height="0dp"
+                    android:layout_weight="1">
 
                     <EditText
                         android:id="@+id/input_email"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginTop="20dp"
                         android:hint="@string/prompt_email"
                         android:imeActionId="@+id/login"
                         android:imeActionLabel="@string/action_sign_in_short"
@@ -94,13 +91,13 @@
 
                 <android.support.design.widget.TextInputLayout
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content">
+                    android:layout_height="0dp"
+                    android:layout_weight="1">
 
                     <EditText
                         android:id="@+id/input_name"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginTop="20dp"
                         android:hint="@string/prompt_name"
                         android:imeActionId="@+id/login"
                         android:imeActionLabel="@string/action_sign_in_short"
@@ -114,13 +111,13 @@
 
                 <android.support.design.widget.TextInputLayout
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content">
+                    android:layout_height="0dp"
+                    android:layout_weight="1">
 
                     <EditText
                         android:id="@+id/input_surname"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginTop="20dp"
                         android:hint="@string/prompt_surname"
                         android:imeActionId="@+id/login"
                         android:imeActionLabel="@string/action_sign_in_short"
@@ -132,33 +129,30 @@
 
                 </android.support.design.widget.TextInputLayout>
 
-
-
             </LinearLayout>
-        </ScrollView>
-    </LinearLayout>
 
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:layout_alignParentBottom="true">
-        <ImageButton
-            android:id="@+id/delete_button"
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_gravity="center"
-            android:layout_weight="0.2"
-            android:background="@android:color/transparent"
-            app:srcCompat="@android:drawable/ic_menu_delete" />
-        <Button
-            android:id="@+id/update_user_button"
-            style="?android:textAppearanceSmall"
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_weight="0.8"
-            android:text="@string/prompt_update"
-            android:textStyle="bold" />
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:layout_alignParentBottom="true">
+                <ImageButton
+                    android:id="@+id/delete_button"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_gravity="center"
+                    android:layout_weight="0.2"
+                    android:background="@android:color/transparent"
+                    app:srcCompat="@android:drawable/ic_menu_delete" />
+                <Button
+                    android:id="@+id/update_user_button"
+                    style="?android:textAppearanceSmall"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="0.8"
+                    android:text="@string/prompt_update"
+                    android:textStyle="bold" />
+            </LinearLayout>
+        </RelativeLayout>
     </LinearLayout>
-</RelativeLayout>
+</ScrollView>

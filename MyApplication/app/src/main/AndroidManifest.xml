@@ -117,9 +117,13 @@
             android:name=".Activities.ChartProjectActivity"
             android:label="Gráficos de proyecto"
             android:parentActivityName=".Activities.ProjectActivity" />
-        <activity android:name=".Activities.ChartSprintActivity"
+        <activity
+            android:name=".Activities.ChartSprintActivity"
             android:label="Gráficos de sprint"
-            android:parentActivityName=".Activities.SprintActivity"></activity>
+            android:parentActivityName=".Activities.SprintActivity" />
+        <activity android:name=".Activities.InfoActivity"
+            android:label="Acerca de"
+            android:parentActivityName=".Activities.HomeActivity"></activity>
     </application>
 
 </manifest>

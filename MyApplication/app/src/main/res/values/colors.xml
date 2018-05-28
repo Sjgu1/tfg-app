@@ -148,4 +148,6 @@
     <color name="Black">#000000</color>
     <color name="Prueba">#df9beb</color>
     <color name="Project_color">#4f4f4f</color>
+    <color name="bacground_color">#252525</color>
+    <color name="fondo_spinner">#3e3e3e</color>
 </resources>

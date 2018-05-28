@@ -192,6 +192,11 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
             // finish();
             // Handle the camera action
         }
+        if (id == R.id.informacion){
+            Intent intent2 = new Intent(c, InfoActivity.class);
+            startActivity(intent2);
+        }
+
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
         return true;

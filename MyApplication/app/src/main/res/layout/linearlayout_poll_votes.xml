@@ -13,7 +13,7 @@
             android:layout_height="match_parent"
             android:layout_weight="0.2"
             android:layout_gravity="center"
-            android:textColor="@color/White"
+            android:textColor="@color/colorAccent"
             android:textSize="25dp"
             android:id="@+id/user_vote_vote"/>
         <TextView

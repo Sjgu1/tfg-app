@@ -1,166 +1,175 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/container"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".Activities.SprintActivity">
-
-
-    <!-- Progress -->
+    android:padding="5dp"
+    android:fillViewport="true" >
     <LinearLayout
         android:layout_width="match_parent"
-        android:id="@+id/sprint_progress"
-        android:orientation="vertical"
         android:layout_height="match_parent"
-        android:gravity="center"
-        android:visibility="gone">
-        <ProgressBar
-            android:layout_gravity="center"
-            style="?android:attr/progressBarStyleLarge"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:visibility="visible" />
+        android:orientation="vertical" >
+        <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+            xmlns:app="http://schemas.android.com/apk/res-auto"
+            xmlns:tools="http://schemas.android.com/tools"
+            android:id="@+id/container"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            tools:context=".Activities.SprintActivity">
+
+
+            <!-- Progress -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:id="@+id/sprint_progress"
+                android:orientation="vertical"
+                android:layout_height="match_parent"
+                android:gravity="center"
+                android:visibility="gone">
+                <ProgressBar
+                    android:layout_gravity="center"
+                    style="?android:attr/progressBarStyleLarge"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:visibility="visible" />
+            </LinearLayout>
+            <LinearLayout
+                android:id="@+id/sprint_form"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginStart="8dp"
+                android:layout_marginEnd="8dp"
+                android:layout_marginTop="8dp"
+                android:orientation="vertical"
+                android:gravity="center"
+                android:layout_marginBottom="50dp">
+
+                <TextView
+                    android:id="@+id/nameSprint"
+                    android:layout_width="match_parent"
+                    android:layout_height="0dp"
+                    android:layout_weight="1"
+                    android:gravity="center"
+                    android:text="TextView"
+                    android:textAppearance="@android:style/TextAppearance.Material.Title"
+                    android:textSize="30dp"/>
+
+                <TextView
+                    android:id="@+id/descriptionSprint"
+                    android:layout_width="match_parent"
+                    android:gravity="center"
+                    android:layout_height="0dp"
+                    android:layout_weight="1"
+                    android:background="#3e3d3d"
+                    android:text="TextV"
+                    android:textAppearance="@android:style/TextAppearance.Material.Medium" />
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="0dp"
+                    android:layout_weight="1"
+                    android:orientation="horizontal">
+                    <TextView
+                        android:id="@+id/textView3"
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:text="@string/prompt_start_date"
+                        android:gravity="center"
+                        android:textColor="@color/White"
+                        android:layout_weight="0.5"
+                        android:textStyle="bold|italic"
+                        android:textAppearance="@android:style/TextAppearance.Material.Medium" />
+                    <TextView
+                        android:id="@+id/textView4"
+                        android:gravity="center"
+                        android:textColor="@color/White"
+                        android:layout_width="0dp"
+                        android:textStyle="bold|italic"
+                        android:layout_height="match_parent"
+                        android:layout_weight="0.5"
+                        android:text="@string/prompt_stimated_end_date"
+                        android:textAppearance="@android:style/TextAppearance.Material.Medium" />
+
+                </LinearLayout>
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="0dp"
+                    android:layout_weight="1"
+                    android:orientation="horizontal">
+                    <TextView
+                        android:id="@+id/sprint_inicio"
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_weight="0.5"
+                        android:text="TextView"
+                        android:gravity="center"/>
+
+                    <TextView
+                        android:id="@+id/sprint_estimated_end"
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_weight="0.5"
+                        android:gravity="center"
+                        android:text="TextView" />
+                </LinearLayout>
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="0dp"
+                    android:layout_weight="0.5"
+                    android:gravity="center"
+                    android:orientation="horizontal">
+                    <TextView
+                        android:id="@+id/textView7"
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_weight="0.6"
+                        android:gravity="center"
+                        android:textColor="@color/White"
+                        android:textStyle="bold|italic"
+                        android:text="@string/prompt_end_date"
+                        android:textAppearance="@android:style/TextAppearance.Material.Medium" />
+
+                    <TextView
+                        android:id="@+id/sprint_end_date"
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_gravity="center"
+                        android:gravity="left|center"
+                        android:layout_weight="0.4"
+                        android:text="TextView" />
+                </LinearLayout>
+                <TextView
+                    android:id="@+id/textView10"
+                    android:layout_width="match_parent"
+                    android:layout_height="0dp"
+                    android:layout_weight="0.6"
+                    android:text="Estados disponibles"
+                    android:gravity="center"
+                    android:textColor="@color/White"
+                    android:textStyle="bold|italic"
+                    android:textAppearance="@android:style/TextAppearance.Material.Medium" />
+                <ListView
+                    android:id="@+id/sprint_status_list_update"
+                    android:layout_width="match_parent"
+                    android:layout_height="0dp"
+                    android:layout_weight="3"/>
+
+            </LinearLayout>
+            <android.support.design.widget.BottomNavigationView
+                android:id="@+id/navigationSprint"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="#262626"
+                app:itemBackground="@android:color/transparent"
+                app:itemIconTint="?attr/colorAccent"
+                android:layout_alignParentBottom="true"
+                app:itemTextColor="@color/DarkGray"
+                app:menu="@menu/navigationsprint" />
+
+
+
+
+
+
+
+        </RelativeLayout>
     </LinearLayout>
-    <LinearLayout
-        android:id="@+id/sprint_form"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_marginStart="8dp"
-        android:layout_marginEnd="8dp"
-        android:layout_marginTop="8dp"
-        android:orientation="vertical"
-        android:gravity="center"
-        android:layout_marginBottom="50dp">
-
-        <TextView
-            android:id="@+id/nameSprint"
-            android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_weight="1"
-            android:gravity="center"
-            android:text="TextView"
-            android:textAppearance="@android:style/TextAppearance.Material.Title"
-            android:textSize="30dp"/>
-
-        <TextView
-            android:id="@+id/descriptionSprint"
-            android:layout_width="match_parent"
-            android:gravity="center"
-            android:layout_height="0dp"
-            android:layout_weight="1"
-            android:background="#3e3d3d"
-            android:text="TextV"
-            android:textAppearance="@android:style/TextAppearance.Material.Medium" />
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_weight="1"
-            android:orientation="horizontal">
-            <TextView
-                android:id="@+id/textView3"
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:text="@string/prompt_start_date"
-                android:gravity="center"
-                android:layout_weight="0.5"
-                android:textStyle="bold"
-                android:textAppearance="@android:style/TextAppearance.Material.Medium" />
-
-            <TextView
-                android:id="@+id/textView4"
-                android:gravity="center"
-                android:layout_width="0dp"
-                android:textStyle="bold"
-                android:layout_height="match_parent"
-                android:layout_weight="0.5"
-                android:text="@string/prompt_stimated_end_date"
-                android:textAppearance="@android:style/TextAppearance.Material.Medium" />
-
-        </LinearLayout>
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_weight="1"
-            android:orientation="horizontal">
-            <TextView
-                android:id="@+id/sprint_inicio"
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_weight="0.5"
-                android:text="TextView"
-                android:gravity="center"/>
-
-            <TextView
-                android:id="@+id/sprint_estimated_end"
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_weight="0.5"
-                android:gravity="center"
-                android:text="TextView" />
-        </LinearLayout>
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_weight="0.5"
-            android:gravity="center"
-            android:orientation="horizontal">
-            <TextView
-                android:id="@+id/textView7"
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_weight="0.6"
-                android:gravity="center"
-                android:textStyle="bold"
-                android:text="@string/prompt_end_date"
-                android:textAppearance="@android:style/TextAppearance.Material.Medium" />
-
-            <TextView
-                android:id="@+id/sprint_end_date"
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_gravity="center"
-                android:gravity="left|center"
-                android:layout_weight="0.4"
-                android:text="TextView" />
-        </LinearLayout>
-        <TextView
-            android:id="@+id/textView10"
-            android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_weight="0.6"
-            android:text="Estados disponibles"
-            android:gravity="center"
-            android:textColor="@color/White"
-            android:textStyle="bold"
-            android:textAppearance="@android:style/TextAppearance.Material.Medium" />
-        <ListView
-            android:id="@+id/sprint_status_list_update"
-            android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_weight="3"/>
-
-    </LinearLayout>
-
-
-
-    <android.support.design.widget.BottomNavigationView
-        android:id="@+id/navigationSprint"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:background="#262626"
-        app:itemBackground="@android:color/transparent"
-        app:itemIconTint="?attr/colorAccent"
-        android:layout_alignParentBottom="true"
-        app:itemTextColor="@color/DarkGray"
-        app:menu="@menu/navigationsprint" />
-
-
-
-
-
-
-
-</RelativeLayout>
+</ScrollView>

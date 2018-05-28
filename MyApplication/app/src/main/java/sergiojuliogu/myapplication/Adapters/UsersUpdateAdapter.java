@@ -332,8 +332,6 @@ public class UsersUpdateAdapter extends BaseAdapter {
                 showProgress(false);
                 if(!cambio)
                     UsersUpdateAdapter.super.notifyDataSetChanged();
-                Toast.makeText(mContext, "Proyecto actualizado." ,
-                        Toast.LENGTH_SHORT).show();
             } else {
                 Toast.makeText(mContext, "Proyecto no actualizado." ,
                         Toast.LENGTH_SHORT).show();

@@ -77,8 +77,6 @@ public class AvatarsActivity extends AppCompatActivity {
 
             JSONObject obj = new JSONObject(value);
             userObject = obj;
-            System.out.println("el user");
-            System.out.println(userObject.toString());
 
 
         } catch (Throwable t) {
@@ -189,10 +187,7 @@ public class AvatarsActivity extends AppCompatActivity {
                 R.drawable.avatar_045, R.drawable.avatar_046,
                 R.drawable.avatar_047, R.drawable.avatar_048,
                 R.drawable.avatar_049, R.drawable.avatar_050
-
-
         };
-
     }
 
     /**
@@ -273,10 +268,8 @@ public class AvatarsActivity extends AppCompatActivity {
             } catch (Exception e){
                 Log.i("exception", e.toString());
             }
-
             return false;
         }
-
 
         @Override
         protected void onPostExecute(final Boolean success) {

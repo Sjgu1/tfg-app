@@ -1,242 +1,254 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/container"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    tools:context="sergiojuliogu.myapplication.Activities.ProjectActivity">
-
-    <!-- Progress -->
+    android:layout_height="match_parent"
+    android:padding="5dp"
+    android:fillViewport="true" >
     <LinearLayout
         android:layout_width="match_parent"
-        android:id="@+id/project_progress"
-        android:orientation="vertical"
         android:layout_height="match_parent"
-        android:gravity="center"
-        android:visibility="gone">
-        <ProgressBar
-            android:layout_gravity="center"
-            style="?android:attr/progressBarStyleLarge"
-            android:layout_width="wrap_content"
+        android:orientation="vertical" >
+        <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+            xmlns:app="http://schemas.android.com/apk/res-auto"
+            xmlns:tools="http://schemas.android.com/tools"
+            android:id="@+id/container"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:visibility="visible" />
+            tools:context="sergiojuliogu.myapplication.Activities.ProjectActivity">
+
+            <!-- Progress -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:id="@+id/project_progress"
+                android:orientation="vertical"
+                android:layout_height="match_parent"
+                android:gravity="center"
+                android:visibility="gone">
+                <ProgressBar
+                    android:layout_gravity="center"
+                    style="?android:attr/progressBarStyleLarge"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:visibility="visible" />
+            </LinearLayout>
+            <LinearLayout
+                android:id="@+id/project_form"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginEnd="8dp"
+                android:layout_marginStart="8dp"
+                android:layout_marginTop="8dp"
+                android:layout_marginBottom="55dp"
+                android:orientation="vertical">
+
+                <TextView
+                    android:id="@+id/label_project_name"
+                    android:layout_width="match_parent"
+                    android:layout_height="0dp"
+                    android:layout_weight="1"
+                    android:gravity="center"
+                    android:text="Nombre"
+                    android:textStyle="bold"
+                    android:textAppearance="@android:style/TextAppearance.Material.Title"
+                    android:textSize="24sp" />
+
+                <TextView
+                    android:id="@+id/textView11"
+                    android:layout_width="match_parent"
+                    android:layout_height="0dp"
+                    android:layout_weight="0.6"
+                    android:textSize="18dp"
+                    android:textColor="@color/White"
+                    android:textStyle="bold|italic"
+                    android:text="@string/prompt_description"
+                    android:textAppearance="@android:style/TextAppearance.Material.Medium" />
+                <TextView
+                    android:id="@+id/label_project_description"
+                    android:layout_width="match_parent"
+                    android:layout_height="0dp"
+                    android:layout_weight="1"
+                    android:textColor="@color/White"
+                    android:text="Texto"
+                    android:textAppearance="@android:style/TextAppearance.Material.Body2" />
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="0dp"
+                    android:layout_weight=".6"
+                    android:orientation="horizontal">
+                    <TextView
+                        android:id="@+id/textView9"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:text="@string/label_repository"
+                        android:layout_weight="0.4"
+                        android:textSize="18dp"
+                        android:textStyle="bold|italic"
+                        android:textColor="@color/White"
+                        android:textAppearance="@android:style/TextAppearance.Material.Medium" />
+                    <TextView
+                        android:id="@+id/label_project_repository"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:textColor="@color/White"
+                        android:layout_weight="0.6"
+                        android:textAppearance="@android:style/TextAppearance.Material.Body2" />
+
+                </LinearLayout>
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="0dp"
+                    android:layout_weight="1"
+                    android:orientation="horizontal">
+                    <TextView
+                        android:id="@+id/textView7.1"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight=".5"
+                        android:gravity="center"
+                        android:textColor="@color/White"
+                        android:textStyle="bold|italic"
+                        android:text="@string/prompt_start_date"
+                        android:textAppearance="@android:style/TextAppearance.Material.Medium" />
+
+                    <TextView
+                        android:id="@+id/textView7.2"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight=".5"
+                        android:textColor="@color/White"
+                        android:textStyle="bold|italic"
+                        android:gravity="center"
+                        android:text="@string/prompt_stimated_end_date"
+                        android:textAppearance="@android:style/TextAppearance.Material.Medium" />
+                </LinearLayout>
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="0dp"
+                    android:layout_weight="1"
+                    android:orientation="horizontal">
+                    <TextView
+                        android:id="@+id/label_start_date"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight=".5"
+                        android:gravity="center"
+                        android:textColor="@color/White"
+                        android:textAppearance="@android:style/TextAppearance.Material.Body2" />
+
+                    <TextView
+                        android:id="@+id/label_end_date"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight=".5"
+                        android:textColor="@color/White"
+                        android:gravity="center"
+                        android:textAppearance="@android:style/TextAppearance.Material.Body2" />
+                </LinearLayout>
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="0dp"
+                    android:layout_weight="0.6"
+                    android:orientation="horizontal">
+                    <TextView
+                        android:id="@+id/terminado"
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_weight="0.5"
+                        android:textColor="@color/White"
+                        android:textStyle="bold|italic"
+                        android:text="@string/prompt_end_date"
+                        android:textAppearance="@android:style/TextAppearance.Material.Medium" />
+                    <TextView
+                        android:id="@+id/label_end"
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:textAlignment="viewStart"
+                        android:textColor="@color/White"
+                        android:layout_marginLeft="5dp"
+                        android:layout_weight="0.5"
+                        android:textAppearance="@android:style/TextAppearance.Material.Body2" />
+                </LinearLayout>
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="0dp"
+                    android:layout_weight="1"
+                    android:orientation="horizontal"
+                    android:gravity="center">
+                    <TextView
+                        android:id="@+id/permi"
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_weight="0.2"
+                        android:gravity="left|center"
+                        android:textColor="@color/White"
+                        android:textStyle="bold|italic"
+                        android:text="@string/prompt_role"
+                        android:textAppearance="@android:style/TextAppearance.Material.Medium" />
+
+                    <TextView
+                        android:id="@+id/label_project_role"
+                        android:layout_width="0dp"
+                        android:gravity="left|center"
+                        android:layout_height="match_parent"
+                        android:layout_marginLeft="5dp"
+                        android:text="Rol"
+                        android:textColor="@color/White"
+                        android:layout_weight="0.8"
+                        android:textAppearance="@android:style/TextAppearance.Material.Body2" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="0dp"
+                    android:layout_weight="1"
+                    android:orientation="horizontal">
+                    <TextView
+                        android:id="@+id/usuarios"
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:gravity="left|center"
+                        android:layout_weight="0.8"
+                        android:textColor="@color/White"
+                        android:textStyle="bold|italic"
+                        android:text="@string/prompt_users"
+                        android:textAppearance="@android:style/TextAppearance.Material.Medium" />
+
+                    <ImageButton
+                        android:id="@+id/add_user_button"
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_weight="0.2"
+                        android:background="@android:color/transparent"
+                        app:srcCompat="@drawable/ic_person_add_white_18dp" />
+                </LinearLayout>
+
+                <GridView
+                    android:id="@+id/users_grid"
+                    android:layout_width="match_parent"
+                    android:layout_weight="3"
+                    android:layout_height="0dp"
+                    android:scrollbars="none"
+                    android:columnWidth="120dp"
+                    android:gravity="center"
+                    android:horizontalSpacing="10dp"
+                    android:numColumns="auto_fit"
+                    android:stretchMode="spacingWidthUniform"
+                    android:verticalSpacing="20dp" />
+            </LinearLayout>
+
+            <android.support.design.widget.BottomNavigationView
+                android:id="@+id/navigation"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="#262626"
+                app:itemBackground="@android:color/transparent"
+                app:itemIconTint="?attr/colorAccent"
+                app:itemTextColor="@color/DarkGray"
+                app:menu="@menu/navigation"
+                android:layout_alignParentBottom="true" />
+
+        </RelativeLayout>
+
     </LinearLayout>
-    <LinearLayout
-        android:id="@+id/project_form"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_marginEnd="8dp"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="8dp"
-        android:layout_marginBottom="55dp"
-        android:orientation="vertical">
-
-        <TextView
-            android:id="@+id/label_project_name"
-            android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_weight="1"
-            android:gravity="center"
-            android:text="Nombre"
-            android:textStyle="bold"
-            android:textAppearance="@android:style/TextAppearance.Material.Title"
-            android:textSize="24sp" />
-
-        <TextView
-            android:id="@+id/textView11"
-            android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_weight="0.6"
-            android:textSize="18dp"
-            android:textColor="@color/White"
-            android:textStyle="bold"
-            android:text="@string/prompt_description"
-            android:textAppearance="@android:style/TextAppearance.Material.Medium" />
-        <TextView
-            android:id="@+id/label_project_description"
-            android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_weight="1"
-            android:textColor="@color/White"
-            android:text="Texto"
-            android:textAppearance="@android:style/TextAppearance.Material.Body2" />
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_weight=".6"
-            android:orientation="horizontal">
-            <TextView
-                android:id="@+id/textView9"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:text="@string/label_repository"
-                android:layout_weight="0.4"
-                android:textSize="18dp"
-                android:textStyle="bold"
-                android:textColor="@color/White"
-                android:textAppearance="@android:style/TextAppearance.Material.Medium" />
-            <TextView
-                android:id="@+id/label_project_repository"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:textColor="@color/White"
-                android:layout_weight="0.6"
-                android:textAppearance="@android:style/TextAppearance.Material.Body2" />
-
-        </LinearLayout>
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_weight="1"
-            android:orientation="horizontal">
-            <TextView
-                android:id="@+id/textView7.1"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight=".5"
-                android:gravity="center"
-                android:textColor="@color/White"
-                android:textStyle="bold"
-                android:text="@string/prompt_start_date"
-                android:textAppearance="@android:style/TextAppearance.Material.Medium" />
-
-            <TextView
-                android:id="@+id/textView7.2"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight=".5"
-                android:textColor="@color/White"
-                android:textStyle="bold"
-                android:gravity="center"
-                android:text="@string/prompt_stimated_end_date"
-                android:textAppearance="@android:style/TextAppearance.Material.Medium" />
-        </LinearLayout>
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_weight="1"
-            android:orientation="horizontal">
-            <TextView
-                android:id="@+id/label_start_date"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight=".5"
-                android:gravity="center"
-                android:textColor="@color/White"
-                android:textAppearance="@android:style/TextAppearance.Material.Body2" />
-
-            <TextView
-                android:id="@+id/label_end_date"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight=".5"
-                android:textColor="@color/White"
-                android:gravity="center"
-                android:textAppearance="@android:style/TextAppearance.Material.Body2" />
-        </LinearLayout>
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_weight="0.6"
-            android:orientation="horizontal">
-            <TextView
-                android:id="@+id/terminado"
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_weight="0.5"
-                android:textColor="@color/White"
-                android:textStyle="bold"
-                android:text="@string/prompt_end_date"
-                android:textAppearance="@android:style/TextAppearance.Material.Medium" />
-            <TextView
-                android:id="@+id/label_end"
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:textAlignment="viewStart"
-                android:textColor="@color/White"
-                android:layout_marginLeft="5dp"
-                android:layout_weight="0.5"
-                android:textAppearance="@android:style/TextAppearance.Material.Body2" />
-        </LinearLayout>
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_weight="1"
-            android:orientation="horizontal"
-            android:gravity="center">
-            <TextView
-                android:id="@+id/permi"
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_weight="0.2"
-                android:gravity="left|center"
-                android:textColor="@color/White"
-                android:textStyle="bold"
-                android:text="@string/prompt_role"
-                android:textAppearance="@android:style/TextAppearance.Material.Medium" />
-
-            <TextView
-                android:id="@+id/label_project_role"
-                android:layout_width="0dp"
-                android:gravity="left|center"
-                android:layout_height="match_parent"
-                android:layout_marginLeft="5dp"
-                android:text="Rol"
-                android:textColor="@color/White"
-                android:layout_weight="0.8"
-                android:textAppearance="@android:style/TextAppearance.Material.Body2" />
-        </LinearLayout>
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_weight="1"
-            android:orientation="horizontal">
-            <TextView
-                android:id="@+id/usuarios"
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:gravity="left|center"
-                android:layout_weight="0.8"
-                android:textColor="@color/White"
-                android:textStyle="bold"
-                android:text="@string/prompt_users"
-                android:textAppearance="@android:style/TextAppearance.Material.Medium" />
-
-            <ImageButton
-                android:id="@+id/add_user_button"
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_weight="0.2"
-                android:background="@android:color/transparent"
-                app:srcCompat="@drawable/ic_person_add_white_18dp" />
-        </LinearLayout>
-
-        <GridView
-            android:id="@+id/users_grid"
-            android:layout_width="match_parent"
-            android:layout_weight="3"
-            android:layout_height="0dp"
-            android:scrollbars="none"
-            android:columnWidth="120dp"
-            android:gravity="center"
-            android:horizontalSpacing="10dp"
-            android:numColumns="auto_fit"
-            android:stretchMode="spacingWidthUniform"
-            android:verticalSpacing="20dp" />
-    </LinearLayout>
-
-    <android.support.design.widget.BottomNavigationView
-        android:id="@+id/navigation"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:background="#262626"
-        app:itemBackground="@android:color/transparent"
-        app:itemIconTint="?attr/colorAccent"
-        app:itemTextColor="@color/DarkGray"
-        app:menu="@menu/navigation"
-        android:layout_alignParentBottom="true" />
-
-</RelativeLayout>
+</ScrollView>
 

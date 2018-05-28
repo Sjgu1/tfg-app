@@ -228,7 +228,6 @@ public class ChartSprintActivity extends AppCompatActivity {
                 description.setText("Estados y número de tareas por estado");
                 chart.setDescription(description);
                 xAxis.setCenterAxisLabels(true);
-                xAxis.setAxisMinimum(0);
                 xAxis.setGranularityEnabled(true);
                 xAxis.setDrawGridLines(false);
                 xAxis.setGranularity(1);

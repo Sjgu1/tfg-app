@@ -68,5 +68,8 @@
     <string name="section_format">Hello World from section: %1$d</string>
     <string name="title_activity_prrar">PrrarActivity</string>
     <string name="title_activity_task">TaskActivity</string>
+
+    <string name="acerca_de_avatars">Smashicons (https://www.flaticon.com/authors/smashicons)</string>
+    <string name="acerca_de_autor">Sergio Julio García Urdiales</string>
 </resources>
 
